@@ -1,0 +1,18 @@
+{
+    "name": "building-blocks",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server/dist/index.js",
+    "scripts": {
+      "install": "cd client && yarn install --dev && cd ../server && yarn install --dev",
+      "build": "cd client && yarn run build && cd ../server && yarn run build",
+      "start": "cd server && yarn start",
+      "dev": "npx concurrently "cd client && yarn dev" "cd server && yarn dev""
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+      "serverless-dotenv-plugin": "^6.0.0",
+      "ts-node-dev": "^2.0.0"
+    }
+  }
