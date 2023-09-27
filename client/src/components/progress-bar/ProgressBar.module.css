@@ -1,0 +1,12 @@
+.progressbar {
+  background-color: var(--blue-50);
+  box-shadow: 0px -9px 0px var(--blue-100) inset;
+  border: var(--4) var(--blue-500) solid;
+  border-radius: var(--112);
+}
+
+.progress {
+  background-color: var(--blue-400);
+  box-shadow: 0px -9px 0px var(--blue-500) inset;
+  height: var(--16);
+}
