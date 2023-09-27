@@ -1,18 +1,18 @@
 import { Request, Response } from 'express';
-import { Server, Socket } from 'socket.io';
+import cors from 'cors';
 
 const { createServer } = require('node:http');
 const express = require('express');
 const bodyParser = require('body-parser');
 const router = require('./routes/router.ts');
  
-const app = express();
+export const app = express();
 const port = 3000;
 const server = createServer(app);
-const io = new Server(server);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 process.on('SIGINT', function() {
     console.log('Server Successfully Shut down');
@@ -27,21 +27,25 @@ app.get('/', (req: Request, res: Response) => {
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
         <title>Test</title>
       </head>
-      <script src="/socket.io/socket.io.js"></script>
+      <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
       <script>
-        const socket = io();
+        fetch('http://localhost:3000/host/newGame', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            const socket = io("http://localhost:"+data.Port);
+        })
+        .catch(error => console.error(error))
       </script>
       <body>
       </body>
     </html>
   `);
-});
-
-io.on('connection', (socket: Socket) => {
-  console.log('a user connected');
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
 });
 
 server.listen(port, () => {
