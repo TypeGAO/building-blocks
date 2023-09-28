@@ -1,3 +1,4 @@
+// Create random 7 character code
 export function generateUniqueCode(): string {
     let code = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

@@ -1,14 +1,16 @@
+// Import types, server, services
 import { Request, Response } from 'express';
 import { app } from '../index';
-import { generateUniqueCode } from '../../services/generateGameService';
 import { Server, Socket } from 'socket.io';
 
 const Router = require('express-promise-router');
- 
 const router = new Router();
 
 let port = 4000;
 
+// Player page, can enter game code and port to join
+// Currently only uses port, not game code
+// TODO: Implement API to check with database for existing code, return port, join using port
 router.get('/', async (req: Request, res: Response) => {
     try {
         res.send(`

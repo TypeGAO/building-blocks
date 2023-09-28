@@ -1,6 +1,9 @@
+// Types for Request and Response
 import { Request, Response } from 'express';
+// cors used to allow socket connections from different ports
 import cors from 'cors';
 
+// Set up server and router
 const { createServer } = require('node:http');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -14,11 +17,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
+// Shut down server gracefully
 process.on('SIGINT', function() {
     console.log('Server Successfully Shut down');
     process.exit(0);
 });
 
+// Default landing page for demo
 app.get('/', (req: Request, res: Response) => {
   res.send(`
     <!DOCTYPE html>
@@ -35,6 +40,7 @@ app.get('/', (req: Request, res: Response) => {
   `);
 });
 
+// Run server on given port
 server.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 })
