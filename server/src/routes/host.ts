@@ -8,7 +8,9 @@ const Router = require('express-promise-router');
 const router = new Router();
 
 let port = 4000;
-let players = 0;
+// Use JSON to keep track of how many players each port/socket has
+const players: { [port: string]: number } = {};
+
 
 // Host page, generate code and open a socket automatically
 // Simply a demo
@@ -40,11 +42,13 @@ router.get('/', async (req: Request, res: Response) => {
                     socket.io.uri = "http://localhost:"+data.Port;
                     socket.disconnect().connect();
                     document.getElementById('code').innerHTML = "Game Code: " + data.Code;
+                    document.getElementById('port').innerHTML = "Game Port: " + data.Port;
                 })
                 .catch(error => console.error(error))
               </script>
               <body>
                 <h1 id="code">Game Code</h1>
+                <h1 id="port">Game Port</h1>
                 <h2>Players</h2>
                 <h2 id="players">0</h2>
               </body>
@@ -80,13 +84,16 @@ router.get('/newGame', async (req: Request, res: Response) => {
         // Increase number of player, update player count
         // Note: use players-1 to not count host
         io.on('connection', (socket: Socket) => {
-          players++;
-          io.emit('updatePlayers', {"players": players-1});
+          if (!players[socket.handshake.headers.host!]) {
+              players[socket.handshake.headers.host!] = 0;
+          }
+          players[socket.handshake.headers.host!]++;
+          io.emit('updatePlayers', {"players": players[socket.handshake.headers.host!]-1});
 
           socket.on('disconnect', () => {
               // Decrase players, update player count
-            players--;
-            io.emit('updatePlayers', {"players": players-1});
+            players[socket.handshake.headers.host!]--;
+            io.emit('updatePlayers', {"players": players[socket.handshake.headers.host!]-1});
             //console.log(`user disconnected from ${socket.handshake.headers.host}`);
           });
 
