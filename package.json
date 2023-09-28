@@ -2,12 +2,12 @@
     "name": "building-blocks",
     "version": "1.0.0",
     "description": "",
-    "main": "server/dist/index.js",
+    "main": "server/src/index.ts",
     "scripts": {
-      "install": "cd client && yarn install --dev && cd ../server && yarn install --dev",
-      "build": "cd client && yarn run build && cd ../server && yarn run build",
-      "start": "cd server && yarn start",
-      "dev": "npx concurrently "cd client && yarn dev" "cd server && yarn dev""
+      "install": "cd client && npm install --dev && cd ../server && npm install --dev",
+      "build": "cd client && npm run build && cd ../server && npm run build",
+      "start": "cd server && npm start",
+      "dev": "npx concurrently 'cd client && npm dev' 'cd server && npm dev'"
     },
     "author": "",
     "license": "ISC",
