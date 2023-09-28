@@ -3,14 +3,12 @@ import { Request, Response } from 'express';
 import { app } from '../index';
 import { generateUniqueCode } from '../../services/generateGameService';
 import { Server, Socket } from 'socket.io';
+import { players, codes } from '../../services/gameManagerService';
 
 const Router = require('express-promise-router');
 const router = new Router();
 
 let port = 4000;
-// Use JSON to keep track of how many players each port/socket has
-const players: { [port: string]: number } = {};
-
 
 // Host page, generate code and open a socket automatically
 // Simply a demo
@@ -42,13 +40,12 @@ router.get('/', async (req: Request, res: Response) => {
                     socket.io.uri = "http://localhost:"+data.Port;
                     socket.disconnect().connect();
                     document.getElementById('code').innerHTML = "Game Code: " + data.Code;
-                    document.getElementById('port').innerHTML = "Game Port: " + data.Port;
+                    socket.emit('save code', {"Code": data.Code});
                 })
                 .catch(error => console.error(error))
               </script>
               <body>
                 <h1 id="code">Game Code</h1>
-                <h1 id="port">Game Port</h1>
                 <h2>Players</h2>
                 <h2 id="players">0</h2>
               </body>
@@ -63,7 +60,12 @@ router.get('/', async (req: Request, res: Response) => {
 router.get('/newGame', async (req: Request, res: Response) => {
     try { 
         // Generate unique code 
-        let code = generateUniqueCode();
+        let code = null;
+        // Keep generating until code doesn't exits
+        // Temporary, will move to database
+        while (!code || codes[code]) {
+            code = generateUniqueCode();
+        }
 
         // TODO: Check if it exists in database
         // TODO: Add to database
@@ -95,6 +97,13 @@ router.get('/newGame', async (req: Request, res: Response) => {
             players[socket.handshake.headers.host!]--;
             io.emit('updatePlayers', {"players": players[socket.handshake.headers.host!]-1});
             //console.log(`user disconnected from ${socket.handshake.headers.host}`);
+          });
+
+          // Saves a new code to the server
+          // Temporary, will change to storing in database
+          socket.on('save code', (resp) => {
+              // Gets last 4 digits of socket host because it is in the form "localhost:xxxx"
+             codes[resp.Code] = (socket.handshake.headers.host!).substr((socket.handshake.headers.host!).length - 4);
           });
 
           //console.log(`a user connected to ${socket.handshake.headers.host}`);

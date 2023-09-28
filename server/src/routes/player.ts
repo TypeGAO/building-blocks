@@ -2,6 +2,7 @@
 import { Request, Response } from 'express';
 import { app } from '../index';
 import { Server, Socket } from 'socket.io';
+import { codes } from '../../services/gameManagerService';
 
 const Router = require('express-promise-router');
 const router = new Router();
@@ -24,18 +25,25 @@ router.get('/', async (req: Request, res: Response) => {
               <script>
                 function joinGame() {
                     let code = document.getElementById("code").value;
-                    let port = document.getElementById("port").value;
-                    const socket = io("http://localhost:"+port);
-                    document.getElementById("beforeJoin").style.display = "none";
-                    document.getElementById("joined").innerHTML = "Joined: " + code;
-                }
+                    fetch('http://localhost:3000/player/getPort/'+code, {
+                      method: 'GET',
+                      headers: {
+                        'Content-Type': 'application/json'
+                      }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const socket = io("http://localhost:"+data.Port);
+                        document.getElementById("beforeJoin").style.display = "none";
+                        document.getElementById("joined").innerHTML = "Joined: " + code;
+                    })
+                    .catch(error => console.error(error))
+                    }
               </script>
               <body>
                 <div id="beforeJoin">
                     <h1>Enter Code</h1>
                     <input type="text" id="code" />
-                    <h1>Enter Port</h1>
-                    <input type="text" id="port" />
                     <button onclick="joinGame()">Join</button>
                 </div>
                 <h1 id="joined"></h1>
@@ -44,6 +52,22 @@ router.get('/', async (req: Request, res: Response) => {
         `);
     } catch (error) {
         res.status(500).json({ message: 'Error Getting Player' });
+    }
+});
+
+// Gets the corresponding port from the given code
+// Currently stored in server
+// TODO: Migrate to database
+router.get('/getPort/:code', async (req: Request, res: Response) => {
+    try {
+        const code = req.params.code;
+        if (codes[code]) {
+            res.send({"Port": codes[code]});
+        } else {
+            throw new Error('Invalid Code');
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Error Getting Port' });
     }
 });
 
