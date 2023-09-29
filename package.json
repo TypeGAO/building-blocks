@@ -1,18 +1,24 @@
 {
-    "name": "building-blocks",
-    "version": "1.0.0",
-    "description": "",
-    "main": "server/src/index.ts",
-    "scripts": {
-      "install": "cd client && npm install --dev && cd ../server && npm install --dev",
-      "build": "cd client && npm run build && cd ../server && npm run build",
-      "start": "cd server && npm start",
-      "dev": "npx concurrently 'cd client && npm dev' 'cd server && npm dev'"
-    },
-    "author": "",
-    "license": "ISC",
-    "devDependencies": {
-      "serverless-dotenv-plugin": "^6.0.0",
-      "ts-node-dev": "^2.0.0"
-    }
+  "name": "building-blocks",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server/dist/index.js",
+  "scripts": {
+    "install": "npm install yarn && cd client && yarn install --dev && cd ../server && yarn install --dev",
+    "build": "cd client && yarn run build && cd ../server && yarn run build",
+    "start": "node server/src/index.js",
+    "dev": "npx concurrently 'cd client && yarn dev' 'cd server && yarn dev'"
+  },
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": "16.17.0"
+  },
+  "devDependencies": {
+    "serverless-dotenv-plugin": "^6.0.0",
+    "ts-node-dev": "^2.0.0"
+  },
+  "dependencies": {
+    "yarn": "^1.22.19"
   }
+}
