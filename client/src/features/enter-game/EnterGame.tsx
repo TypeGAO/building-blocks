@@ -3,26 +3,38 @@ import { Button, Input } from "../../components"
 
 function EnterGame() {
   const [pin, setPin] = useState("")
+  const [nickname, setNickname] = useState("")
+  const [stage, setStage] = useState<"pin" | "nickname">("pin")
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setPin(e.target.value)
+    if (stage === "pin") {
+      setPin(e.target.value)
+      return
+    }
+    setNickname(e.target.value)
   }
 
   function handleSubmit() {
-    alert("Submit")
+    if (stage === "pin") {
+      setStage("nickname")
+      return
+    }
+    alert("submitted")
   }
 
   return (
-    <div>
+    <>
       <Input
-        placeholder="Game PIN"
-        value={pin}
+        placeholder={stage === "pin" ? "Game PIN" : "Nickname"}
+        value={stage === "pin" ? pin : nickname}
         onChange={(e) => handleChange(e)}
+        autoFocus
+        style={{ textAlign: "center" }}
       />
       <Button color="green" onClick={handleSubmit}>
-        Enter
+        {stage === "pin" ? "Enter" : "Play"}
       </Button>
-    </div>
+    </>
   )
 }
 

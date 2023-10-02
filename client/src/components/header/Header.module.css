@@ -1,0 +1,22 @@
+/* Header.module.css */
+
+.header {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  text-align: center;
+  padding: var(--24);
+  height: var(--64);
+  border-bottom: var(--4) solid var(--neutral-200);
+}
+
+.left-element {
+  text-align: left;
+}
+
+.middle {
+  display: inline-block;
+}
+
+.right-element {
+}
