@@ -1,12 +1,16 @@
 {
+  "dependencies": {
+    "cors": "^2.8.5",
+    "socket.io": "^4.7.2"
+  },
   "name": "building-blocks",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "",
   "main": "server/dist/index.js",
   "scripts": {
-    "install": "npm install yarn && cd client && yarn install --dev && cd ../server && yarn install --dev",
+     "install": "npm install node && npm install yarn && cd client && yarn install --dev && cd ../server && yarn install --dev",
     "build": "cd client && yarn run build && cd ../server && yarn run build",
-    "start": "node server/src/index.js",
+    "start": "cd server && yarn start",
     "dev": "npx concurrently 'cd client && yarn dev' 'cd server && yarn dev'"
   },
   "author": "",
