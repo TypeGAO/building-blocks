@@ -1,48 +1,23 @@
-// Types for Request and Response
-import { Request, Response } from 'express';
-// cors used to allow socket connections from different ports
-import cors from 'cors';
+import express from "express";
+import http from "http";
+import { Server } from "socket.io";
+import hostSocketConnection from "./routes/host";
+import playerSocketConnection from "./routes/player";
 
-// Set up server and router
-const { createServer } = require('node:http');
-const express = require('express');
-const bodyParser = require('body-parser');
-const router = require('./routes/router.ts');
- 
-export const app = express();
-const port = 3000;
-const server = createServer(app);
+const app = express();
+const server = http.createServer(app);
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
-
-// Shut down server gracefully
-process.on('SIGINT', function() {
-    console.log('Server Successfully Shut down');
-    process.exit(0);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+  },
 });
 
-// Default landing page for demo
-app.get('/', (req: Request, res: Response) => {
-  res.send(`
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta name="viewport" content="width=device-width,initial-scale=1.0">
-        <title>Landing Page</title>
-      </head>
-      <body>
-        <a href="http://localhost:3000/host">Host</a>
-        <a href="http://localhost:3000/player">Player</a>
-      </body>
-    </html>
-  `);
+hostSocketConnection(io);
+playerSocketConnection(io);
+
+const PORT = process.env.PORT || 3000;
+
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
-
-// Run server on given port
-server.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-})
-
-router(app);
