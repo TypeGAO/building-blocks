@@ -1,16 +1,11 @@
-import EnterGame from "../features/enter-game/EnterGame"
-import { Button, Header } from "../components"
+import { Header } from "../components"
+import { EnterGame } from "../features/enter-game"
+import { CreateGameButton } from "../features/create-game"
 
 function Landing() {
   return (
     <>
-      <Header
-        rightElement={
-          <Button onClick={() => console.log("Clicked")} color="blue">
-            Host your own game
-          </Button>
-        }
-      />
+      <Header rightElement={<CreateGameButton />} />
       <div
         style={{
           display: "flex",
