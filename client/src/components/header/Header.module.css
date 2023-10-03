@@ -10,13 +10,14 @@
   border-bottom: var(--4) solid var(--neutral-200);
 }
 
-.left-element {
-  text-align: left;
+.left {
+  text-align: start;
 }
 
-.middle {
+.mid {
   display: inline-block;
 }
 
-.right-element {
+.right {
+  text-align: end;
 }
