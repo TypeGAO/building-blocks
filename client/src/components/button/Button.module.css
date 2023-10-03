@@ -5,11 +5,6 @@
 
 button {
   cursor: pointer;
-  font-size: var(--16);
-  padding-top: var(--12);
-  padding-bottom: var(--16);
-  padding-left: var(--16);
-  padding-right: var(--16);
   background: var(--neutral-100);
   color: var(--neutral-950);
   box-shadow: var(--button-shadow);
@@ -44,6 +39,22 @@ button:focus-visible {
 button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+}
+
+.md {
+  font-size: var(--16);
+  padding-top: var(--12);
+  padding-bottom: var(--16);
+  padding-left: var(--16);
+  padding-right: var(--16);
+}
+
+.lg {
+  font-size: var(--20);
+  padding-top: var(--16);
+  padding-bottom: var(--20);
+  padding-left: var(--20);
+  padding-right: var(--20);
 }
 
 .blue {

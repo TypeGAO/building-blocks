@@ -1,11 +1,6 @@
 input {
   outline: none;
   border: var(--4) solid;
-  padding-top: var(--20);
-  padding-bottom: var(--20);
-  padding-right: var(--12);
-  padding-left: var(--12);
-  font-size: var(--16);
   border-radius: var(--8);
   color: var(--neutral-700);
   font-weight: 600;
@@ -23,6 +18,22 @@ input:focus {
 input::placeholder {
   color: var(--neutral-400);
   font-weight: 600;
+}
+
+.md {
+  padding-top: var(--20);
+  padding-bottom: var(--20);
+  padding-right: var(--12);
+  padding-left: var(--12);
+  font-size: var(--16);
+}
+
+.lg {
+  padding-top: var(--24);
+  padding-bottom: var(--24);
+  padding-right: var(--16);
+  padding-left: var(--16);
+  font-size: var(--20);
 }
 
 .default {
