@@ -14,6 +14,10 @@ const meta: Meta<typeof Button> = {
       options: ["green", "blue", "neutral"],
       control: { type: "radio" },
     },
+    size: {
+      options: ["md", "lg"],
+      control: { type: "radio" },
+    },
   },
 }
 
@@ -24,6 +28,7 @@ type Story = StoryObj<typeof Button>
 export const Default: Story = {
   args: {
     color: "green",
+    size: "md",
     children: "Run",
     disabled: false,
     onClick: action("onClick"),
