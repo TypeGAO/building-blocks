@@ -1,8 +1,8 @@
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
-import hostSocketConnection from "./routes/host";
-import playerSocketConnection from "./routes/player";
+
+import { hostSocketConnection, playerSocketConnection } from "./routes/sockets";
 
 const app = express();
 const server = http.createServer(app);
