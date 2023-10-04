@@ -8,10 +8,11 @@
   "description": "",
   "main": "server/dist/index.js",
   "scripts": {
-    "install": "cd client && yarn install --dev && cd ../server && yarn install --dev",
+    "install": "cd client && yarn install && cd ../server && yarn install ",
     "build": "cd client && yarn run build && cd ../server && yarn run build",
     "start": "cd server && yarn start",
-    "dev": "npx concurrently 'cd client && yarn dev' 'cd server && yarn dev'"
+    "prod": "npx concurrently 'cd client && yarn dev --host' 'cd server && yarn start'",
+    "dev": "npx concurrently 'cd client && yarn dev --host && yarn storybook' 'cd server && yarn start'"
   },
   "author": "",
   "license": "ISC",
