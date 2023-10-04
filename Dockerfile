@@ -1,12 +1,13 @@
-FROM node:16.17.0 as build-stage
-WORKDIR /app
-COPY package*.json ./
-COPY . .
-RUN npm install
-COPY . .
-RUN npm run build
+FROM node:latest
 
-FROM nginx:1.22.1-alpine as prod-stage
-COPY --from=build-stage /app/build /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+WORKDIR /app
+
+COPY . .
+
+RUN npm install yarn
+RUN yarn install
+
+EXPOSE 5173
+EXPOSE 3000
+
+CMD yarn prod
