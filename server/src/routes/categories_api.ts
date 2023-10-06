@@ -5,6 +5,8 @@ const query = require('../db/index.ts');
  
 const router = new Router();
 
+// CRUD api for categories table in database
+
 router.post('/addCategory', async (req: Request, res: Response) => {
     try {
         const { category } = req.body;

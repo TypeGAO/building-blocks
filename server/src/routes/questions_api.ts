@@ -5,6 +5,8 @@ const query = require('../db/index.ts');
  
 const router = new Router();
 
+// CRUD api for questions table in the database
+
 router.post('/addQuestion', async (req: Request, res: Response) => {
     try {
         const { question, starter_code, question_set_id, test_cases } = req.body;

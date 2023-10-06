@@ -5,6 +5,8 @@ const query = require('../db/index.ts');
  
 const router = new Router();
 
+// CRUD api for question_sets table in the database
+
 router.post('/addQuestionSet', async (req: Request, res: Response) => {
     try {
         const { grade_level, description, categories, created_on } = req.body;
@@ -67,6 +69,8 @@ router.delete('/deleteQuestionSet/:id', async (req: Request, res: Response) => {
     }
 });
 
+// Gets questions related to a question set
+
 router.get('/getQuestionsInSet/:id', async (req: Request, res: Response) => {
     try { 
         const id = req.params.id;
@@ -74,20 +78,6 @@ router.get('/getQuestionsInSet/:id', async (req: Request, res: Response) => {
                       FROM questions
                       WHERE (question_set_id = $1)`;
         const { rows }  = await query(strSQL, [id]);
-        res.send(rows);
-    } catch (error) {
-        res.status(500).json({ message: 'Error Getting Questions' });
-    }
-});
-
-router.post('/setQuestionSet', async (req: Request, res: Response) => {
-    try { 
-        const { roomID, 
-                questionSetID } = req.body;
-        let strSQL = `UPDATE rooms
-                      SET (question_set_id = $1)
-                      WHERE (pin = $2)`;
-        const { rows }  = await query(strSQL, [questionSetID, roomID]);
         res.send(rows);
     } catch (error) {
         res.status(500).json({ message: 'Error Getting Questions' });

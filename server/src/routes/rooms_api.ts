@@ -5,6 +5,8 @@ const query = require('../db/index.ts');
  
 const router = new Router();
 
+// CRUD api for rooms table in the database
+
 router.post('/addRoom', async (req: Request, res: Response) => {
     try {
         const { pin, is_active, question_set_id, game_activity, time_started } = req.body;
@@ -53,6 +55,22 @@ router.delete('/deleteRoom/:id', async (req: Request, res: Response) => {
         res.send(rows[0]);
     } catch (error) {
         res.status(500).json({ message: 'Error Deleting Room' });
+    }
+});
+
+// Sets a room's question set
+
+router.post('/setQuestionSet', async (req: Request, res: Response) => {
+    try { 
+        const { roomID, 
+                questionSetID } = req.body;
+        let strSQL = `UPDATE rooms
+                      SET (question_set_id = $1)
+                      WHERE (pin = $2)`;
+        const { rows }  = await query(strSQL, [questionSetID, roomID]);
+        res.send(rows);
+    } catch (error) {
+        res.status(500).json({ message: 'Error Getting Questions' });
     }
 });
 

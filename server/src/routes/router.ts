@@ -1,5 +1,7 @@
 import { Express } from "express";
 
+// Use router for api calls
+// See each file for more detail
 const question_sets = require('./question_set_api.ts');
 const questions = require('./questions_api.ts');
 const categories = require('./categories_api.ts');
