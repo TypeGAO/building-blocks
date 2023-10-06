@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { newGameActivity } from '../../services/generateGameService';
 
 const Router = require('express-promise-router');
 const query = require('../db/index.ts');
