@@ -1,5 +1,6 @@
 export type GameActivity = {
-  role?: "player" | "host"
-  stage: "landing" | "lobby" | "game"
+  roomId: string | null
+  role?: string
+  stage: string
   playerCount: number | 0
 }
