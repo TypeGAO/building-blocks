@@ -1,0 +1,19 @@
+.backdrop {
+  background-color: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 5;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  flex-direction: column;
+  gap: var(--16);
+  color: var(--neutral-50);
+  font-size: var(--20);
+  font-weight: 600;
+}
