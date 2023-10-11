@@ -8,3 +8,19 @@ export function generateUniqueCode(): string {
     return code;
 }
 
+export function addPlayer(username: string): object {
+    return {
+        username: username,
+        currentQuestion: 0,
+        score: 0,
+        buildingBlocksIDs: []
+    }
+}
+
+export function newGameActivity(roomID: string): object {
+    return { 
+        roomID: roomID,
+        timeRemaining: -1,
+        players: []
+    };
+}
