@@ -1,4 +1,5 @@
 import { Server, Socket } from "socket.io";
+import { addPlayer } from "../../../services/generateGameService";
 
 /**
  * playerSocketConnection(io)
@@ -24,16 +25,13 @@ const playerSocketConnection = (io: Server) => {
   const connectedPlayers = new Map();
 
   io.on("connection", (socket: Socket) => {
-    socket.on("joinRoom", (roomId: string) => {
+    socket.on("joinRoom", (roomId: string, nickname: string) => {
       const room = io.sockets.adapter.rooms.get(roomId);
 
       if (room) {
         socket.join(roomId);
 
-        connectedPlayers.set(socket.id, {
-          roomId,
-          nickname: "foobar", // TODO: Add support for nicknames
-        });
+        connectedPlayers.set(socket.id, addPlayer(roomId, nickname));
 
         socket.emit("roomJoined", {
           roomId,

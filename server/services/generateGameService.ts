@@ -8,9 +8,10 @@ export function generateUniqueCode(): string {
     return code;
 }
 
-export function addPlayer(username: string): object {
+export function addPlayer(roomId: string, nickname: string): object {
     return {
-        username: username,
+        roomId: roomId,
+        nickname: nickname,
         currentQuestion: 0,
         score: 0,
         buildingBlocksIDs: []
