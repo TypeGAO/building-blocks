@@ -24,13 +24,12 @@ const hostSocketConnection = (io: Server) => {
       const roomId = generateUniqueCode();
       socket.join(roomId);
       socket.emit("roomCreated", { roomId, stage: "lobby", role: "host" });
-      console.log(roomId);
 
       // Add room in database
       const game_activity = newGameActivity(roomId);
       let strSQL = ` INSERT INTO rooms (pin, is_active, question_set_id, game_activity, time_started) 
                      VALUES ($1, false, $2, $3, NOW())`;
-      await query(strSQL, [roomId, game_activity, -1]);
+      await query(strSQL, [roomId, 1, game_activity]);
     });
   });
 };
