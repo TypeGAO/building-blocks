@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { socket } from "./socket"
 import useGameActivity from "./hooks/useGameActivity"
 import Landing from "./pages/Landing"
+import PlayerLobby from "./pages/PlayerLobby"
 
 /**
  * App Component
@@ -72,7 +73,7 @@ function App() {
 
   if (gameActivity.role === "player") {
     if (gameActivity.stage === "lobby") {
-      return <h1>Connected to {gameActivity.roomId}</h1>
+      return <PlayerLobby />
     }
   }
 
