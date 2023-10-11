@@ -21,7 +21,7 @@ export function addPlayer(roomId: string, nickname: string): object {
 export function newGameActivity(roomID: string): object {
     return { 
         roomID: roomID,
-        timeRemaining: -1,
+        time: -1,
         players: []
     };
 }
