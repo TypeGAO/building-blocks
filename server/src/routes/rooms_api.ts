@@ -77,7 +77,7 @@ router.post('/setQuestionSet', async (req: Request, res: Response) => {
 
 // Set and get game activity
 
-router.get('/setGameActivity/:id', async (req: Request, res: Response) => {
+router.get('/getGameActivity/:id', async (req: Request, res: Response) => {
     try {
         const roomId = req.params.id;
         const strSQL = `SELECT game_activity FROM rooms WHERE pin = $1`;

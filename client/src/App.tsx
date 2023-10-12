@@ -2,7 +2,6 @@ import { useEffect } from "react"
 import { socket } from "./socket"
 import useGameActivity from "./hooks/useGameActivity"
 import Landing from "./pages/Landing"
-
 /**
  * App Component
  *
@@ -17,12 +16,33 @@ function App() {
       roomId: string
       stage: string
       role: string
+      time: int
+      players: [Player]
     }) {
       setGameActivity({
         ...gameActivity,
         roomId: data.roomId,
         stage: data.stage,
         role: data.role,
+        time: data.time,
+        players: data.players
+      })
+    }
+
+    function onUpdateGameActivity(data: {
+      roomId: string
+      stage: string
+      role: string
+      time: int
+      players: [Player]
+    }) {
+      setGameActivity({
+        ...gameActivity,
+        roomId: data.roomId,
+        stage: data.stage,
+        role: data.role,
+        time: data.time,
+        players: data.players
       })
     }
 
@@ -30,12 +50,16 @@ function App() {
       roomId: string
       stage: string
       role: string
+      time: int
+      players: [Player]
     }) {
       setGameActivity({
         ...gameActivity,
         roomId: data.roomId,
         stage: data.stage,
         role: data.role,
+        time: data.time,
+        players: data.players
       })
     }
 
@@ -43,29 +67,27 @@ function App() {
       alert(errorMessage)
     }
 
-    function onPlayerCount(playerCount: number) {
-      setGameActivity({ ...gameActivity, playerCount: playerCount })
-    }
-
     socket.on("roomCreated", onRoomCreated)
     socket.on("roomJoined", onRoomJoined)
     socket.on("roomNotFound", onRoomNotFound)
-    socket.on("playerCount", onPlayerCount)
+    socket.on("updateGameActivity", onUpdateGameActivity)
 
     return () => {
       socket.off("roomCreated", onRoomCreated)
       socket.off("roomJoined", onRoomJoined)
       socket.off("roomNotFound", onRoomNotFound)
-      socket.off("playerCount", onPlayerCount)
+      socket.off("updateGameActivity", onUpdateGameActivity)
     }
   }, [gameActivity, setGameActivity])
 
   if (gameActivity.role === "host") {
     if (gameActivity.stage === "lobby") {
       return (
-        <h1>
-          Join with {gameActivity.roomId}, Connected: {gameActivity.playerCount}
-        </h1>
+        <div>
+            <h1>
+              Join with {gameActivity.roomId}, Connected: {gameActivity.players.length}
+            </h1>
+        </div>
       )
     }
   }
