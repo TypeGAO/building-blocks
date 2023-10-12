@@ -20,8 +20,9 @@ export function addPlayer(roomId: string, nickname: string): Player {
     }
 }
 
-export function newGameActivity(roomId: string): GameActivity {
+export function newGameActivity(masterSocket: string, roomId: string): GameActivity {
     return { 
+        masterSocket: masterSocket,
         roomId: roomId,
         time: -1,
         players: [],

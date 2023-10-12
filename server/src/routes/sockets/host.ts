@@ -24,8 +24,7 @@ const hostSocketConnection = (io: Server) => {
       const roomId = generateUniqueCode();
       socket.join(roomId);
 
-      const game_activity = newGameActivity(roomId);
-      game_activity.roomId = roomId;
+      const game_activity = newGameActivity(socket.id, roomId);
 
       // Add room in database
       let strSQL = ` INSERT INTO rooms (pin, is_active, question_set_id, game_activity, time_started) 

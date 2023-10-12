@@ -7,6 +7,7 @@ export type Player = {
 }
 
 export type GameActivity = {
+  masterSocket: string  | null
   roomId: string | null
   role?: string
   stage: string

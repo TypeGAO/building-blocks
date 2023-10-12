@@ -49,7 +49,7 @@ const playerSocketConnection = (io: Server) => {
         await query(strSQL, [game_activity, roomId]);
 
         game_activity.role = "host";
-        io.to(roomId).emit("updateGameActivity", game_activity);
+        socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
 
         game_activity.role = "player";
         socket.emit("roomJoined", game_activity);
@@ -78,7 +78,7 @@ const playerSocketConnection = (io: Server) => {
             await query(strSQL, [game_activity, roomId]);
 
             game_activity.role = "host";
-            io.to(roomId).emit("updateGameActivity", game_activity);
+            socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
           }
         }
       }
