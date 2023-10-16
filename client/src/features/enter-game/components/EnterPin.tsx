@@ -1,12 +1,30 @@
 import { useState } from "react"
+import { useQuery } from "react-query"
+import toast from "react-hot-toast"
 import { Button, Input, SpinnerOverlay } from "../../../components"
 import useGameActivity from "../../../hooks/useGameActivity"
+import { fetchRoomByPin } from "../../../api"
+import useDelayedLoadingState from "../../../hooks/useDelayedLoadingState"
 
 function EnterPin() {
-  // TODO: Replace with API call. This currently emulates a request
-  const [roomId, setRoomId] = useState("")
+  const [roomId, setRoomId] = useState<string>("")
+  const [isSubmitted, setIsSubmitted] = useState(false)
   const { gameActivity, setGameActivity } = useGameActivity()
-  const [isLoading, setIsLoading] = useState(false)
+
+  const { isLoading } = useQuery({
+    queryKey: ["roomByPin", isSubmitted],
+    queryFn: () => fetchRoomByPin(roomId),
+    enabled: !!isSubmitted,
+    retry: 0,
+    onSuccess: () => {
+      setGameActivity({ ...gameActivity, roomId: roomId })
+      setIsSubmitted(false)
+    },
+    onError: () => {
+      toast.error("That Game PIN doesn't seem right")
+      setIsSubmitted(false)
+    },
+  })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRoomId(e.target.value)
@@ -14,17 +32,16 @@ function EnterPin() {
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setIsLoading(true)
-    setTimeout(() => {
-      setGameActivity({ ...gameActivity, roomId: roomId })
-      setIsLoading(false)
-    }, 800)
+    setIsSubmitted(true)
   }
+
+  const showSpinnerOverlay = useDelayedLoadingState(isLoading, 200)
 
   return (
     <>
-      {isLoading && <SpinnerOverlay label="Connecting" />}
-      <form onSubmit={(e) => handleSubmit(e)}>
+      {showSpinnerOverlay && <SpinnerOverlay label="Connecting" />}
+
+      <form onSubmit={handleSubmit}>
         <div style={{ display: "grid", width: "100%", gap: "var(--8)" }}>
           <Input
             placeholder="Game PIN"
