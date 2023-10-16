@@ -1,7 +1,8 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { socket } from "./socket"
 import useGameActivity from "./hooks/useGameActivity"
 import Landing from "./pages/Landing"
+import TextEditor from "./components/text-editor/TextEditor"
 
 /**
  * App Component
@@ -11,6 +12,7 @@ import Landing from "./pages/Landing"
  */
 function App() {
   const { gameActivity, setGameActivity } = useGameActivity()
+  const [showEditor, setShowEditor] = useState(gameActivity.role === "player" && gameActivity.stage === "lobby")
 
   useEffect(() => {
     function onRoomCreated(data: {
@@ -52,27 +54,49 @@ function App() {
     socket.on("roomNotFound", onRoomNotFound)
     socket.on("playerCount", onPlayerCount)
 
+    if (gameActivity.role === "player" && gameActivity.stage === "lobby") {
+      setShowEditor(true)
+    }
+
     return () => {
       socket.off("roomCreated", onRoomCreated)
       socket.off("roomJoined", onRoomJoined)
       socket.off("roomNotFound", onRoomNotFound)
       socket.off("playerCount", onPlayerCount)
     }
-  }, [gameActivity, setGameActivity])
+
+  }, [gameActivity])
 
   if (gameActivity.role === "host") {
     if (gameActivity.stage === "lobby") {
       return (
-        <h1>
-          Join with {gameActivity.roomId}, Connected: {gameActivity.playerCount}
-        </h1>
+        <div>
+          <h1>
+            Join with {gameActivity.roomId}, Connected: {gameActivity.playerCount}
+          </h1>
+          {/* {showEditor && 
+          <TextEditor
+            initialContent="# your code here"
+            language="python"
+            theme="myCustomTheme"
+          />} */}
+        </div>
       )
     }
   }
 
   if (gameActivity.role === "player") {
     if (gameActivity.stage === "lobby") {
-      return <h1>Connected to {gameActivity.roomId}</h1>
+      return (
+        <div>
+          <h1>Connected to {gameActivity.roomId}</h1>
+          {showEditor && 
+          <TextEditor
+            initialContent="# your code here"
+            language="python"
+          />}
+        </div>
+      )
     }
   }
 

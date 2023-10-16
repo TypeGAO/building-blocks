@@ -1,0 +1,12 @@
+{
+    "base": "vs",
+    "inherit": false,
+    "colors": {
+        "editor.background": "#1e1e1e"
+    },
+    "rules": [
+      { "foreground": "#FF0000", "token": "keyword" },
+      { "foreground": "#00FF00", "token": "string" },
+      { "foreground": "#0000FF", "token": "comment", "fontStyle": "bold" }
+    ]
+}

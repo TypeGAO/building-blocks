@@ -1,0 +1,14 @@
+.textEditorContainer {
+    border: 6px solid rgb(0, 195, 255);
+    border-radius: 10px;
+    padding: 8px;
+    width: 45%;
+  }
+  
+.editor {
+    height: 450px;
+    width: 100%;
+    font-size: 14px;
+    border: 2px solid #ddd;
+    border-radius: 3px;
+}
