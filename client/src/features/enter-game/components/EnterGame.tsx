@@ -4,24 +4,36 @@ import { Button, Input } from "../../../components"
 
 function EnterGame() {
   const [roomId, setRoomId] = useState("")
+  const [nickname, setNickname] = useState("")
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRoomIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRoomId(e.target.value)
+  }
+  const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNickname(e.target.value)
   }
 
   const handleSubmit = () => {
-    if (roomId) {
-      socket.emit("joinRoom", roomId)
+    if (roomId && nickname) {
+      socket.emit("joinRoom", roomId, nickname)
     }
   }
 
   return (
     <>
       <Input
+        placeholder="Nickname"
+        size="lg"
+        value={nickname}
+        onChange={handleNicknameChange}
+        autoFocus
+        style={{ textAlign: "center" }}
+      />
+      <Input
         placeholder="Game PIN"
         size="lg"
         value={roomId}
-        onChange={handleChange}
+        onChange={handleRoomIdChange}
         autoFocus
         style={{ textAlign: "center" }}
       />

@@ -1,3 +1,5 @@
+import { Player, GameActivity } from '../src/types';
+
 // Create random 7 character code
 export function generateUniqueCode(): string {
     let code = '';
@@ -8,19 +10,22 @@ export function generateUniqueCode(): string {
     return code;
 }
 
-export function addPlayer(username: string): object {
+export function addPlayer(roomId: string, nickname: string): Player {
     return {
-        username: username,
+        roomId: roomId,
+        nickname: nickname,
         currentQuestion: 0,
         score: 0,
-        buildingBlocksIDs: []
+        buildingBlocksId: []
     }
 }
 
-export function newGameActivity(roomID: string): object {
+export function newGameActivity(masterSocket: string, roomId: string): GameActivity {
     return { 
-        roomID: roomID,
-        timeRemaining: -1,
-        players: []
+        masterSocket: masterSocket,
+        roomId: roomId,
+        time: -1,
+        players: [],
+        stage: "lobby"
     };
 }
