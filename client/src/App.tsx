@@ -87,6 +87,10 @@ function App() {
             <h1>
               Join with {gameActivity.roomId}, Connected: {gameActivity.players.length}
             </h1>
+            <h2>
+                Players: 
+            </h2>
+            {gameActivity.players.map(player => <li>{player.nickname}</li>)}
         </div>
       )
     }
