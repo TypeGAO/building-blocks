@@ -4,7 +4,6 @@ import useGameActivity from "../../../hooks/useGameActivity"
 
 function EnterPin() {
   // TODO: Replace with API call. This currently emulates a request
-
   const [roomId, setRoomId] = useState("")
   const { gameActivity, setGameActivity } = useGameActivity()
   const [isLoading, setIsLoading] = useState(false)

@@ -8,6 +8,7 @@ import { GameActivityProvider } from "./contexts/GameActivityProvider.tsx"
 import "./index.css"
 import "./styles/colors.css"
 import "./styles/spacing.css"
+import "./styles/cursors.css"
 
 const router = createBrowserRouter([
   {
