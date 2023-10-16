@@ -7,7 +7,11 @@ const mountRoutes = require('./routes/router.ts');
 const app = express();
 const server = http.createServer(app);
 
-const io = new Server(server, {
+interface SocketData {
+    gameActivities: Map<string, object>
+}
+
+const io = new Server<SocketData>(server, {
   cors: {
     origin: "http://localhost:5173",
   },
