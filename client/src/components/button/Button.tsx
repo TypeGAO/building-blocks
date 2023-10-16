@@ -9,8 +9,8 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 function Button({
-  color,
-  size,
+  color = "neutral",
+  size = "md",
   disabled,
   onClick,
   children,
@@ -19,7 +19,7 @@ function Button({
   return (
     <button
       onClick={onClick}
-      className={`${styles[color || "neutral"]} ${styles[size || "md"]}`}
+      className={`${styles[color]} ${styles[size]}`}
       disabled={disabled || false}
       {...props}
     >

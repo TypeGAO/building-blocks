@@ -11,7 +11,7 @@ interface InputProps
 
 function Input({
   value,
-  size,
+  size = "md",
   onChange,
   placeholder,
   error,
@@ -22,9 +22,7 @@ function Input({
       value={value}
       onChange={onChange}
       placeholder={placeholder}
-      className={`${error ? styles.error : styles.default} ${
-        styles[size || "md"]
-      }`}
+      className={`${error ? styles.error : styles.default} ${styles[size]}`}
       {...props}
     />
   )

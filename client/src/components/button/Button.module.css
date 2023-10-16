@@ -1,23 +1,18 @@
-:root {
-  --button-shadow: inset 0px -5px 0px rgba(0, 0, 0, 0.15),
-    inset 0px -10px 0px rgba(255, 255, 255, 0.15);
-}
-
 button {
   cursor: pointer;
-  background: var(--neutral-100);
+  background-color: var(--neutral-100);
   color: var(--neutral-950);
-  box-shadow: var(--button-shadow);
-  border-radius: var(--12);
+  border-radius: var(--16);
   border: var(--4) solid;
-  border-color: var(--neutral-900);
+  border-color: var(--neutral-600);
   font-family: inherit;
   font-weight: 900;
   transition: 0.1s;
+  box-shadow: inset 0px -6px 0px rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.25);
 }
 
 button:hover {
-  box-shadow: var(--button-shadow);
   transition: 0.1s ease-out;
   transform: translateY(-2px);
   filter: brightness(1.03);
@@ -26,13 +21,13 @@ button:hover {
 button:active {
   transform: translateY(0px);
   transition: 0.1s;
+  box-shadow: inset 0px -4px 0px rgba(0, 0, 0, 0.1);
 }
 
 button:focus-visible {
   outline: unset;
   box-shadow:
-    inset 0px -6px 0px rgba(0, 0, 0, 0.15),
-    inset 0px -10px 0px rgba(255, 255, 255, 0.15),
+    inset 0px -6px 0px rgba(0, 0, 0, 0.1),
     0 0 0 4px var(--blue-400);
 }
 
@@ -58,12 +53,15 @@ button:disabled {
 }
 
 .blue {
-  background: var(--blue-300);
-  border-color: var(--blue-900);
+  color: var(--blue-950);
+  background-color: var(--blue-400);
 }
 
 .green {
   color: var(--neutral-50);
-  background: var(--green-500);
-  border-color: var(--green-900);
+  background-color: var(--green-500);
+}
+
+.neutral {
+  border-color: var(--neutral-700);
 }
