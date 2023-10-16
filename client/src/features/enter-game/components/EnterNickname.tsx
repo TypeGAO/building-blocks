@@ -5,7 +5,7 @@ import useGameActivity from "../../../hooks/useGameActivity"
 
 function EnterNickname() {
   const [nickname, setNickname] = useState("")
-  const { gameActivity } = useGameActivity()
+  const { gameActivity, setGameActivity } = useGameActivity()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value)
@@ -13,9 +13,9 @@ function EnterNickname() {
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
-
-    if (nickname) {
-      socket.emit("joinRoom", gameActivity.roomId)
+    setGameActivity({ ...gameActivity, nickname: nickname })
+    if (gameActivity.roomId && nickname) {
+      socket.emit("joinRoom", gameActivity.roomId, nickname)
     }
   }
 
