@@ -4,6 +4,7 @@ import useGameActivity from "./hooks/useGameActivity"
 import Landing from "./pages/Landing"
 import PlayerLobby from "./pages/PlayerLobby"
 import { GameActivity } from "./types"
+import HostLobby from "./pages/HostLobby"
 
 /**
  * App Component
@@ -48,39 +49,20 @@ function App() {
       })
     }
 
-    function onRoomNotFound(errorMessage: string) {
-      alert(errorMessage)
-    }
-
     socket.on("roomCreated", onRoomCreated)
     socket.on("roomJoined", onRoomJoined)
-    socket.on("roomNotFound", onRoomNotFound)
     socket.on("updateGameActivity", onUpdateGameActivity)
 
     return () => {
       socket.off("roomCreated", onRoomCreated)
       socket.off("roomJoined", onRoomJoined)
-      socket.off("roomNotFound", onRoomNotFound)
       socket.off("updateGameActivity", onUpdateGameActivity)
     }
   }, [gameActivity, setGameActivity])
 
-  console.log("gameActivity :: ", gameActivity)
-
   if (gameActivity.role === "host") {
     if (gameActivity.stage === "lobby") {
-      return (
-        <div>
-          <h1>
-            Join with {gameActivity.roomId}, Connected:{" "}
-            {gameActivity.players.length}
-          </h1>
-          <h2>Players:</h2>
-          {gameActivity.players.map((player) => (
-            <li>{player.nickname}</li>
-          ))}
-        </div>
-      )
+      return <HostLobby />
     }
   }
 
