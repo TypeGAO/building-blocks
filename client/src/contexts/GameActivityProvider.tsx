@@ -18,9 +18,9 @@ export const GameActivityProvider = ({
 }: GameActivityContextProps) => {
   const [gameActivity, setGameActivity] = useState<GameActivity>({
     roomId: null,
+    nickname: "",
     role: "player",
     stage: "landing",
-    playerCount: 0,
     time: -1,
     players: [],
   })

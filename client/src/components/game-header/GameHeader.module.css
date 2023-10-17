@@ -1,0 +1,32 @@
+.header {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  text-align: center;
+  padding: var(--16) var(--20);
+  height: var(--20);
+  border-bottom: var(--4) solid var(--neutral-200);
+}
+
+.left {
+  justify-self: flex-start;
+  display: flex;
+  align-self: flex-start;
+  flex-direction: row;
+}
+
+.mid {
+  display: inline-block;
+}
+
+.right {
+  justify-self: flex-end;
+  display: flex;
+  align-self: flex-start;
+  flex-direction: row;
+}
+
+.nickname {
+  font-weight: 700;
+  font-size: var(--16);
+}
