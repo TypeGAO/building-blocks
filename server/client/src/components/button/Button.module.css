@@ -1,0 +1,69 @@
+:root {
+  --button-shadow: inset 0px -5px 0px rgba(0, 0, 0, 0.15),
+    inset 0px -10px 0px rgba(255, 255, 255, 0.15);
+}
+
+button {
+  cursor: pointer;
+  background: var(--neutral-100);
+  color: var(--neutral-950);
+  box-shadow: var(--button-shadow);
+  border-radius: var(--12);
+  border: var(--4) solid;
+  border-color: var(--neutral-900);
+  font-family: inherit;
+  font-weight: 900;
+  transition: 0.1s;
+}
+
+button:hover {
+  box-shadow: var(--button-shadow);
+  transition: 0.1s ease-out;
+  transform: translateY(-2px);
+  filter: brightness(1.03);
+}
+
+button:active {
+  transform: translateY(0px);
+  transition: 0.1s;
+}
+
+button:focus-visible {
+  outline: unset;
+  box-shadow:
+    inset 0px -6px 0px rgba(0, 0, 0, 0.15),
+    inset 0px -10px 0px rgba(255, 255, 255, 0.15),
+    0 0 0 4px var(--blue-400);
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.md {
+  font-size: var(--16);
+  padding-top: var(--12);
+  padding-bottom: var(--16);
+  padding-left: var(--16);
+  padding-right: var(--16);
+}
+
+.lg {
+  font-size: var(--20);
+  padding-top: var(--16);
+  padding-bottom: var(--20);
+  padding-left: var(--20);
+  padding-right: var(--20);
+}
+
+.blue {
+  background: var(--blue-300);
+  border-color: var(--blue-900);
+}
+
+.green {
+  color: var(--neutral-50);
+  background: var(--green-500);
+  border-color: var(--green-900);
+}

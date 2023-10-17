@@ -1,0 +1,38 @@
+version: '3.3'
+services:
+  nginx:
+    image: ardiank/nginx
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+
+  client:
+    image: ardiank/client
+    build: 
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    container_name: client
+    networks:
+      - app-network
+
+  backend:
+    image: ardiank/backend
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    container_name: backend
+    hostname: backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

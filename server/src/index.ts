@@ -7,13 +7,10 @@ const mountRoutes = require('./routes/router.ts');
 const app = express();
 const server = http.createServer(app);
 
-interface SocketData {
-    gameActivities: Map<string, object>
-}
-
-const io = new Server<SocketData>(server, {
+const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "http://buildingblockstest.us-east-2.elasticbeanstalk.com",
+    methods: ["GET", "POST"],
   },
 });
 

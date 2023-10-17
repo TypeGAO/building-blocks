@@ -1,0 +1,19 @@
+version: 0.2
+env:
+  secrets-manager:
+    DOCKERHUB_PASS: "DockerLogin:DOCKER_P"
+    DOCKERHUB_USERNAME: "DockerLogin:DOCKER_U"
+phases:
+  build:
+    commands:
+      - echo Building nginx, client, and backend images
+      - docker build -t ardiank/nginx -f ./nginx/Dockerfile ./nginx
+      - cd client && docker build -t ardiank/client .
+      - cd .. && docker build -t ardiank/backend -f Dockerfile .
+      - echo "$DOCKERHUB_PASS" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
+  post_build:
+    commands:
+      - echo Pushing images to Docker Hub
+      - docker push ardiank/nginx
+      - docker push ardiank/client
+      - docker push ardiank/backend

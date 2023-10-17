@@ -1,0 +1,31 @@
+version: '3.3'
+services:
+  client:
+      build: 
+        context: ./client
+        dockerfile: Dockerfile.dev
+      ports:
+         - "5173:5173"
+      container_name: client
+      networks:
+       - app-network
+      volumes:
+        - ./client/src/socket.ts:/app/src/socket.ts
+
+  backend:
+      build: 
+        context: .
+        dockerfile: Dockerfile
+      ports:
+        - "3000:3000"
+        - "5432:5432"
+      container_name: backend
+      #network_mode: host
+      networks:
+       - app-network
+      volumes:
+        - ./server/src/index.ts:/app/server/src/index.ts
+
+networks:
+  app-network:
+    driver: bridge
