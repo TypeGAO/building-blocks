@@ -3,7 +3,7 @@ import { socket } from "./socket"
 import useGameActivity from "./hooks/useGameActivity"
 import Landing from "./pages/Landing"
 import PlayerLobby from "./pages/PlayerLobby"
-import { Player } from "./types"
+import { GameActivity } from "./types"
 
 /**
  * App Component
@@ -15,13 +15,7 @@ function App() {
   const { gameActivity, setGameActivity } = useGameActivity()
 
   useEffect(() => {
-    function onRoomCreated(data: {
-      roomId: string
-      stage: string
-      role: string
-      time: number
-      players: [Player]
-    }) {
+    function onRoomCreated(data: GameActivity) {
       setGameActivity({
         ...gameActivity,
         roomId: data.roomId,
@@ -32,13 +26,7 @@ function App() {
       })
     }
 
-    function onUpdateGameActivity(data: {
-      roomId: string
-      stage: string
-      role: string
-      time: number
-      players: [Player]
-    }) {
+    function onUpdateGameActivity(data: GameActivity) {
       setGameActivity({
         ...gameActivity,
         roomId: data.roomId,
@@ -49,13 +37,7 @@ function App() {
       })
     }
 
-    function onRoomJoined(data: {
-      roomId: string
-      stage: string
-      role: string
-      time: number
-      players: [Player]
-    }) {
+    function onRoomJoined(data: GameActivity) {
       setGameActivity({
         ...gameActivity,
         roomId: data.roomId,
