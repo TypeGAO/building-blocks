@@ -8,7 +8,7 @@ import useDelayedLoadingState from "../../../hooks/useDelayedLoadingState"
 
 function EnterPin() {
   const [roomId, setRoomId] = useState<string>("")
-  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
   const { gameActivity, setGameActivity } = useGameActivity()
 
   const { isLoading } = useQuery({
