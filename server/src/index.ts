@@ -2,13 +2,14 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 import { hostSocketConnection, playerSocketConnection } from "./routes/sockets";
-const mountRoutes = require('./routes/router.ts');
+import cors from "cors";
+const mountRoutes = require("./routes/router.ts");
 
 const app = express();
 const server = http.createServer(app);
 
 interface SocketData {
-    gameActivities: Map<string, object>
+  gameActivities: Map<string, object>;
 }
 
 const io = new Server<SocketData>(server, {
@@ -16,6 +17,12 @@ const io = new Server<SocketData>(server, {
     origin: "http://localhost:5173",
   },
 });
+
+app.use(
+  cors({
+    origin: "hhttp://localhost:5173",
+  }),
+);
 
 hostSocketConnection(io);
 playerSocketConnection(io);
