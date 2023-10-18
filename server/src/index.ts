@@ -20,7 +20,7 @@ const io = new Server<SocketData>(server, {
 
 app.use(
   cors({
-    origin: "hhttp://localhost:5173",
+    origin: "http://localhost:5173",
   }),
 );
 
