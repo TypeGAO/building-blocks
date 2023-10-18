@@ -48,7 +48,7 @@ const hostSocketConnection = (io: Server) => {
         socket.emit("updateGameActivity", game_activity);
 
         game_activity.role = "player";
-        socket.broadcast.emit("updateGameActivity", game_activity);
+        socket.broadcast.to(roomId).emit("updateGameActivity", game_activity);
     });
   });
 };
