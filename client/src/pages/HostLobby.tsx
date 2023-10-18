@@ -1,5 +1,6 @@
 import useGameActivity from "../hooks/useGameActivity"
 import styles from "./HostLobby.module.css"
+import { StartGameButton } from "../features/start-game"
 
 function HostLobby() {
   const { gameActivity } = useGameActivity()
@@ -36,6 +37,7 @@ function HostLobby() {
         ))}
       </div>
       playerCount : {playerCount}
+      <StartGameButton roomId={gameActivity.roomId}/>
     </div>
   )
 }
