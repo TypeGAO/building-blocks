@@ -1,5 +1,17 @@
+export type Player = {
+  roomId: string
+  nickname: string
+  score: number
+  currentQuestion: number
+  buildingBlocksId: [number] | []
+}
+
 export type GameActivity = {
-  role?: "player" | "host"
-  stage: "landing" | "lobby" | "game"
-  playerCount: number | 0
+  masterSocket?: string | null
+  roomId: string | null
+  nickname: string | null
+  role?: string
+  stage: string
+  time: number
+  players: [Player] | []
 }

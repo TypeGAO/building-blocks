@@ -5,13 +5,8 @@ interface NotificationProps {
   children: string
 }
 
-function Notification({ color, children }: NotificationProps) {
-  return (
-    <div
-      className={styles[color || "green"]}>
-      {children}
-    </div>
-  )
+function Notification({ color = "green", children }: NotificationProps) {
+  return <div className={styles[color]}>{children}</div>
 }
 
 export default Notification
