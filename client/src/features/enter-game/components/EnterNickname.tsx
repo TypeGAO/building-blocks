@@ -1,7 +1,9 @@
 import { useState } from "react"
+import { profanities } from "profanities"
 import { socket } from "../../../socket"
 import { Button, Input } from "../../../components"
 import useGameActivity from "../../../hooks/useGameActivity"
+import toast from "react-hot-toast"
 
 function EnterNickname() {
   const [nickname, setNickname] = useState("")
@@ -13,6 +15,12 @@ function EnterNickname() {
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    if (profanities.includes(nickname)) {
+      toast.error("That nickname isn't ok")
+      return
+    }
+
     setGameActivity({ ...gameActivity, nickname: nickname })
     if (gameActivity.roomId && nickname) {
       socket.emit("joinRoom", gameActivity.roomId, nickname)

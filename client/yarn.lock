@@ -5033,6 +5033,7 @@ __metadata:
     eslint-plugin-storybook: ^0.6.14
     postcss: ^8.4.30
     prettier: ^3.0.3
+    profanities: ^3.0.1
     react: ^18.2.0
     react-dom: ^18.2.0
     react-hot-toast: ^2.4.1
@@ -8801,6 +8802,13 @@ __metadata:
   version: 0.11.10
   resolution: "process@npm:0.11.10"
   checksum: bfcce49814f7d172a6e6a14d5fa3ac92cc3d0c3b9feb1279774708a719e19acd673995226351a082a9ae99978254e320ccda4240ddc474ba31a76c79491ca7c3
+  languageName: node
+  linkType: hard
+
+"profanities@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "profanities@npm:3.0.1"
+  checksum: ee8260ceb8670d39d879e0a87b5f1a6bc9304965def7eb5281a6b88f07b60c5796b4d9867b761b12a39d78c6e8955b662c76424e4d47e062d82d7fcb84391f83
   languageName: node
   linkType: hard
 
