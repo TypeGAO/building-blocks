@@ -14,13 +14,14 @@ interface SocketData {
 
 const io = new Server<SocketData>(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: (process.env.NODE_DEV == "true" ? "http://localhost:5173" : "http://buildingblockstest.us-east-2.elasticbeanstalk.com"),
+    methods: ["GET", "POST"],
   },
 });
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: (process.env.NODE_DEV == "true" ? "http://localhost:5173" : "http://buildingblockstest.us-east-2.elasticbeanstalk.com"),
   }),
 );
 
@@ -30,6 +31,7 @@ playerSocketConnection(io);
 const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, () => {
+  console.log(process.env.NODE_DEV == "true" ? "http://localhost:5173" : "http://buildingblockstest.us-east-2.elasticbeanstalk.com");
   console.log(`Server is running on port ${PORT}`);
 });
 
