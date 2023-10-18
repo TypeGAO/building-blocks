@@ -7,7 +7,7 @@ function QuizCreation() {
     <div className="QuizCreation">
       <QuestionBuilder />
     </div>
-  );
+  )
 }
 
 export default QuizCreation;
