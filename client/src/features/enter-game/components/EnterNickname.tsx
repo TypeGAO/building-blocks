@@ -16,7 +16,7 @@ function EnterNickname() {
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (profanities.includes(nickname)) {
+    if (profanities.includes(nickname.toLowerCase())) {
       toast.error("That nickname isn't ok")
       return
     }
