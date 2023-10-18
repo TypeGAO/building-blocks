@@ -37,7 +37,7 @@ function HostLobby() {
         ))}
       </div>
       playerCount : {playerCount}
-      <StartGameButton roomId={gameActivity.roomId}/>
+      <StartGameButton roomId={gameActivity.roomId} players={gameActivity.players.length}/>
     </div>
   )
 }

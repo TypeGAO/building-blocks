@@ -49,6 +49,17 @@ function App() {
       })
     }
 
+    function onRoomJoined(data: GameActivity) {
+      setGameActivity({
+        ...gameActivity,
+        roomId: data.roomId,
+        stage: data.stage,
+        role: data.role,
+        time: data.time,
+        players: data.players,
+      })
+    }
+
     socket.on("roomCreated", onRoomCreated)
     socket.on("roomJoined", onRoomJoined)
     socket.on("updateGameActivity", onUpdateGameActivity)
@@ -64,11 +75,17 @@ function App() {
     if (gameActivity.stage === "lobby") {
       return <HostLobby />
     }
+    else if (gameActivity.stage == "started") {
+        return <h1>Host View Game Started</h1>
+    }
   }
 
   if (gameActivity.role === "player") {
     if (gameActivity.stage === "lobby") {
       return <PlayerLobby />
+    }
+    else if (gameActivity.stage == "started") {
+        return <h1>Player View Game Started</h1>
     }
   }
 
