@@ -5,6 +5,7 @@ import Landing from "./pages/Landing"
 import PlayerLobby from "./pages/PlayerLobby"
 import { GameActivity } from "./types"
 import HostLobby from "./pages/HostLobby"
+import toast from "react-hot-toast"
 
 /**
  * App Component
@@ -60,14 +61,20 @@ function App() {
       })
     }
 
+    function onDuplicateName() {
+      toast.error("Name is Taken!");
+    }
+
     socket.on("roomCreated", onRoomCreated)
     socket.on("roomJoined", onRoomJoined)
     socket.on("updateGameActivity", onUpdateGameActivity)
+    socket.on("duplicateName", onDuplicateName);
 
     return () => {
       socket.off("roomCreated", onRoomCreated)
       socket.off("roomJoined", onRoomJoined)
       socket.off("updateGameActivity", onUpdateGameActivity)
+      socket.off("duplicateName", onDuplicateName);
     }
   }, [gameActivity, setGameActivity])
 

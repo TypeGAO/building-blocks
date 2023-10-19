@@ -1,11 +1,7 @@
 import { Player, GameActivity } from '../src/types';
 const query = require('../src/db/index.ts');
 
-// Use JSON to keep track of how many players each port/socket has
-export const players: { [port: string]: number } = {};
-// Use JSON to keep track of which codes correspond to which ports
-export const codes: { [code: string]: string} = {};
-
+// Helper functions for getting, setting, and inserting game activities into the database
 export async function getGameActivity(roomId: string) {
     let strSQL = `SELECT game_activity 
                   FROM rooms WHERE pin = $1`

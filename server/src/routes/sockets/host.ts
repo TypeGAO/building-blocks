@@ -21,6 +21,7 @@ const query = require('../../db/index.ts');
 const hostSocketConnection = (io: Server) => {
   io.on("connection", (socket: Socket) => {
     socket.on("createRoom", async () => {
+      // Generate unique code
       const roomId = generateUniqueCode();
       socket.join(roomId);
 
@@ -29,17 +30,21 @@ const hostSocketConnection = (io: Server) => {
       // Add room in database
       await insertGameActivity(game_activity, roomId);
 
+      // Send to host
       game_activity.role = "host";
       socket.emit("roomCreated", game_activity);
     });
 
     socket.on("startGame", async (roomId: string) => {
 
+        // Get game activity from database, set it as started
         const game_activity = await getGameActivity(roomId);
         game_activity.stage = "started";
 
+        // Update game activity
         await setGameActivity(game_activity, roomId);
 
+        // Send game activity to host and all players
         game_activity.role = "host";
         socket.emit("updateGameActivity", game_activity);
 
