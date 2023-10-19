@@ -24,6 +24,7 @@ export function newGameActivity(masterSocket: string, roomId: string): GameActiv
     return { 
         masterSocket: masterSocket,
         roomId: roomId,
+        nickname: "",
         time: -1,
         players: [],
         stage: "lobby"

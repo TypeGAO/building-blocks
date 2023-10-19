@@ -1,6 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { Player, GameActivity } from '../../types';
 import { addPlayer } from "../../../services/generateGameService";
+import { getGameActivity, setGameActivity } from "../../../services/gameManagerService";
 
 const query = require('../../db/index.ts');
 
@@ -38,15 +39,11 @@ const playerSocketConnection = (io: Server) => {
         const new_player = addPlayer(roomId, nickname);
         connectedPlayers.set(socket.id, new_player);
 
-        let strSQL = `SELECT game_activity 
-                      FROM rooms WHERE pin = $1`
-        const { rows } = await query(strSQL, [roomId]);
-        const game_activity = rows[0].game_activity;
+        const game_activity = await getGameActivity(roomId);
 
         game_activity.players.push(new_player);
 
-        strSQL = `UPDATE rooms SET game_activity = $1 WHERE pin = $2`;
-        await query(strSQL, [game_activity, roomId]);
+        await setGameActivity(game_activity, roomId);
 
         game_activity.role = "host";
         socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
@@ -67,15 +64,11 @@ const playerSocketConnection = (io: Server) => {
         if (roomId) {
           const room = io.sockets.adapter.rooms.get(roomId);
           if (room) {
-            let strSQL = `SELECT game_activity 
-                          FROM rooms WHERE pin = $1`
-            const { rows } = await query(strSQL, [roomId]);
-            const game_activity = rows[0].game_activity;
+            const game_activity = await getGameActivity(roomId);
 
             game_activity.players  = game_activity.players.filter((p: Player) => p.nickname !== nickname);
 
-            strSQL = `UPDATE rooms SET game_activity = $1 WHERE pin = $2`;
-            await query(strSQL, [game_activity, roomId]);
+            await setGameActivity(game_activity, roomId);
 
             game_activity.role = "host";
             socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);

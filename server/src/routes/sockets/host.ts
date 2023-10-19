@@ -1,5 +1,6 @@
 import { Server, Socket } from "socket.io";
 import { generateUniqueCode, newGameActivity } from "../../../services/generateGameService";
+import { getGameActivity, setGameActivity, insertGameActivity } from "../../../services/gameManagerService";
 
 const query = require('../../db/index.ts');
 /**
@@ -26,23 +27,18 @@ const hostSocketConnection = (io: Server) => {
       const game_activity = newGameActivity(socket.id, roomId);
 
       // Add room in database
-      let strSQL = ` INSERT INTO rooms (pin, is_active, question_set_id, game_activity, time_started) 
-                     VALUES ($1, false, $2, $3, NOW())`;
-      await query(strSQL, [roomId, 1, game_activity]);
+      await insertGameActivity(game_activity, roomId);
 
       game_activity.role = "host";
       socket.emit("roomCreated", game_activity);
     });
 
     socket.on("startGame", async (roomId: string) => {
-        let strSQL = `SELECT game_activity 
-                      FROM rooms WHERE pin = $1`
-        const { rows } = await query(strSQL, [roomId]);
-        const game_activity = rows[0].game_activity;
+
+        const game_activity = await getGameActivity(roomId);
         game_activity.stage = "started";
 
-        strSQL = `UPDATE rooms SET game_activity = $1 WHERE pin = $2`;
-        await query(strSQL, [game_activity, roomId]);
+        await setGameActivity(game_activity, roomId);
 
         game_activity.role = "host";
         socket.emit("updateGameActivity", game_activity);
