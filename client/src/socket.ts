@@ -1,5 +1,9 @@
 import { io } from "socket.io-client"
+import { DEV_SERVER_URL, PROD_SERVER_URL } from "./constants"
 
-export const socket = io(import.meta.env.DEV ? "http://localhost:3000" : "http://buildingblockstest.us-east-2.elasticbeanstalk.com", {
-  autoConnect: true,
-})
+export const socket = io(
+  import.meta.env.DEV ? DEV_SERVER_URL : PROD_SERVER_URL,
+  {
+    autoConnect: true,
+  }
+)
