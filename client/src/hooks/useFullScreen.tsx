@@ -39,7 +39,7 @@ export function isFullScreen(): boolean {
  * );
  * ```
  */
-function useFullscreen() {
+function useFullscreen(): [boolean, () => void] {
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false),
     toggle = useCallback(() => {
       if (!isFullScreen()) {
