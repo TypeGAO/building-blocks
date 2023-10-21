@@ -24,7 +24,6 @@ import { useState, useEffect } from "react"
  * );
  * ```
  */
-
 const useDelayedLoadingState = (
   isLoading: boolean,
   delayTime: number
