@@ -2,6 +2,10 @@ import { useEffect, useState } from "react"
 import { socket } from "./socket"
 import useGameActivity from "./hooks/useGameActivity"
 import Landing from "./pages/Landing"
+import PlayerLobby from "./pages/PlayerLobby"
+import { GameActivity } from "./types"
+import HostLobby from "./pages/HostLobby"
+import toast from "react-hot-toast"
 import TextEditor from "./components/text-editor/TextEditor"
 
 /**
@@ -12,91 +16,90 @@ import TextEditor from "./components/text-editor/TextEditor"
  */
 function App() {
   const { gameActivity, setGameActivity } = useGameActivity()
-  const [showEditor, setShowEditor] = useState(gameActivity.role === "player" && gameActivity.stage === "lobby")
+  const [editorContent, setEditorContent] = useState('#your code here')
 
   useEffect(() => {
-    function onRoomCreated(data: {
-      roomId: string
-      stage: string
-      role: string
-    }) {
+    function onRoomCreated(data: GameActivity) {
       setGameActivity({
         ...gameActivity,
         roomId: data.roomId,
         stage: data.stage,
         role: data.role,
+        time: data.time,
+        players: data.players,
       })
     }
 
-    function onRoomJoined(data: {
-      roomId: string
-      stage: string
-      role: string
-    }) {
+    function onUpdateGameActivity(data: GameActivity) {
       setGameActivity({
         ...gameActivity,
         roomId: data.roomId,
         stage: data.stage,
         role: data.role,
+        time: data.time,
+        players: data.players,
       })
     }
 
-    function onRoomNotFound(errorMessage: string) {
-      alert(errorMessage)
+    // function onRoomJoined(data: GameActivity) {
+    //   setGameActivity({
+    //     ...gameActivity,
+    //     roomId: data.roomId,
+    //     stage: data.stage,
+    //     role: data.role,
+    //     time: data.time,
+    //     players: data.players,
+    //   })
+    // }
+
+    function onRoomJoined(data: GameActivity) {
+      setGameActivity({
+        ...gameActivity,
+        roomId: data.roomId,
+        stage: data.stage,
+        role: data.role,
+        time: data.time,
+        players: data.players,
+      })
     }
 
-    function onPlayerCount(playerCount: number) {
-      setGameActivity({ ...gameActivity, playerCount: playerCount })
+    function onDuplicateName() {
+      toast.error("Name is Taken!");
     }
 
     socket.on("roomCreated", onRoomCreated)
     socket.on("roomJoined", onRoomJoined)
-    socket.on("roomNotFound", onRoomNotFound)
-    socket.on("playerCount", onPlayerCount)
-
-    if (gameActivity.role === "player" && gameActivity.stage === "lobby") {
-      setShowEditor(true)
-    }
+    socket.on("updateGameActivity", onUpdateGameActivity)
+    socket.on("duplicateName", onDuplicateName);
 
     return () => {
       socket.off("roomCreated", onRoomCreated)
       socket.off("roomJoined", onRoomJoined)
-      socket.off("roomNotFound", onRoomNotFound)
-      socket.off("playerCount", onPlayerCount)
+      socket.off("updateGameActivity", onUpdateGameActivity)
+      socket.off("duplicateName", onDuplicateName);
     }
-
-  }, [gameActivity])
+  }, [gameActivity, setGameActivity])
 
   if (gameActivity.role === "host") {
     if (gameActivity.stage === "lobby") {
-      return (
-        <div>
-          <h1>
-            Join with {gameActivity.roomId}, Connected: {gameActivity.playerCount}
-          </h1>
-          {/* {showEditor && 
-          <TextEditor
-            initialContent="# your code here"
-            language="python"
-            theme="myCustomTheme"
-          />} */}
-        </div>
-      )
+      return <HostLobby />
+    }
+    else if (gameActivity.stage == "started") {
+        return <h1>Host View Game Started</h1>
     }
   }
 
   if (gameActivity.role === "player") {
     if (gameActivity.stage === "lobby") {
-      return (
-        <div>
-          <h1>Connected to {gameActivity.roomId}</h1>
-          {showEditor && 
-          <TextEditor
-            initialContent="# your code here"
-            language="python"
-          />}
-        </div>
-      )
+      return <PlayerLobby />
+    }
+    else if (gameActivity.stage == "started") {
+        return (
+          <div>
+            <h1>Player View Game Started</h1>
+            <TextEditor value={editorContent} onChange={(newValue) => setEditorContent(newValue)} />
+          </div>
+        )
     }
   }
 

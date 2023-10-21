@@ -1,43 +1,32 @@
-import Editor from "@monaco-editor/react"
-import * as monaco from "monaco-editor"
-// import myCustomTheme from "./my-custom-theme.json"
-import styles from "./TextEditor.module.css"
+import React, { useState } from 'react'
+import { Controlled as CodeMirror } from 'react-codemirror2'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/mode/python/python' //python mode
 
-monaco.editor.defineTheme('customTheme', {
-    base: 'vs-dark',
-    inherit: true,
-    rules: [
-      {
-        token: "identifier",
-        foreground: "9CDCFE"
-      },
-      {
-        token: "identifier.function",
-        foreground: "DCDCAA"
-      },
-      {
-        token: "type",
-        foreground: "1AAFB0"
-      }
-    ],
-    colors: {}
-    });
-monaco.editor.setTheme('customTheme')
+interface TextEditorProps {
+  value: string
+  onChange: (newValue: string) => void
+}
 
-function TextEditor(props: { initialContent: string; language: string }) {
-    const { initialContent, language } = props
+const TextEditor: React.FC<TextEditorProps> = ({ value, onChange }) => {
+  const options = {
+    mode: 'python', 
+    theme: 'material', 
+  }
 
-    monaco.editor.setTheme('customTheme')
+  const handleBeforeChange = (editor: any, data: any, newValue: string) => {
+    onChange(newValue)
+  }
 
-    return (
-        <div className={styles.textEditorContainer}>
-            <Editor 
-                defaultValue={initialContent}
-                language={language}
-                className={styles.editor}
-            />
-        </div>
-    )
+  return (
+    <div>
+      <CodeMirror
+        value={value}
+        options={options}
+        onBeforeChange={handleBeforeChange}
+      />
+    </div>
+  )
 }
 
 export default TextEditor
