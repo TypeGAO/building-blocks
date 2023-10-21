@@ -1,3 +1,4 @@
+import { Tooltip } from ".."
 import styles from "./HostControlsButton.module.css"
 
 interface HostControlsButtonProps {
@@ -8,9 +9,11 @@ interface HostControlsButtonProps {
 
 function HostControlsButton({ icon, label, onClick }: HostControlsButtonProps) {
   return (
-    <button title={label} className={styles.button} onClick={onClick}>
-      {icon}
-    </button>
+    <Tooltip label={label}>
+      <button className={styles.button} onClick={onClick}>
+        {icon}
+      </button>
+    </Tooltip>
   )
 }
 

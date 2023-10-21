@@ -28,7 +28,7 @@ function HostLobby() {
               ) : (
                 <ArrowsOutSimple size={24} weight="fill" />
               ),
-              label: "Full screen",
+              label: isFullScreen ? "Exit full screen" : "Enter full screen",
               onClick: toggle,
             },
           ]}

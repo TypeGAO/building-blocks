@@ -1,0 +1,39 @@
+.tooltip {
+  display: inline-flex;
+  align-items: center;
+}
+
+.tooltipLabel {
+  visibility: hidden;
+  width: max-content;
+  background-color: var(--neutral-950);
+  color: #fff;
+  font-weight: 700;
+  text-align: center;
+  padding: var(--8) var(--16);
+  border-radius: var(--8);
+  position: absolute;
+  z-index: 1;
+  animation: float 0.8s infinite alternate;
+}
+
+.tooltip:hover .tooltipLabel {
+  visibility: visible;
+}
+
+.left {
+  right: 105%;
+}
+
+.right {
+  left: 105%;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-4px);
+  }
+}
