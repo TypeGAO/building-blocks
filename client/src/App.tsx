@@ -5,8 +5,6 @@ import Landing from "./pages/Landing"
 import PlayerLobby from "./pages/PlayerLobby"
 import { GameActivity } from "./types"
 import HostLobby from "./pages/HostLobby"
-import toast from "react-hot-toast"
-import TextEditor from "./components/text-editor/TextEditor"
 
 /**
  * App Component
@@ -36,70 +34,43 @@ function App() {
         roomId: data.roomId,
         stage: data.stage,
         role: data.role,
-        time: data.time,
-        players: data.players,
       })
     }
 
-    // function onRoomJoined(data: GameActivity) {
-    //   setGameActivity({
-    //     ...gameActivity,
-    //     roomId: data.roomId,
-    //     stage: data.stage,
-    //     role: data.role,
-    //     time: data.time,
-    //     players: data.players,
-    //   })
-    // }
-
-    function onRoomJoined(data: GameActivity) {
-      setGameActivity({
-        ...gameActivity,
-        roomId: data.roomId,
-        stage: data.stage,
-        role: data.role,
-        time: data.time,
-        players: data.players,
-      })
+    function onRoomNotFound(errorMessage: string) {
+      alert(errorMessage)
     }
 
-    function onDuplicateName() {
-      toast.error("Name is Taken!");
+    function onPlayerCount(playerCount: number) {
+      setGameActivity({ ...gameActivity, playerCount: playerCount })
     }
 
     socket.on("roomCreated", onRoomCreated)
     socket.on("roomJoined", onRoomJoined)
-    socket.on("updateGameActivity", onUpdateGameActivity)
-    socket.on("duplicateName", onDuplicateName);
+    socket.on("roomNotFound", onRoomNotFound)
+    socket.on("playerCount", onPlayerCount)
 
     return () => {
       socket.off("roomCreated", onRoomCreated)
       socket.off("roomJoined", onRoomJoined)
-      socket.off("updateGameActivity", onUpdateGameActivity)
-      socket.off("duplicateName", onDuplicateName);
+      socket.off("roomNotFound", onRoomNotFound)
+      socket.off("playerCount", onPlayerCount)
     }
   }, [gameActivity, setGameActivity])
 
   if (gameActivity.role === "host") {
     if (gameActivity.stage === "lobby") {
-      return <HostLobby />
-    }
-    else if (gameActivity.stage == "started") {
-        return <h1>Host View Game Started</h1>
+      return (
+        <h1>
+          Join with {gameActivity.roomId}, Connected: {gameActivity.playerCount}
+        </h1>
+      )
     }
   }
 
   if (gameActivity.role === "player") {
     if (gameActivity.stage === "lobby") {
-      return <PlayerLobby />
-    }
-    else if (gameActivity.stage == "started") {
-        return (
-          <div>
-            <h1>Player View Game Started</h1>
-            <TextEditor value={editorContent} onChange={(newValue) => setEditorContent(newValue)} />
-          </div>
-        )
+      return <h1>Connected to {gameActivity.roomId}</h1>
     }
   }
 

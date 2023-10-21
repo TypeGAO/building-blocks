@@ -1,35 +1,15 @@
-import { useState } from "react"
-import { socket } from "../../../socket"
-import { Button, Input } from "../../../components"
+import useGameActivity from "../../../hooks/useGameActivity"
+import EnterNickname from "./EnterNickname"
+import EnterPin from "./EnterPin"
 
 function EnterGame() {
-  const [roomId, setRoomId] = useState("")
+  const { gameActivity } = useGameActivity()
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRoomId(e.target.value)
+  if (gameActivity.roomId) {
+    return <EnterNickname />
   }
 
-  const handleSubmit = () => {
-    if (roomId) {
-      socket.emit("joinRoom", roomId)
-    }
-  }
-
-  return (
-    <>
-      <Input
-        placeholder="Game PIN"
-        size="lg"
-        value={roomId}
-        onChange={handleChange}
-        autoFocus
-        style={{ textAlign: "center" }}
-      />
-      <Button color="green" size="lg" onClick={handleSubmit}>
-        Enter
-      </Button>
-    </>
-  )
+  return <EnterPin />
 }
 
 export default EnterGame

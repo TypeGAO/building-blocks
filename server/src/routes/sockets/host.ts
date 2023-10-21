@@ -1,5 +1,7 @@
 import { Server, Socket } from "socket.io";
-import { generateUniqueCode } from "../../../services/generateGameService";
+import { generateUniqueCode, newGameActivity } from "../../../services/generateGameService";
+
+const query = require('../../db/index.ts');
 
 /**
  * hostSocketConnection(io)
@@ -18,11 +20,19 @@ import { generateUniqueCode } from "../../../services/generateGameService";
  */
 const hostSocketConnection = (io: Server) => {
   io.on("connection", (socket: Socket) => {
-    socket.on("createRoom", () => {
+    socket.on("createRoom", async () => {
       const roomId = generateUniqueCode();
       socket.join(roomId);
-      socket.emit("roomCreated", { roomId, stage: "lobby", role: "host" });
-      console.log(roomId);
+
+      const game_activity = newGameActivity(socket.id, roomId);
+
+      // Add room in database
+      let strSQL = ` INSERT INTO rooms (pin, is_active, question_set_id, game_activity, time_started) 
+                     VALUES ($1, false, $2, $3, NOW())`;
+      await query(strSQL, [roomId, 1, game_activity]);
+
+      game_activity.role = "host";
+      socket.emit("roomCreated", game_activity);
     });
   });
 };

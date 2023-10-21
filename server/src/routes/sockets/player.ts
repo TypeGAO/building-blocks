@@ -1,4 +1,8 @@
 import { Server, Socket } from "socket.io";
+import { Player, GameActivity } from '../../types';
+import { addPlayer } from "../../../services/generateGameService";
+
+const query = require('../../db/index.ts');
 
 /**
  * playerSocketConnection(io)
@@ -23,44 +27,58 @@ import { Server, Socket } from "socket.io";
 const playerSocketConnection = (io: Server) => {
   const connectedPlayers = new Map();
 
-  io.on("connection", (socket: Socket) => {
-    socket.on("joinRoom", (roomId: string) => {
+  io.on("connection", async (socket: Socket) => {
+      // TODO: reject taken nicknames
+    socket.on("joinRoom", async (roomId: string, nickname: string) => {
       const room = io.sockets.adapter.rooms.get(roomId);
 
       if (room) {
         socket.join(roomId);
 
-        connectedPlayers.set(socket.id, {
-          roomId,
-          nickname: "foobar", // TODO: Add support for nicknames
-        });
+        const new_player = addPlayer(roomId, nickname);
+        connectedPlayers.set(socket.id, new_player);
 
-        socket.emit("roomJoined", {
-          roomId,
-          stage: "lobby",
-          role: "player",
-        });
+        let strSQL = `SELECT game_activity 
+                      FROM rooms WHERE pin = $1`
+        const { rows } = await query(strSQL, [roomId]);
+        const game_activity = rows[0].game_activity;
 
-        const playerCount = room.size - 1;
-        io.to(roomId).emit("playerCount", playerCount);
+        game_activity.players.push(new_player);
 
-        socket.to(roomId).emit("playerJoined", socket.id);
+        strSQL = `UPDATE rooms SET game_activity = $1 WHERE pin = $2`;
+        await query(strSQL, [game_activity, roomId]);
+
+        game_activity.role = "host";
+        socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
+
+        game_activity.role = "player";
+        socket.emit("roomJoined", game_activity);
       } else {
         socket.emit("roomNotFound", `Room ${roomId} not found`);
       }
     });
 
-    socket.on("disconnect", () => {
+    socket.on("disconnect", async () => {
       if (connectedPlayers.has(socket.id)) {
-        const { roomId } = connectedPlayers.get(socket.id);
+        const { roomId, nickname } = connectedPlayers.get(socket.id);
 
         connectedPlayers.delete(socket.id);
 
         if (roomId) {
           const room = io.sockets.adapter.rooms.get(roomId);
           if (room) {
-            const playerCount = room.size - 1;
-            io.to(roomId).emit("playerCount", playerCount);
+            let strSQL = `SELECT game_activity 
+                          FROM rooms WHERE pin = $1`
+            const { rows } = await query(strSQL, [roomId]);
+            const game_activity = rows[0].game_activity;
+
+            game_activity.players  = game_activity.players.filter((p: Player) => p.nickname !== nickname);
+
+            strSQL = `UPDATE rooms SET game_activity = $1 WHERE pin = $2`;
+            await query(strSQL, [game_activity, roomId]);
+
+            game_activity.role = "host";
+            socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
           }
         }
       }
