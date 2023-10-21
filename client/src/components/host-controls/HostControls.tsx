@@ -14,9 +14,10 @@ interface HostControlsProps {
 function HostControls({ controls }: HostControlsProps) {
   return (
     <div className={styles.controls}>
-      {controls.map((item) => {
+      {controls.map((item, index) => {
         return (
           <HostControlsButton
+            key={index}
             icon={item.icon}
             label={item.label}
             onClick={item.onClick}
