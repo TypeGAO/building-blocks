@@ -50,17 +50,6 @@ function App() {
       })
     }
 
-    function onRoomJoined(data: GameActivity) {
-      setGameActivity({
-        ...gameActivity,
-        roomId: data.roomId,
-        stage: data.stage,
-        role: data.role,
-        time: data.time,
-        players: data.players,
-      })
-    }
-
     function onDuplicateName() {
       toast.error("Name is Taken!");
     }
