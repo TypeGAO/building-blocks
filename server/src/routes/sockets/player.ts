@@ -58,11 +58,29 @@ const playerSocketConnection = (io: Server) => {
         socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
 
         game_activity.role = "player";
+        game_activity.nickname = nickname;
         socket.emit("roomJoined", game_activity);
       } else {
         // Send error to client
         socket.emit("roomNotFound", `Room ${roomId} not found`);
       }
+    });
+
+    socket.on("runCode",  async (roomId: string, code: string, nickname: string) => {
+        // TODO: actually run code
+        // TODO: scoring criteria
+        const game_activity = await getGameActivity(roomId);
+
+        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestion += 1;
+        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).score += 1;
+        await setGameActivity(game_activity, roomId);
+
+        game_activity.role = "host";
+        socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
+
+        game_activity.role = "player";
+        game_activity.nickname = nickname;
+        socket.emit("updateGameActivity", game_activity);
     });
 
     socket.on("hostLeft",  async (roomId: string) => {

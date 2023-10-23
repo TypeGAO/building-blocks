@@ -60,11 +60,13 @@ const hostSocketConnection = (io: Server) => {
         if (connectedHosts.has(socket.id)) {
             const roomId = connectedHosts.get(socket.id);
 
+            // End game
             const game_activity = await getGameActivity(roomId);
             game_activity.stage = "ended";
             await setGameActivity(game_activity, roomId);
             await endGame(roomId);
 
+            // Send to all players
             socket.broadcast.to(roomId).emit('hostLeft', game_activity);
         }
     });
