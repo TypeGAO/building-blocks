@@ -32,34 +32,41 @@ const playerSocketConnection = (io: Server) => {
       const room = io.sockets.adapter.rooms.get(roomId);
 
       if (room) {
-        // Join the socket.io room
-        socket.join(roomId);
+        // Get game activity, check game not started
+        const game_activity = await getGameActivity(roomId);
+        // Game must be in lobby stage
+        if (game_activity.stage == "lobby") {
+            // Join the socket.io room
+            socket.join(roomId);
 
-        // Search for duplicate nicknames in the same roomId
-        const values = Array.from(connectedPlayers.values());
-        if (values.find((player: Player) => player.roomId === roomId 
-                                         && player.nickname === nickname)) {
-            // Send to client to display error
-            socket.emit("duplicateName");
-            return;
+            // Search for duplicate nicknames in the same roomId
+            const values = Array.from(connectedPlayers.values());
+            if (values.find((player: Player) => player.roomId === roomId 
+                                             && player.nickname === nickname)) {
+                // Send to client to display error
+                socket.emit("duplicateName");
+                return;
+            }
+
+            // Add player to Map of all players
+            const new_player = addPlayer(roomId, nickname);
+            connectedPlayers.set(socket.id, new_player);
+
+            // Add a player, and save it
+            game_activity.players.push(new_player);
+            await setGameActivity(game_activity, roomId);
+
+            // Send the new game activity to the host and all clients
+            game_activity.role = "host";
+            socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
+
+            game_activity.role = "player";
+            game_activity.nickname = nickname;
+            socket.emit("roomJoined", game_activity);
+        } else {
+            socket.emit("cannotJoinGame");
         }
 
-        // Add player to Map of all players
-        const new_player = addPlayer(roomId, nickname);
-        connectedPlayers.set(socket.id, new_player);
-
-        // Get the game activity, add a player, and save it
-        const game_activity = await getGameActivity(roomId);
-        game_activity.players.push(new_player);
-        await setGameActivity(game_activity, roomId);
-
-        // Send the new game activity to the host and all clients
-        game_activity.role = "host";
-        socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
-
-        game_activity.role = "player";
-        game_activity.nickname = nickname;
-        socket.emit("roomJoined", game_activity);
       } else {
         // Send error to client
         socket.emit("roomNotFound", `Room ${roomId} not found`);

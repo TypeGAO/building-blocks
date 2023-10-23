@@ -66,12 +66,17 @@ function App() {
         }
     }
 
+    function onCannotJoinGame() {
+        toast.error("Can't Join Game!");
+    }
+
     socket.on("roomCreated", onRoomCreated)
     socket.on("roomJoined", onRoomJoined)
     socket.on("updateGameActivity", onUpdateGameActivity)
     socket.on("duplicateName", onDuplicateName);
     socket.on("hostLeft", onHostLeft);
     socket.on("kickPlayer", onKickPlayer);
+    socket.on("cannotJoinGame", onCannotJoinGame);
 
     return () => {
       socket.off("roomCreated", onRoomCreated)
@@ -80,6 +85,7 @@ function App() {
       socket.off("duplicateName", onDuplicateName);
       socket.off("hostLeft", onHostLeft);
       socket.off("kickPlayer", onKickPlayer);
+      socket.off("cannotJoinGame", onCannotJoinGame);
     }
   }, [gameActivity, setGameActivity])
 
