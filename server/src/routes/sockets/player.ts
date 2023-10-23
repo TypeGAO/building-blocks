@@ -3,8 +3,6 @@ import { Player, GameActivity } from '../../types';
 import { addPlayer } from "../../../services/generateGameService";
 import { getGameActivity, setGameActivity } from "../../../services/gameManagerService";
 
-const query = require('../../db/index.ts');
-
 /**
  * playerSocketConnection(io)
  *
@@ -64,6 +62,16 @@ const playerSocketConnection = (io: Server) => {
       } else {
         // Send error to client
         socket.emit("roomNotFound", `Room ${roomId} not found`);
+      }
+    });
+
+    socket.on("hostLeft",  async (roomId: string) => {
+      // Find the player based on socket id
+      if (connectedPlayers.has(socket.id)) {
+        const { roomId, nickname } = connectedPlayers.get(socket.id);
+
+        // Delete it from the Map of all players
+        connectedPlayers.delete(socket.id);
       }
     });
 

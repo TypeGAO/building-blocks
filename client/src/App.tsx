@@ -65,16 +65,23 @@ function App() {
       toast.error("Name is Taken!");
     }
 
+    function onHostLeft(data: GameActivity) {
+        window.location.reload();
+        socket.emit("hostLeft", data.roomId);
+    }
+
     socket.on("roomCreated", onRoomCreated)
     socket.on("roomJoined", onRoomJoined)
     socket.on("updateGameActivity", onUpdateGameActivity)
     socket.on("duplicateName", onDuplicateName);
+    socket.on("hostLeft", onHostLeft);
 
     return () => {
       socket.off("roomCreated", onRoomCreated)
       socket.off("roomJoined", onRoomJoined)
       socket.off("updateGameActivity", onUpdateGameActivity)
       socket.off("duplicateName", onDuplicateName);
+      socket.off("hostLeft", onHostLeft);
     }
   }, [gameActivity, setGameActivity])
 

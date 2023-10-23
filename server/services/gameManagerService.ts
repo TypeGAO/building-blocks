@@ -20,3 +20,14 @@ export async function insertGameActivity(game_activity: GameActivity, roomId: st
                    VALUES ($1, false, $2, $3, NOW())`;
     await query(strSQL, [roomId, 1, game_activity]);
 }
+
+export async function endGame(roomId: string) {
+    const strSQL = `
+            UPDATE rooms 
+            SET is_active = false
+            WHERE pin = $1 
+            RETURNING time_started
+        `;
+
+    await query(strSQL, [roomId]);
+}
