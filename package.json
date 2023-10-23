@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "codemirror": "^5.65.15",
+    "codemirror": "^6.0.1",
     "cors": "^2.8.5",
     "react-codemirror2": "^7.3.0",
     "socket.io": "^4.7.2",
