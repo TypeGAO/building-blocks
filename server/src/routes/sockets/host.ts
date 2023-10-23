@@ -1,8 +1,8 @@
 import { Server, Socket } from "socket.io";
 import { generateUniqueCode, newGameActivity } from "../../../services/generateGameService";
+import { getGameActivity, setGameActivity, insertGameActivity } from "../../../services/gameManagerService";
 
 const query = require('../../db/index.ts');
-
 /**
  * hostSocketConnection(io)
  *
@@ -21,18 +21,35 @@ const query = require('../../db/index.ts');
 const hostSocketConnection = (io: Server) => {
   io.on("connection", (socket: Socket) => {
     socket.on("createRoom", async () => {
+      // Generate unique code
       const roomId = generateUniqueCode();
       socket.join(roomId);
 
       const game_activity = newGameActivity(socket.id, roomId);
 
       // Add room in database
-      let strSQL = ` INSERT INTO rooms (pin, is_active, question_set_id, game_activity, time_started) 
-                     VALUES ($1, false, $2, $3, NOW())`;
-      await query(strSQL, [roomId, 1, game_activity]);
+      await insertGameActivity(game_activity, roomId);
 
+      // Send to host
       game_activity.role = "host";
       socket.emit("roomCreated", game_activity);
+    });
+
+    socket.on("startGame", async (roomId: string) => {
+
+        // Get game activity from database, set it as started
+        const game_activity = await getGameActivity(roomId);
+        game_activity.stage = "started";
+
+        // Update game activity
+        await setGameActivity(game_activity, roomId);
+
+        // Send game activity to host and all players
+        game_activity.role = "host";
+        socket.emit("updateGameActivity", game_activity);
+
+        game_activity.role = "player";
+        socket.broadcast.to(roomId).emit("updateGameActivity", game_activity);
     });
   });
 };

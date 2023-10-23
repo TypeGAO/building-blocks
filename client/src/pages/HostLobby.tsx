@@ -2,6 +2,7 @@ import { ArrowsOutSimple, ArrowsInSimple } from "@phosphor-icons/react"
 import { Button, HostControls } from "../components"
 import useGameActivity from "../hooks/useGameActivity"
 import styles from "./HostLobby.module.css"
+import { StartGameButton } from "../features/start-game"
 import useFullscreen from "../hooks/useFullScreen"
 import { DEV_URL, PROD_URL } from "../constants"
 
@@ -9,7 +10,6 @@ function getJoinUrl() {
   let url = import.meta.env.DEV ? DEV_URL : PROD_URL
   url = url.replace(/^http:\/\//, "www.")
   return url
-}
 
 function HostLobby() {
   const { gameActivity } = useGameActivity()
@@ -54,7 +54,7 @@ function HostLobby() {
               <span>
                 {playerCount} {playerCount === 1 ? "player" : "players"}
               </span>
-              <Button size="lg">Start</Button>
+              <StartGameButton roomId={gameActivity.roomId} players={gameActivity.players.length}/>
             </>
           )}
         </div>

@@ -5,6 +5,7 @@ import Landing from "./pages/Landing"
 import PlayerLobby from "./pages/PlayerLobby"
 import { GameActivity } from "./types"
 import HostLobby from "./pages/HostLobby"
+import toast from "react-hot-toast"
 
 /**
  * App Component
@@ -49,14 +50,31 @@ function App() {
       })
     }
 
+    function onRoomJoined(data: GameActivity) {
+      setGameActivity({
+        ...gameActivity,
+        roomId: data.roomId,
+        stage: data.stage,
+        role: data.role,
+        time: data.time,
+        players: data.players,
+      })
+    }
+
+    function onDuplicateName() {
+      toast.error("Name is Taken!");
+    }
+
     socket.on("roomCreated", onRoomCreated)
     socket.on("roomJoined", onRoomJoined)
     socket.on("updateGameActivity", onUpdateGameActivity)
+    socket.on("duplicateName", onDuplicateName);
 
     return () => {
       socket.off("roomCreated", onRoomCreated)
       socket.off("roomJoined", onRoomJoined)
       socket.off("updateGameActivity", onUpdateGameActivity)
+      socket.off("duplicateName", onDuplicateName);
     }
   }, [gameActivity, setGameActivity])
 
@@ -64,11 +82,17 @@ function App() {
     if (gameActivity.stage === "lobby") {
       return <HostLobby />
     }
+    else if (gameActivity.stage == "started") {
+        return <h1>Host View Game Started</h1>
+    }
   }
 
   if (gameActivity.role === "player") {
     if (gameActivity.stage === "lobby") {
       return <PlayerLobby />
+    }
+    else if (gameActivity.stage == "started") {
+        return <h1>Player View Game Started</h1>
     }
   }
 
