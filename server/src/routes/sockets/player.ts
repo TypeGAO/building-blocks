@@ -3,8 +3,6 @@ import { Player, GameActivity } from '../../types';
 import { addPlayer } from "../../../services/generateGameService";
 import { getGameActivity, setGameActivity } from "../../../services/gameManagerService";
 
-const query = require('../../db/index.ts');
-
 /**
  * playerSocketConnection(io)
  *
@@ -34,36 +32,71 @@ const playerSocketConnection = (io: Server) => {
       const room = io.sockets.adapter.rooms.get(roomId);
 
       if (room) {
-        // Join the socket.io room
-        socket.join(roomId);
+        // Get game activity, check game not started
+        const game_activity = await getGameActivity(roomId);
+        // Game must be in lobby stage
+        if (game_activity.stage == "lobby") {
+            // Join the socket.io room
+            socket.join(roomId);
 
-        // Search for duplicate nicknames in the same roomId
-        const values = Array.from(connectedPlayers.values());
-        if (values.find((player: Player) => player.roomId === roomId 
-                                         && player.nickname === nickname)) {
-            // Send to client to display error
-            socket.emit("duplicateName");
-            return;
+            // Search for duplicate nicknames in the same roomId
+            const values = Array.from(connectedPlayers.values());
+            if (values.find((player: Player) => player.roomId === roomId 
+                                             && player.nickname === nickname)) {
+                // Send to client to display error
+                socket.emit("duplicateName");
+                return;
+            }
+
+            // Add player to Map of all players
+            const new_player = addPlayer(roomId, nickname);
+            connectedPlayers.set(socket.id, new_player);
+
+            // Add a player, and save it
+            game_activity.players.push(new_player);
+            await setGameActivity(game_activity, roomId);
+
+            // Send the new game activity to the host and all clients
+            game_activity.role = "host";
+            socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
+
+            game_activity.role = "player";
+            game_activity.nickname = nickname;
+            socket.emit("roomJoined", game_activity);
+        } else {
+            socket.emit("cannotJoinGame");
         }
 
-        // Add player to Map of all players
-        const new_player = addPlayer(roomId, nickname);
-        connectedPlayers.set(socket.id, new_player);
+      } else {
+        // Send error to client
+        socket.emit("roomNotFound", `Room ${roomId} not found`);
+      }
+    });
 
-        // Get the game activity, add a player, and save it
+    socket.on("runCode",  async (roomId: string, code: string, nickname: string) => {
+        // TODO: actually run code
+        // TODO: scoring criteria
         const game_activity = await getGameActivity(roomId);
-        game_activity.players.push(new_player);
+
+        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestion += 1;
+        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).score += 1;
         await setGameActivity(game_activity, roomId);
 
-        // Send the new game activity to the host and all clients
         game_activity.role = "host";
         socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
 
         game_activity.role = "player";
-        socket.emit("roomJoined", game_activity);
-      } else {
-        // Send error to client
-        socket.emit("roomNotFound", `Room ${roomId} not found`);
+        game_activity.nickname = nickname;
+        socket.emit("updateGameActivity", game_activity);
+    });
+
+    socket.on("hostLeft",  async (roomId: string) => {
+      // Find the player based on socket id
+      if (connectedPlayers.has(socket.id)) {
+        const { roomId, nickname } = connectedPlayers.get(socket.id);
+
+        // Delete it from the Map of all players
+        connectedPlayers.delete(socket.id);
       }
     });
 

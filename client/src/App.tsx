@@ -2,10 +2,11 @@ import { useEffect } from "react"
 import { socket } from "./socket"
 import useGameActivity from "./hooks/useGameActivity"
 import Landing from "./pages/Landing"
-import PlayerLobby from "./pages/PlayerLobby"
+import PlayerLobby from "./pages/PlayerLobby" 
 import { GameActivity } from "./types"
 import HostLobby from "./pages/HostLobby"
 import toast from "react-hot-toast"
+import { RunCodeButton } from "./features/run-code"
 
 /**
  * App Component
@@ -54,16 +55,37 @@ function App() {
       toast.error("Name is Taken!");
     }
 
+    function onHostLeft(data: GameActivity) {
+        window.location.reload();
+        socket.emit("hostLeft", data.roomId);
+    }
+
+    function onKickPlayer(nickname: string) {
+        if (gameActivity.nickname === nickname) {
+            window.location.reload();
+        }
+    }
+
+    function onCannotJoinGame() {
+        toast.error("Can't Join Game!");
+    }
+
     socket.on("roomCreated", onRoomCreated)
     socket.on("roomJoined", onRoomJoined)
     socket.on("updateGameActivity", onUpdateGameActivity)
     socket.on("duplicateName", onDuplicateName);
+    socket.on("hostLeft", onHostLeft);
+    socket.on("kickPlayer", onKickPlayer);
+    socket.on("cannotJoinGame", onCannotJoinGame);
 
     return () => {
       socket.off("roomCreated", onRoomCreated)
       socket.off("roomJoined", onRoomJoined)
       socket.off("updateGameActivity", onUpdateGameActivity)
       socket.off("duplicateName", onDuplicateName);
+      socket.off("hostLeft", onHostLeft);
+      socket.off("kickPlayer", onKickPlayer);
+      socket.off("cannotJoinGame", onCannotJoinGame);
     }
   }, [gameActivity, setGameActivity])
 
@@ -72,7 +94,18 @@ function App() {
       return <HostLobby />
     }
     else if (gameActivity.stage == "started") {
-        return <h1>Host View Game Started</h1>
+        return  (
+            <div>
+                <h1>Host View Game Started</h1>
+                <ul>
+                  {gameActivity.players.map((player: Player) => (
+                    <li>
+                      {player.nickname}: {player.currentQuestion}
+                    </li>
+                  ))}
+                </ul>
+            </div>
+        )
     }
   }
 
@@ -81,7 +114,13 @@ function App() {
       return <PlayerLobby />
     }
     else if (gameActivity.stage == "started") {
-        return <h1>Player View Game Started</h1>
+        return (
+            <div>
+                <h1>Player View Game Started</h1>
+                <h2>Question: {gameActivity.players.find((player: Player) => player.nickname === gameActivity.nickname && player.roomId === gameActivity.roomId).currentQuestion}</h2>
+                <RunCodeButton roomId={gameActivity.roomId} code={"print('howdy world')"} nickname={gameActivity.nickname}/>
+            </div>
+        )
     }
   }
 

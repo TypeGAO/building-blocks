@@ -5,11 +5,16 @@ import styles from "./HostLobby.module.css"
 import { StartGameButton } from "../features/start-game"
 import useFullscreen from "../hooks/useFullScreen"
 import { DEV_URL, PROD_URL } from "../constants"
+import { socket } from "../socket"
 
 function getJoinUrl() {
   let url = import.meta.env.DEV ? DEV_URL : PROD_URL
   url = url.replace(/^http:\/\//, "www.")
   return url
+}
+
+function kickPlayer(nickname: string) {
+    socket.emit("kickPlayer", nickname);
 }
 
 function HostLobby() {
@@ -66,6 +71,7 @@ function HostLobby() {
               className={`${styles.player} ${
                 index === 0 && styles.playerAnimate
               }`}
+              onClick={() => kickPlayer(player.nickname)}
             >
               {player.nickname}
             </div>
