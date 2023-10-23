@@ -1,5 +1,5 @@
 import { ArrowsOutSimple, ArrowsInSimple } from "@phosphor-icons/react"
-import { Button, HostControls } from "../components"
+import {  HostControls } from "../components"
 import useGameActivity from "../hooks/useGameActivity"
 import styles from "./HostLobby.module.css"
 import { StartGameButton } from "../features/start-game"
@@ -55,7 +55,7 @@ function HostLobby() {
               <span>
                 {playerCount} {playerCount === 1 ? "player" : "players"}
               </span>
-              <StartGameButton roomId={gameActivity.roomId} players={gameActivity.players.length}/>
+              <StartGameButton roomId={gameActivity.roomId} players={gameActivity.players}/>
             </>
           )}
         </div>
