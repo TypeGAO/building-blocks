@@ -27,9 +27,8 @@ function HostLobby() {
         {[...gameActivity.players].reverse().map((player, index) => (
           <div
             key={player.nickname}
-            className={`${styles.player} ${
-              index === 0 && styles.playerAnimate
-            }`}
+            className={`${styles.player} ${index === 0 && styles.playerAnimate
+              }`}
           >
             {player.nickname}
           </div>

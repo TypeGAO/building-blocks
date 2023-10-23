@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 
 import App from "./App.tsx"
+import QuizCreation from "./pages/CreateGame.tsx"
 import { GameActivityProvider } from "./contexts/GameActivityProvider.tsx"
 
 import "./index.css"
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
   },
+  {
+    path: "/createGame",
+    element: <QuizCreation />
+  }
 ])
 
 const queryClient = new QueryClient({
