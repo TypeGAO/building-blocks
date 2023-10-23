@@ -1,10 +1,10 @@
 import { useState } from "react"
 import { useQuery } from "react-query"
 import toast from "react-hot-toast"
-import { Button, Input, SpinnerOverlay } from "../../../components"
-import useGameActivity from "../../../hooks/useGameActivity"
-import { fetchRoomByPin } from "../../../api"
-import useDelayedLoadingState from "../../../hooks/useDelayedLoadingState"
+import { Button, Input, SpinnerOverlay } from "../../components"
+import useGameActivity from "../../hooks/useGameActivity"
+import { fetchRoomByPin } from "../../api"
+import useDelayedLoadingState from "../../hooks/useDelayedLoadingState"
 
 function EnterPin() {
   const [roomId, setRoomId] = useState<string>("")

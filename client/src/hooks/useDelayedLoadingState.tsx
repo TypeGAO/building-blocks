@@ -24,12 +24,11 @@ import { useState, useEffect } from "react"
  * );
  * ```
  */
-
-const useDelayedLoadingState = (
+function useDelayedLoadingState(
   isLoading: boolean,
   delayTime: number
-): boolean => {
-  const [showLoadingState, setShowLoadingState] = useState(false)
+): boolean {
+  const [showLoadingState, setShowLoadingState] = useState<boolean>(false)
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout | undefined

@@ -1,1 +1,1 @@
-export { default as CreateGameButton } from "./components/CreateGameButton"
+export { default as CreateGameButton } from "./CreateGameButton"
