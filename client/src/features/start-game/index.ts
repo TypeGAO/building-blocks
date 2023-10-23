@@ -1,1 +1,1 @@
-export { default as StartGameButton } from "./components/StartGameButton"
+export { default as StartGameButton } from "./StartGameButton"
