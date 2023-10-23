@@ -30,7 +30,7 @@ function RunCodeButton({ roomId, code, nickname }: RunGameButtonProps) {
   }
 
   return (
-    <Button size="lg" color="red" onClick={handleClick}>
+    <Button size="lg" color="neutral" onClick={handleClick}>
       Run Code
     </Button>
   )

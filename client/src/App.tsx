@@ -7,6 +7,7 @@ import { GameActivity } from "./types"
 import HostLobby from "./pages/HostLobby"
 import toast from "react-hot-toast"
 import { RunCodeButton } from "./features/run-code"
+import { Player } from "./types/index"
 
 /**
  * App Component
@@ -117,7 +118,7 @@ function App() {
         return (
             <div>
                 <h1>Player View Game Started</h1>
-                <h2>Question: {gameActivity.players.find((player: Player) => player.nickname === gameActivity.nickname && player.roomId === gameActivity.roomId).currentQuestion}</h2>
+                <h2>Question: {gameActivity.players.find((player: Player) => player.nickname === gameActivity.nickname && player.roomId === gameActivity.roomId).currentQuestion ?? 0}</h2>
                 <RunCodeButton roomId={gameActivity.roomId} code={"print('howdy world')"} nickname={gameActivity.nickname}/>
             </div>
         )
