@@ -1,6 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { generateUniqueCode, newGameActivity } from "../../../services/generateGameService";
 import { getGameActivity, setGameActivity, insertGameActivity, endGame } from "../../../services/gameManagerService";
+import { Player } from '../../types';
 
 /**
  * hostSocketConnection(io)
@@ -54,6 +55,27 @@ const hostSocketConnection = (io: Server) => {
 
         game_activity.role = "player";
         socket.broadcast.to(roomId).emit("updateGameActivity", game_activity);
+    });
+
+    socket.on("kickPlayer", async (nickname: string) => {
+            const roomId = connectedHosts.get(socket.id);
+            const game_activity = await getGameActivity(roomId);
+
+            // Remove player from list
+            game_activity.players  = game_activity.players.filter((p: Player) => p.nickname !== nickname);
+
+            await setGameActivity(game_activity, roomId);
+
+            game_activity.role = "host";
+            game_activity.stage = "lobby";
+            socket.emit('updateGameActivity', game_activity);
+
+            // Send to all players
+            socket.broadcast.to(roomId).emit('kickPlayer', nickname);
+            
+            game_activity.role = "player";
+            game_activity.stage = "lobby";
+            socket.broadcast.to(roomId).emit('updateGameActivity', game_activity);
     });
 
     socket.on("disconnect", async () => {

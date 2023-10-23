@@ -60,11 +60,18 @@ function App() {
         socket.emit("hostLeft", data.roomId);
     }
 
+    function onKickPlayer(nickname: string) {
+        if (gameActivity.nickname === nickname) {
+            window.location.reload();
+        }
+    }
+
     socket.on("roomCreated", onRoomCreated)
     socket.on("roomJoined", onRoomJoined)
     socket.on("updateGameActivity", onUpdateGameActivity)
     socket.on("duplicateName", onDuplicateName);
     socket.on("hostLeft", onHostLeft);
+    socket.on("kickPlayer", onKickPlayer);
 
     return () => {
       socket.off("roomCreated", onRoomCreated)
@@ -72,6 +79,7 @@ function App() {
       socket.off("updateGameActivity", onUpdateGameActivity)
       socket.off("duplicateName", onDuplicateName);
       socket.off("hostLeft", onHostLeft);
+      socket.off("kickPlayer", onKickPlayer);
     }
   }, [gameActivity, setGameActivity])
 
