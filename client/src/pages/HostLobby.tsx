@@ -10,6 +10,7 @@ function getJoinUrl() {
   let url = import.meta.env.DEV ? DEV_URL : PROD_URL
   url = url.replace(/^http:\/\//, "www.")
   return url
+}
 
 function HostLobby() {
   const { gameActivity } = useGameActivity()
