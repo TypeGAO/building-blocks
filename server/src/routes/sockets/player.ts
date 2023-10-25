@@ -77,6 +77,15 @@ const playerSocketConnection = (io: Server) => {
     socket.on("runCode",  async (roomId: string, code: string, nickname: string, questionId: number) => {
         const game_activity = await getGameActivity(roomId);
 
+
+        // Test for malicious code (not ideal)
+        const regexTest = /\b(exec|eval|open|input|os\.system|os\.popen|os\.remove|os\.unlink|os\.rmdir|os\.makedirs|os\.chmod|os\.chown|os\.symlink|os\.link|os\.rename|os\.startfile|os\.kill|os\.killpg|os\.fork|os\.pipe|os\.dup|os\.dup2|os\.wait|os\.waitpid|shutil\.rmtree|__import__|imp\.load_source|os\.spawn.|os\.execl.|callable|compile|del|execfile|reload|load_module|import\s+os|import\s+sys|import\s+shutil|import\s+fileinput|from\s+os\s+import|from\s+sys\s+import|from\s+shutil\s+import|from\s+fileinput\s+import)\b/g;
+        const matches = code.match(regexTest);
+        if (matches && matches.length > 0) {
+              socket.emit("wrong", "Potentially malicious patterns detected");
+              return;
+        } 
+
         // Run code, get test case expected output, compare it to output
         const output = await runCode(code);
         const expected_output = await getExpectedOutput(questionId);
