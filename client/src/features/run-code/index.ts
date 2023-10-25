@@ -1,1 +1,1 @@
-export { default as RunCodeButton } from "./components/RunCodeButton"
+export { default as RunCodeButton } from "./RunCodeButton"
