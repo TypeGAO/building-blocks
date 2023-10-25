@@ -1,8 +1,32 @@
 .lobby {
   background-color: var(--blue-200);
+  animation: bg-animate 17s infinite;
+  animation-direction: alternate;
   height: 100vh;
   width: 100%;
-  position: absolute;
+  position: fixed;
+  overflow-y: auto;
+}
+
+@keyframes bg-animate {
+  25% {
+    background: var(--blue-200);
+  }
+  50% {
+    background: var(--purple-200);
+  }
+  75% {
+    background: var(--green-200);
+  }
+  100% {
+    background: var(--red-200);
+  }
+}
+
+.controls {
+  position: fixed;
+  top: var(--12);
+  right: var(--12);
 }
 
 .banner {
@@ -43,21 +67,42 @@
   font-weight: 900;
 }
 
+.container {
+  max-width: 300px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  gap: var(--36);
+  flex-direction: column;
+}
+
+.playerCountStart {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.7);
+  padding: var(--12) var(--20);
+  font-size: var(--24);
+  font-weight: 600;
+  gap: var(--24);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .playerList {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
   gap: var(--16);
-  height: 55%;
+  height: 50vh;
   overflow: scroll;
   align-content: baseline;
 }
 
 .playerList::-webkit-scrollbar {
-  width: 20px;
+  max-width: 20px;
 }
 
 .playerList::-webkit-scrollbar-corner {
@@ -67,19 +112,11 @@
 .playerList::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.3);
   border-radius: var(--6);
+  width: 20px;
 }
 
 .playerList::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.6);
-}
-
-.playerList .empty {
-  background-color: rgba(0, 0, 0, 0.5);
-  color: var(--neutral-50);
-  padding: var(--12) var(--20);
-  border-radius: var(--6);
-  font-size: var(--20);
-  font-weight: 600;
 }
 
 .playerList .player {

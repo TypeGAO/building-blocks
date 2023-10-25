@@ -1,2 +1,1 @@
-export { default as EnterGame } from "./components/EnterGame"
-
+export { default as EnterGame } from "./EnterGame"

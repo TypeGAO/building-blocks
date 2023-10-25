@@ -128,7 +128,7 @@ router.put("/setGameActivity", async (req: Request, res: Response) => {
 });
 
 // Start game
-router.put("startGame/:id", async (req: Request, res: Response) => {
+router.put("/startGame/:id", async (req: Request, res: Response) => {
   try {
     const roomId = req.params.id;
 
@@ -137,7 +137,7 @@ router.put("startGame/:id", async (req: Request, res: Response) => {
             UPDATE rooms 
             SET is_active = true, time_started = NOW() 
             WHERE pin = $1 
-            RETURNING is_active, time_started
+            RETURNING time_started
         `;
 
     const { rows } = await query(strSQL, [roomId]);
@@ -145,7 +145,7 @@ router.put("startGame/:id", async (req: Request, res: Response) => {
     if (rows.length) {
       res.json({
         message: "Game started successfully",
-        gameActivity: rows[0].game_activity,
+        timeStarted: rows[0].time_started,
       });
     } else {
       res.status(404).json({ message: "Room not found" });

@@ -1,5 +1,5 @@
-import { Button } from "../../../components"
-import { socket } from "../../../socket"
+import { Button } from "../../components"
+import { socket } from "../../socket"
 
 function CreateGameButton() {
   const handleClick = () => {

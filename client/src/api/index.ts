@@ -5,6 +5,7 @@ export async function fetchRoomByPin(id: string) {
   return res
 }
 
-//add new one with name
-//post request
-//look in server
+export async function startGame(id: string) {
+  const res = await axiosClient.put(`/rooms/startGame/${id}`)
+  return res
+}

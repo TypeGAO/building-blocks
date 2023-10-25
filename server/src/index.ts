@@ -14,13 +14,14 @@ interface SocketData {
 
 const io = new Server<SocketData>(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: (process.env.NODE_DEV == "true" ? "http://localhost:5173" : "http://bblocks.live"),
+    methods: ["GET", "PUT", "POST", "DELETE"],
   },
 });
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: (process.env.NODE_DEV == "true" ? "http://localhost:5173" : "http://bblocks.live"),
   }),
 );
 

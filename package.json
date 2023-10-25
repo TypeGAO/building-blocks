@@ -13,7 +13,7 @@
     "build": "cd client && yarn run build && cd ../server && yarn run build",
     "start": "cd server && yarn start",
     "prod": "npx concurrently 'cd client && yarn dev --host' 'cd server && yarn start'",
-    "dev": "npx concurrently 'cd client && yarn dev --host' 'cd client && yarn storybook' 'cd server && yarn start'"
+    "dev": "npx concurrently 'cd client && yarn dev --host' 'cd client && yarn storybook' 'cd server && yarn dev'"
   },
   "author": "",
   "license": "ISC",

@@ -1,3 +1,3 @@
-export { default as CreateGameButton } from "./components/CreateGameButton"
+export { default as CreateGameButton } from "./CreateGameButton"
 
-export { default as QuestionBuilder } from "./components/QuestionBuilder"
+export { default as QuestionBuilder } from "./QuestionBuilder"
