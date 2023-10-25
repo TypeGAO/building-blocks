@@ -7,6 +7,8 @@ import { GameActivity } from "./types"
 import HostLobby from "./pages/HostLobby"
 import toast from "react-hot-toast"
 import { RunCodeButton } from "./features/run-code"
+import { PauseGameButton } from "./features/pause-game"
+import { StartGameButton } from "./features/start-game"
 import { Player } from "./types/index"
 
 /**
@@ -105,8 +107,17 @@ function App() {
               </li>
             ))}
           </ul>
+          <PauseGameButton roomId={gameActivity.roomId} />
         </div>
       )
+    }
+    else if (gameActivity.stage == "paused") {
+        return (
+            <div>
+              <h1>Paused</h1>
+              <StartGameButton roomId={gameActivity.roomId} players={gameActivity.players}/>
+            </div>
+        )
     }
   }
 
@@ -126,6 +137,13 @@ function App() {
           <RunCodeButton roomId={gameActivity.roomId} code={"print('howdy world')"} nickname={gameActivity.nickname} />
         </div>
       )
+    }
+    else if (gameActivity.stage == "paused") {
+        return (
+            <div>
+              <h1>Paused</h1>
+            </div>
+        )
     }
   }
 

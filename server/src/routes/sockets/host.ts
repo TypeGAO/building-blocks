@@ -57,6 +57,23 @@ const hostSocketConnection = (io: Server) => {
         socket.broadcast.to(roomId).emit("updateGameActivity", game_activity);
     });
 
+    socket.on("pauseGame", async (roomId: string) => {
+
+        // Get game activity from database, set it as paused
+        const game_activity = await getGameActivity(roomId);
+        game_activity.stage = "paused";
+
+        // Update game activity
+        await setGameActivity(game_activity, roomId);
+
+        // Send game activity to host and all players
+        game_activity.role = "host";
+        socket.emit("updateGameActivity", game_activity);
+
+        game_activity.role = "player";
+        socket.broadcast.to(roomId).emit("updateGameActivity", game_activity);
+    });
+
     socket.on("kickPlayer", async (nickname: string) => {
             const roomId = connectedHosts.get(socket.id);
             const game_activity = await getGameActivity(roomId);

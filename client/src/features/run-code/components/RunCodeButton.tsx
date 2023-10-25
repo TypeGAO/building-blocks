@@ -15,18 +15,6 @@ function RunCodeButton({ roomId, code, nickname }: RunGameButtonProps) {
       } else {
           toast.error("Error Running Code");
       }
-    //if (players.length === 0) {
-      //toast.error("The Lobby Is Empty!")
-    //} else {
-      //if (roomId) {
-        //const res = await startGame(roomId)
-        //if (res.status === 200) {
-          //socket.emit("startGame", roomId)
-        //} else {
-          //toast.error("Error Starting Game")
-        //}
-      //}
-    //}
   }
 
   return (
