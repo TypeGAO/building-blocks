@@ -151,7 +151,7 @@ function App() {
               player.nickname === gameActivity.nickname &&
               player.roomId === gameActivity.roomId
           )?.score ?? 0}</h2>
-          <RunCodeButton roomId={gameActivity.roomId} code={"print('howdy')"} nickname={gameActivity.nickname} questionId={1}/>
+          <RunCodeButton roomId={gameActivity.roomId} code={`print(\\"howdy\\")`} nickname={gameActivity.nickname} questionId={1}/>
         </div>
       )
     }

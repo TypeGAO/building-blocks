@@ -1,5 +1,7 @@
 import { Player, GameActivity } from '../src/types';
 const query = require('../src/db/index.ts');
+const util = require('node:util');
+const exec = util.promisify(require('node:child_process').exec);
 
 // Helper functions for getting, setting, and inserting game activities into the database
 export async function getGameActivity(roomId: string) {
@@ -40,4 +42,14 @@ export async function getExpectedOutput(questionId: number) {
     const { rows } = await query(strSQL, [questionId]);
     const expected_output = rows[0].test_cases.expected_output;
     return expected_output;
+}
+
+export async function runCode(code: string) {
+    // Timeout for 5 seconds, python -I is for isolated environment
+    const command = `timeout 5s bash -c 'python -I -c "${code}"' || echo "bblocks-internal-error"`;
+    const { stdout, stderr } = await exec(command);
+    if (stderr) {
+        return stderr.trim();
+    }
+    return stdout.trim();
 }

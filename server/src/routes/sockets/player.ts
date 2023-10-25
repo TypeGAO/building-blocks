@@ -1,7 +1,8 @@
 import { Server, Socket } from "socket.io";
 import { Player, GameActivity } from '../../types';
 import { addPlayer } from "../../../services/generateGameService";
-import { getGameActivity, setGameActivity, getExpectedOutput } from "../../../services/gameManagerService";
+import { getGameActivity, setGameActivity, getExpectedOutput, runCode } from "../../../services/gameManagerService";
+
 
 /**
  * playerSocketConnection(io)
@@ -76,11 +77,8 @@ const playerSocketConnection = (io: Server) => {
     socket.on("runCode",  async (roomId: string, code: string, nickname: string, questionId: number) => {
         const game_activity = await getGameActivity(roomId);
 
-        // TODO: actually run code
-        // Will be from function call
-        const output = "howdy";
-
-        // Get test case expected output, compare it to output
+        // Run code, get test case expected output, compare it to output
+        const output = await runCode(code);
         const expected_output = await getExpectedOutput(questionId);
         const code_correct = output === expected_output;
 
@@ -98,7 +96,6 @@ const playerSocketConnection = (io: Server) => {
             game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).submissions = 0;
 
             socket.emit("correct", output);
-            await setGameActivity(game_activity, roomId);
         } else {
             // Increase submissions (max 5 for score penalty)
             if (submissions <= 5) {
@@ -106,6 +103,9 @@ const playerSocketConnection = (io: Server) => {
             }
             socket.emit("wrong", output);
         }
+
+        // Save and send game activity
+        await setGameActivity(game_activity, roomId);
 
         game_activity.role = "host";
         socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
