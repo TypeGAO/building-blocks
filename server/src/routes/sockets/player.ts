@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { Player, GameActivity } from '../../types';
 import { addPlayer } from "../../../services/generateGameService";
-import { getGameActivity, setGameActivity } from "../../../services/gameManagerService";
+import { getGameActivity, setGameActivity, getExpectedOutput } from "../../../services/gameManagerService";
 
 /**
  * playerSocketConnection(io)
@@ -73,14 +73,39 @@ const playerSocketConnection = (io: Server) => {
       }
     });
 
-    socket.on("runCode",  async (roomId: string, code: string, nickname: string) => {
-        // TODO: actually run code
-        // TODO: scoring criteria
+    socket.on("runCode",  async (roomId: string, code: string, nickname: string, questionId: number) => {
         const game_activity = await getGameActivity(roomId);
 
-        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestion += 1;
-        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).score += 1;
-        await setGameActivity(game_activity, roomId);
+        // TODO: actually run code
+        // Will be from function call
+        const output = "howdy";
+
+        // Get test case expected output, compare it to output
+        const expected_output = await getExpectedOutput(questionId);
+        const code_correct = output === expected_output;
+
+        // Get submissions
+        const submissions = game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).submissions;
+
+        if (code_correct) {
+            game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestion += 1;
+
+            // Score based on submissions and random value
+            const rand = Math.floor(Math.random() * 5) + 1;
+            game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).score += (100 - submissions*10 + rand);
+
+            // Reset submisisons
+            game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).submissions = 0;
+
+            socket.emit("correct", output);
+            await setGameActivity(game_activity, roomId);
+        } else {
+            // Increase submissions (max 5 for score penalty)
+            if (submissions <= 5) {
+                game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).submissions += 1;
+            }
+            socket.emit("wrong", output);
+        }
 
         game_activity.role = "host";
         socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);

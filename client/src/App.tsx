@@ -73,6 +73,14 @@ function App() {
       toast.error("Can't Join Game!");
     }
 
+    function onWrong(output: string) {
+      toast.error(`Wrong! Output: ${output}`);
+    }
+
+    function onCorrect(output: string) {
+      toast.error(`Correct! Output: ${output}`);
+    }
+
     socket.on("roomCreated", onRoomCreated)
     socket.on("roomJoined", onRoomJoined)
     socket.on("updateGameActivity", onUpdateGameActivity)
@@ -80,6 +88,8 @@ function App() {
     socket.on("hostLeft", onHostLeft);
     socket.on("kickPlayer", onKickPlayer);
     socket.on("cannotJoinGame", onCannotJoinGame);
+    socket.on("correct", onCorrect);
+    socket.on("wrong", onWrong);
 
     return () => {
       socket.off("roomCreated", onRoomCreated)
@@ -89,6 +99,8 @@ function App() {
       socket.off("hostLeft", onHostLeft);
       socket.off("kickPlayer", onKickPlayer);
       socket.off("cannotJoinGame", onCannotJoinGame);
+      socket.off("correct", onCorrect);
+      socket.off("wrong", onWrong);
     }
   }, [gameActivity, setGameActivity])
 
@@ -134,7 +146,12 @@ function App() {
               player.nickname === gameActivity.nickname &&
               player.roomId === gameActivity.roomId
           )?.currentQuestion ?? 0}</h2>
-          <RunCodeButton roomId={gameActivity.roomId} code={"print('howdy world')"} nickname={gameActivity.nickname} />
+          <h2>Score:  {gameActivity.players.find(
+            (player: Player) =>
+              player.nickname === gameActivity.nickname &&
+              player.roomId === gameActivity.roomId
+          )?.score ?? 0}</h2>
+          <RunCodeButton roomId={gameActivity.roomId} code={"print('howdy')"} nickname={gameActivity.nickname} questionId={1}/>
         </div>
       )
     }

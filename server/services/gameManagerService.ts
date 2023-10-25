@@ -31,3 +31,13 @@ export async function endGame(roomId: string) {
 
     await query(strSQL, [roomId]);
 }
+
+export async function getExpectedOutput(questionId: number) {
+    const strSQL = `
+            SELECT test_cases
+            FROM questions WHERE id = $1
+        `;
+    const { rows } = await query(strSQL, [questionId]);
+    const expected_output = rows[0].test_cases.expected_output;
+    return expected_output;
+}

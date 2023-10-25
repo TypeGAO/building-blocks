@@ -6,12 +6,13 @@ interface RunGameButtonProps {
   roomId: string | null
   code: string | null
   nickname: string | null
+  questionId: number | null
 }
 
-function RunCodeButton({ roomId, code, nickname }: RunGameButtonProps) {
+function RunCodeButton({ roomId, code, nickname, questionId }: RunGameButtonProps) {
   const handleClick = async () => {
       if (roomId && code) {
-          socket.emit("runCode", roomId, code, nickname);
+          socket.emit("runCode", roomId, code, nickname, questionId);
       } else {
           toast.error("Error Running Code");
       }
