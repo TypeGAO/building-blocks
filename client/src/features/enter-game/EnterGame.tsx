@@ -1,4 +1,4 @@
-import useGameActivity from "../../../hooks/useGameActivity"
+import useGameActivity from "../../hooks/useGameActivity"
 import EnterNickname from "./EnterNickname"
 import EnterPin from "./EnterPin"
 

@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { profanities } from "profanities"
-import { socket } from "../../../socket"
-import { Button, Input } from "../../../components"
-import useGameActivity from "../../../hooks/useGameActivity"
+import { socket } from "../../socket"
+import { Button, Input } from "../../components"
+import useGameActivity from "../../hooks/useGameActivity"
 import toast from "react-hot-toast"
 
 function EnterNickname() {

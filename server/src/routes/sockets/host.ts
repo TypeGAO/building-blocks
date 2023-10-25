@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { generateUniqueCode, newGameActivity } from "../../../services/generateGameService";
-
-const query = require('../../db/index.ts');
+import { getGameActivity, setGameActivity, insertGameActivity, endGame } from "../../../services/gameManagerService";
+import { Player } from '../../types';
 
 /**
  * hostSocketConnection(io)
@@ -19,20 +19,78 @@ const query = require('../../db/index.ts');
  * After joining the room, a 'roomCreated' event is emitted to the host.
  */
 const hostSocketConnection = (io: Server) => {
+  const connectedHosts = new Map();
+
   io.on("connection", (socket: Socket) => {
     socket.on("createRoom", async () => {
+      // Generate unique code
       const roomId = generateUniqueCode();
       socket.join(roomId);
+
+      // Save roomId and host
+      connectedHosts.set(socket.id, roomId);
 
       const game_activity = newGameActivity(socket.id, roomId);
 
       // Add room in database
-      let strSQL = ` INSERT INTO rooms (pin, is_active, question_set_id, game_activity, time_started) 
-                     VALUES ($1, false, $2, $3, NOW())`;
-      await query(strSQL, [roomId, 1, game_activity]);
+      await insertGameActivity(game_activity, roomId);
 
+      // Send to host
       game_activity.role = "host";
       socket.emit("roomCreated", game_activity);
+    });
+
+    socket.on("startGame", async (roomId: string) => {
+
+        // Get game activity from database, set it as started
+        const game_activity = await getGameActivity(roomId);
+        game_activity.stage = "started";
+
+        // Update game activity
+        await setGameActivity(game_activity, roomId);
+
+        // Send game activity to host and all players
+        game_activity.role = "host";
+        socket.emit("updateGameActivity", game_activity);
+
+        game_activity.role = "player";
+        socket.broadcast.to(roomId).emit("updateGameActivity", game_activity);
+    });
+
+    socket.on("kickPlayer", async (nickname: string) => {
+            const roomId = connectedHosts.get(socket.id);
+            const game_activity = await getGameActivity(roomId);
+
+            // Remove player from list
+            game_activity.players  = game_activity.players.filter((p: Player) => p.nickname !== nickname);
+
+            await setGameActivity(game_activity, roomId);
+
+            game_activity.role = "host";
+            game_activity.stage = "lobby";
+            socket.emit('updateGameActivity', game_activity);
+
+            // Send to all players
+            socket.broadcast.to(roomId).emit('kickPlayer', nickname);
+            
+            game_activity.role = "player";
+            game_activity.stage = "lobby";
+            socket.broadcast.to(roomId).emit('updateGameActivity', game_activity);
+    });
+
+    socket.on("disconnect", async () => {
+        if (connectedHosts.has(socket.id)) {
+            const roomId = connectedHosts.get(socket.id);
+
+            // End game
+            const game_activity = await getGameActivity(roomId);
+            game_activity.stage = "ended";
+            await setGameActivity(game_activity, roomId);
+            await endGame(roomId);
+
+            // Send to all players
+            socket.broadcast.to(roomId).emit('hostLeft', game_activity);
+        }
     });
   });
 };

@@ -2001,6 +2001,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@phosphor-icons/react@npm:^2.0.13":
+  version: 2.1.3
+  resolution: "@phosphor-icons/react@npm:2.1.3"
+  peerDependencies:
+    react: ">= 16.8"
+    react-dom: ">= 16.8"
+  checksum: 0a35247a63fbba01dd58edba01dc1f444094ce85a516d1ab341db7699d189c9a4824eb729ca0a768ebb76b25890760ef9d339f4de49a0e4541c6a71f5d97ea93
+  languageName: node
+  linkType: hard
+
 "@pkgjs/parseargs@npm:^0.11.0":
   version: 0.11.0
   resolution: "@pkgjs/parseargs@npm:0.11.0"
@@ -4992,6 +5002,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "client@workspace:."
   dependencies:
+    "@phosphor-icons/react": ^2.0.13
     "@storybook/addon-actions": ^7.4.5
     "@storybook/addon-essentials": ^7.4.5
     "@storybook/addon-interactions": ^7.4.5
