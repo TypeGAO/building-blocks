@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Button, Input } from "../../../components"
+import { Button, Input } from "../../components"
 
 function QuestionBuilder() {
   const [questions, setQuestions] = useState([{
