@@ -138,6 +138,9 @@ function App() {
       return <PlayerLobby />
     }
     else if (gameActivity.stage == "started") {
+      let testCode = 
+      `while True:
+           print(\\"howdy\\");`;
       return (
         <div>
           <h1>Player View Game Started</h1>
@@ -151,7 +154,7 @@ function App() {
               player.nickname === gameActivity.nickname &&
               player.roomId === gameActivity.roomId
           )?.score ?? 0}</h2>
-          <RunCodeButton roomId={gameActivity.roomId} code={`print(\\"howdy\\")`} nickname={gameActivity.nickname} questionId={1}/>
+          <RunCodeButton roomId={gameActivity.roomId} code={testCode} nickname={gameActivity.nickname} questionId={1}/>
         </div>
       )
     }

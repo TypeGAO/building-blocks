@@ -46,10 +46,14 @@ export async function getExpectedOutput(questionId: number) {
 
 export async function runCode(code: string) {
     // Timeout for 5 seconds, python -I is for isolated environment
-    const command = `timeout 5s bash -c 'python -I -c "${code}"' || echo "bblocks-internal-error"`;
-    const { stdout, stderr } = await exec(command);
-    if (stderr) {
-        return stderr.trim();
+    const command = `python -I -c "${code}"`;
+    try {
+        const { stdout, stderr } = await exec(command, { timeout: 5000 });
+        if (stderr) {
+            return stderr.trim();
+        }
+        return stdout.trim();
+    } catch (error: any) {
+        return error.message;
     }
-    return stdout.trim();
 }
