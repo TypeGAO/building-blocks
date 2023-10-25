@@ -14,14 +14,14 @@ interface SocketData {
 
 const io = new Server<SocketData>(server, {
   cors: {
-    origin: (process.env.NODE_DEV == "true" ? "http://localhost:5173" : "http://buildingblockstest.us-east-2.elasticbeanstalk.com"),
+    origin: (process.env.NODE_DEV == "true" ? "http://localhost:5173" : "http://bblocks.live"),
     methods: ["GET", "PUT", "POST", "DELETE"],
   },
 });
 
 app.use(
   cors({
-    origin: (process.env.NODE_DEV == "true" ? "http://localhost:5173" : "http://buildingblockstest.us-east-2.elasticbeanstalk.com"),
+    origin: (process.env.NODE_DEV == "true" ? "http://localhost:5173" : "http://bblocks.live"),
   }),
 );
 
