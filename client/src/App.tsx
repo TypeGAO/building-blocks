@@ -138,19 +138,6 @@ function App() {
       return <PlayerLobby />
     }
     else if (gameActivity.stage == "started") {
-      let testCode = 
-`
-def pascal_triangle(n):
-   for line in range(1, n + 1):
-       C = 1
-       for i in range(1, line + 1):
-           print(C, end = \\" \\")
-           C = int(C * (line - i) / i)
-       print(\\"\\")
-n = 10
-pascal_triangle(n)
-`;
-
       return (
         <div>
           <h1>Player View Game Started</h1>
@@ -164,7 +151,8 @@ pascal_triangle(n)
               player.nickname === gameActivity.nickname &&
               player.roomId === gameActivity.roomId
           )?.score ?? 0}</h2>
-          <RunCodeButton roomId={gameActivity.roomId} code={testCode} nickname={gameActivity.nickname} questionId={1}/>
+          <h3>Expected Output: Howdy world!</h3>
+          <RunCodeButton roomId={gameActivity.roomId} nickname={gameActivity.nickname} questionId={1}/>
         </div>
       )
     }
