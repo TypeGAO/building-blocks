@@ -18,7 +18,8 @@ export function addPlayer(roomId: string, nickname: string): Player {
         nickname: nickname,
         currentQuestion: 0,
         score: 0,
-        buildingBlocksId: []
+        buildingBlocksId: [],
+        submissions: 0
     }
 }
 

@@ -1,38 +1,49 @@
-import { Button } from "../../../components"
+import { useState } from "react"
+import { Button, Input } from "../../../components"
 import { socket } from "../../../socket"
 import toast from "react-hot-toast"
 
 interface RunGameButtonProps {
   roomId: string | null
-  code: string | null
   nickname: string | null
+  questionId: number | null
 }
 
-function RunCodeButton({ roomId, code, nickname }: RunGameButtonProps) {
+function RunCodeButton({ roomId, nickname, questionId }: RunGameButtonProps) {
+  const [code, setCode] = useState<string>("")
   const handleClick = async () => {
-      if (roomId && code) {
-          socket.emit("runCode", roomId, code, nickname);
-      } else {
-          toast.error("Error Running Code");
-      }
-    //if (players.length === 0) {
-      //toast.error("The Lobby Is Empty!")
-    //} else {
-      //if (roomId) {
-        //const res = await startGame(roomId)
-        //if (res.status === 200) {
-          //socket.emit("startGame", roomId)
-        //} else {
-          //toast.error("Error Starting Game")
-        //}
-      //}
-    //}
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCode(e.target.value)
+  }
+
+  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (roomId && code) {
+        socket.emit("runCode", roomId, code.replace(/"/g, '\\"'), nickname, questionId);
+    } else {
+        toast.error("Error Running Code");
+    }
   }
 
   return (
-    <Button size="lg" color="neutral" onClick={handleClick}>
-      Run Code
-    </Button>
+      <form onSubmit={handleSubmit}>
+        <div style={{ display: "grid", width: "30%", gap: "var(--8)" }}>
+          <textarea
+            size="lg"
+            value={code}
+            onChange={handleChange}
+            autoFocus
+            style={{ textAlign: "left" }}
+            rows="13"
+            id="IDE"
+          />
+          <Button size="lg" color="neutral">
+            Run Code
+          </Button>
+        </div>
+      </form>
   )
 }
 
