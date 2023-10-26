@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io";
 import { generateUniqueCode, newGameActivity } from "../../../services/generateGameService";
-import { getGameActivity, setGameActivity, insertGameActivity, endGame } from "../../../services/gameManagerService";
+import { getGameActivity, setGameActivity, insertGameActivity, endGame, gameStarted } from "../../../services/gameManagerService";
 import { Player } from '../../types';
 
 /**
@@ -55,6 +55,11 @@ const hostSocketConnection = (io: Server) => {
 
         game_activity.role = "player";
         socket.broadcast.to(roomId).emit("updateGameActivity", game_activity);
+
+        // If game already started (unpause), restore code
+        if (await gameStarted(roomId)) {
+            socket.broadcast.to(roomId).emit("restoreCode");
+        }
     });
 
     socket.on("pauseGame", async (roomId: string) => {
@@ -70,6 +75,8 @@ const hostSocketConnection = (io: Server) => {
         game_activity.role = "host";
         socket.emit("updateGameActivity", game_activity);
 
+        // Save current code, restore after pause
+        socket.broadcast.to(roomId).emit("saveCode");
         game_activity.role = "player";
         socket.broadcast.to(roomId).emit("updateGameActivity", game_activity);
     });

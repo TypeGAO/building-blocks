@@ -4,6 +4,15 @@ const util = require('node:util');
 const exec = util.promisify(require('node:child_process').exec);
 
 // Helper functions for getting, setting, and inserting game activities into the database
+
+export async function gameStarted(roomId: string) {
+    let strSQL = `SELECT is_active 
+                  FROM rooms WHERE pin = $1`
+    const { rows } = await query(strSQL, [roomId]);
+    const is_active = rows[0].is_active;
+    return is_active;
+}
+
 export async function getGameActivity(roomId: string) {
     let strSQL = `SELECT game_activity 
                   FROM rooms WHERE pin = $1`

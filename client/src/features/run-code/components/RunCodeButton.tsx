@@ -37,6 +37,7 @@ function RunCodeButton({ roomId, nickname, questionId }: RunGameButtonProps) {
             autoFocus
             style={{ textAlign: "left" }}
             rows="13"
+            id="IDE"
           />
           <Button size="lg" color="neutral">
             Run Code
