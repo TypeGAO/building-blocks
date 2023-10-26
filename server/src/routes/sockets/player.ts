@@ -104,6 +104,10 @@ const playerSocketConnection = (io: Server) => {
             // Reset submisisons
             game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).submissions = 0;
 
+            // Add building block id
+            const block_id = Math.floor(Math.random() * 30) + 1;
+            game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).buildingBlocksId.push(block_id);
+
             socket.emit("correct", output);
         } else {
             // Increase submissions (max 5 for score penalty)
