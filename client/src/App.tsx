@@ -10,6 +10,7 @@ import PlayerLobby from "./pages/PlayerLobby"
 import PlayerGame from "./pages/PlayerGame"
 import HostLobby from "./pages/HostLobby"
 import HostGame from "./pages/HostGame"
+import PlayerPaused from "./pages/PlayerPaused"
 
 /**
  * App Component
@@ -60,17 +61,37 @@ function App() {
 
     function onHostLeft(data: GameActivity) {
       window.location.reload()
+      localStorage.clear()
       socket.emit("hostLeft", data.roomId)
     }
 
     function onKickPlayer(nickname: string) {
       if (gameActivity.nickname === nickname) {
         window.location.reload()
+        localStorage.clear()
       }
     }
 
     function onCannotJoinGame() {
       toast.error("Can't Join Game!")
+    }
+
+    function onWrong(output: string) {
+      toast.error(`Wrong! Output: ${output}`)
+    }
+
+    function onCorrect(output: string) {
+      toast.error(`Correct! Output: ${output}`)
+    }
+
+    function onSaveCode() {
+      let text = document.getElementById("IDE").value
+      localStorage.setItem("savedCode", text)
+    }
+
+    function onRestoreCode() {
+      document.getElementById("IDE").value = localStorage.getItem("savedCode")
+      localStorage.clear()
     }
 
     socket.on("roomCreated", onRoomCreated)
@@ -80,6 +101,10 @@ function App() {
     socket.on("hostLeft", onHostLeft)
     socket.on("kickPlayer", onKickPlayer)
     socket.on("cannotJoinGame", onCannotJoinGame)
+    socket.on("correct", onCorrect)
+    socket.on("wrong", onWrong)
+    socket.on("saveCode", onSaveCode)
+    socket.on("restoreCode", onRestoreCode)
 
     return () => {
       socket.off("roomCreated", onRoomCreated)
@@ -89,6 +114,10 @@ function App() {
       socket.off("hostLeft", onHostLeft)
       socket.off("kickPlayer", onKickPlayer)
       socket.off("cannotJoinGame", onCannotJoinGame)
+      socket.off("correct", onCorrect)
+      socket.off("wrong", onWrong)
+      socket.off("saveCode", onSaveCode)
+      socket.off("restoreCode", onRestoreCode)
     }
   }, [gameActivity, setGameActivity])
 
@@ -107,6 +136,8 @@ function App() {
         return <PlayerLobby />
       case "started":
         return <PlayerGame />
+      case "paused":
+        return <PlayerPaused />
     }
   }
 

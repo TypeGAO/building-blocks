@@ -1,3 +1,4 @@
+import { PauseGameButton } from "../features/pause-game"
 import useGameActivity from "../hooks/useGameActivity"
 import { Player } from "../types"
 
@@ -14,6 +15,7 @@ function HostGame() {
           </li>
         ))}
       </ul>
+      <PauseGameButton />
     </div>
   )
 }
