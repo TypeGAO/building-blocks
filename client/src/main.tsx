@@ -11,12 +11,17 @@ import "./styles/spacing.css"
 import "./styles/cursors.css"
 import { QueryClient, QueryClientProvider } from "react-query"
 import { Toaster } from "react-hot-toast"
+// import { CoinAmount } from "./components"
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
   },
+  // {
+  //   path: '/test',
+  //   element: <CoinAmount amount={150} size="sm" />
+  // }
 ])
 
 const queryClient = new QueryClient({

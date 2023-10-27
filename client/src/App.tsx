@@ -8,7 +8,6 @@ import HostLobby from "./pages/HostLobby"
 import toast from "react-hot-toast"
 import { RunCodeButton } from "./features/run-code"
 import { Player } from "./types/index"
-import TextEditor from "./components/text-editor/TextEditor"
 
 /**
  * App Component
@@ -18,7 +17,6 @@ import TextEditor from "./components/text-editor/TextEditor"
  */
 function App() {
   const { gameActivity, setGameActivity } = useGameActivity()
-  const [editorContent, setEditorContent] = useState('')
 
   useEffect(() => {
     function onRoomCreated(data: GameActivity) {
@@ -117,10 +115,6 @@ function App() {
       return (
         <div>
           <PlayerLobby />
-          <TextEditor 
-            value={editorContent}
-            onChange={(newValue) => setEditorContent(newValue)}
-          />
         </div>
       )
     }
