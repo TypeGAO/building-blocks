@@ -1,1 +1,1 @@
-export { default as PauseGameButton } from "./components/PauseGameButton"
+export { default as PauseGameButton } from "./PauseGameButton"
