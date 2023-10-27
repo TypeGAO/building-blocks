@@ -11,7 +11,7 @@ import "./styles/spacing.css"
 import "./styles/cursors.css"
 import { QueryClient, QueryClientProvider } from "react-query"
 import { Toaster } from "react-hot-toast"
-// import { CoinAmount } from "./components"
+// import { Question } from "./components"
 
 const router = createBrowserRouter([
   {
@@ -20,7 +20,7 @@ const router = createBrowserRouter([
   },
   // {
   //   path: '/test',
-  //   element: <CoinAmount amount={150} size="sm" />
+  //   element: <Question title="Even or Odd?" description="Get an input that takes in a number. If the number is even, print True. If odd, print False." />
   // }
 ])
 
