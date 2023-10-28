@@ -64,7 +64,14 @@
 }
 
 .banner .bannerUrl {
-  font-weight: 900;
+  background-color: var(--neutral-950);
+  color: var(--neutral-50);
+  box-shadow: 0 0 0 var(--8) var(--neutral-950);
+  transform: rotate(-2deg);
+  display: inline-block;
+  margin-left: var(--10);
+  margin-bottom: var(--8);
+  font-weight: 800;
 }
 
 .container {
