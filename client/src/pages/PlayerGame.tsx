@@ -3,7 +3,7 @@ import styles from "./PlayerGame.module.css"
 
 import useGameActivity from "../hooks/useGameActivity"
 import { Player } from "../types"
-import { RunCodeButton } from "../features/run-code"
+import { Code } from "../features/code"
 
 function PlayerGame() {
   const { gameActivity } = useGameActivity()
@@ -12,7 +12,7 @@ function PlayerGame() {
     <div className={styles.container}>
       <div className={styles.col}>question col</div>
       <div className={styles.col}>
-        <h1>Player View Game Started</h1>
+        <Code />
         <h2>
           Question:{" "}
           {gameActivity.players.find(
@@ -29,8 +29,6 @@ function PlayerGame() {
               player.roomId === gameActivity.roomId
           )?.score ?? 0}
         </h2>
-        <h3>Expected Output: Howdy world!</h3>
-        <RunCodeButton questionId={1} />
       </div>
       <div className={styles.col}>
         <Scene />
