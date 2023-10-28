@@ -9,8 +9,8 @@ function HostGame() {
     <div>
       <h1>Host View Game Started</h1>
       <ul>
-        {gameActivity.players.map((player: Player) => (
-          <li>
+        {gameActivity.players.map((player: Player, index) => (
+          <li key={index}>
             {player.nickname}: {player.currentQuestion}
           </li>
         ))}
