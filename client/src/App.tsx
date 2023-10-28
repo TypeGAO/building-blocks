@@ -127,6 +127,8 @@ function App() {
         return <HostLobby />
       case "started":
         return <HostGame />
+      case "paused":
+        return <HostGame />
     }
   }
 
