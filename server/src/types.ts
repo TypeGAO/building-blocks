@@ -4,6 +4,7 @@ export type Player = {
   score: number
   currentQuestion: number
   buildingBlocksId: [number] | []
+  submissions: number
 }
 
 export type GameActivity = {

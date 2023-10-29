@@ -5,7 +5,7 @@
   text-align: center;
   padding: var(--16) var(--20);
   height: var(--20);
-  border-bottom: var(--4) solid var(--neutral-200);
+  border-bottom: var(--2) solid var(--neutral-200);
 }
 
 .left {
