@@ -1,3 +1,4 @@
+import styles from "./PlayerLobby.module.css"
 import { GameHeader, Spinner } from "../components"
 import funFacts from "../assets/fun-facts.json"
 
@@ -9,42 +10,15 @@ function PlayerLobby() {
   return (
     <>
       <GameHeader />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "90vh",
-        }}
-      >
-        <div
-          style={{
-            width: "500px",
-            marginLeft: "auto",
-            marginRight: "auto",
-            textAlign: "center",
-            fontSize: "var(--20)",
-            gap: "var(--36)",
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <div style={{ fontSize: "var(--28)" }}>
-            <strong>You're in!</strong>
-          </div>
+      <div className={styles.page}>
+        <div className={styles.container}>
+          <h1 className={styles.title}>You're in!</h1>
           <div>
             <Spinner color="blue" />
           </div>
-          <div
-            style={{
-              fontSize: "var(--16)",
-              lineHeight: "var(--24)",
-              color: "var(--neutral-700)",
-              padding: "var(--16)",
-            }}
-          >
+          <p className={styles.fact}>
             <strong>Did you know?</strong> {getRandomFact()}
-          </div>
+          </p>
         </div>
       </div>
     </>

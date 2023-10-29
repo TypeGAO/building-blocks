@@ -4,7 +4,7 @@
   width: 100%;
   position: fixed;
   overflow-y: auto;
-  top: var(--48);
+  top: var(--52);
 }
 
 .col {
