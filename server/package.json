@@ -9,6 +9,7 @@
   "private": true,
   "dependencies": {
     "body-parser": "^1.20.2",
+    "codemirror": "^6.0.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-promise-router": "^4.1.1",
@@ -22,7 +23,7 @@
     "typescript": "^5.2.2"
   },
   "scripts": {
-    "start": "set NODE_DEV=false && export NODE_DEV=false && ts-node src/index.ts",
+    "start": "set NODE_DEV=false && ts-node src/index.ts",
     "dev": "set NODE_DEV=true && export NODE_DEV=true && ts-node src/index.ts",
     "build": "tsc",
     "serve": "node dist/index.js"

@@ -1,0 +1,49 @@
+.currency {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    background-color: transparent;
+}
+
+.coin {
+    width: 15px;
+    height: auto;
+    padding-right: 5px;
+
+    &.small {
+        width: 10px;
+        height: auto;
+        padding-right: 3px;
+    }
+
+    &.medium {
+        width: 15px;
+        height: auto;
+        padding-right: 5px;
+    }
+}
+
+.quantity {
+    font-weight: 900;
+    color: black;
+    font-family: 'Lato';
+}
+
+.small {
+    display: flex;
+    align-items: center;
+    width: 30px;
+    height: 15px;
+    padding: 5px 10px;
+    font-size: smaller;
+}
+
+.medium {
+    display: flex;
+    align-items: center;
+    width: 40px;
+    height: 20px;
+    padding: 8px 12px;
+    font-size: large;
+}

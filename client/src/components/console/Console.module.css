@@ -1,0 +1,48 @@
+.console {
+    display: block;
+    align-items: center;
+    text-align: left;
+    padding: var(--16) var(--20);
+    height: var(--144);
+    width: 100%;
+    border-top: var(--4) solid var(--neutral-950);
+    border-left: var(--4) solid var(--neutral-950);
+    border-right: var(--4) solid var(--neutral-950);
+    border-bottom: var(--4) solid var(--neutral-950);
+    border-radius: 15px;
+    background-color: #3D3D3D;
+}
+
+.left {
+    justify-self: flex-start;
+    display: flex;
+    align-self: flex-start;
+    flex-direction: row;
+}
+
+.mid {
+    display: inline-block;
+}
+
+.right {
+    justify-self: flex-end;
+    display: flex;
+    align-self: flex-start;
+    flex-direction: row;
+}
+
+.title {
+    font-weight: 700;
+    font-size: var(--16);
+    color:#BDBDBD;
+    font-family: 'Roboto Mono';
+    line-height: 2;
+}
+
+.content {
+    font-weight: 700;
+    font-size: var(--16);
+    color: white;
+    font-family: 'Roboto Mono';
+    font-weight: 400;
+}
