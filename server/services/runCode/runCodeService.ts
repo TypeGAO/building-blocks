@@ -1,10 +1,10 @@
 const express = require('express');
-const { spawn, exec } = require('child_process');
+const { spawn, spawnSync, execSync, exec } = require('child_process');
 
 export function runCode(userCode: string, dockerName: string): string {
     //Build docker image
-    let buildImage = 'docker build -t ' + dockerName + ' .';
-    exec(buildImage);
+    let buildImage = 'docker build -t ' + dockerName + ' ./services/runCode';
+    execSync(buildImage);
 
     //Run container
     const dockerRunCommand = [
@@ -18,31 +18,35 @@ export function runCode(userCode: string, dockerName: string): string {
         dockerName
     ];
 
-    const dockerRun = spawn('docker', dockerRunCommand, {
-        stdio: 'pipe'
-    });
+    execSync('docker run --name test --rm -d -t -i test');
 
-    dockerRun.stdin.write(userCode);
+    let code = '"' + userCode + '"';
+    //let dockerExec = 'docker exec ' + dockerName + ' python -c ' + code;
 
-    let dockerExec = 'docker exec ' + dockerName + ' python -c -I ' + userCode;
+    let dExec = [
+        'exec',
+        dockerName,
+        'python',
+        '-c',
+        code
+    ];
 
-    exec(dockerExec);
-
-    dockerRun.stdin.end();
+    const dockerRun = spawn('docker', dExec);
 
     //Get output
     let output = '';
     let errorOutput = '';
 
-    dockerRun.stdout.on('data', data => {
+    dockerRun.stdout.on('data', (data: any) => {
+        console.log("date: " + data);
         output += data.toString();
     });
 
-    dockerRun.stderr.on('data', data => {
+    dockerRun.stderr.on('data', (data: any) => {
         errorOutput += data.toString();
     });
 
-    dockerRun.on('close', code => {
+    dockerRun.on('close', (code: any) => {
         if (code === 0) {
             console.log('Code execution successful.');
             console.log('Output:', output);
@@ -54,7 +58,7 @@ export function runCode(userCode: string, dockerName: string): string {
         }
     });
 
-    dockerRun.on('error', err => {
+    dockerRun.on('error', (err: any) => {
         console.error('Error while spawning Docker process:', err);
         return errorOutput;
     });
