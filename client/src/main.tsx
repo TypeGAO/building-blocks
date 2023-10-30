@@ -4,6 +4,7 @@ import ReactDOM from "react-dom/client"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 
 import App from "./App.tsx"
+import QuizCreation from "./pages/CreateQuestions.tsx"
 import { GameActivityProvider } from "./contexts/GameActivityProvider.tsx"
 
 import "./index.css"
@@ -20,8 +21,8 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: '/test',
-    element: <TextEditorWrapper />
+    path: "/host/create",
+    element: <QuizCreation />
   }
 ])
 

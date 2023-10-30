@@ -1,0 +1,38 @@
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+}
+
+.container {
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  font-size: var(--20);
+  gap: var(--36);
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-weight: 800;
+  font-size: var(--24);
+  padding: 0;
+  margin: 0;
+}
+
+.descriptionContainer {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 350px;
+}
+
+.description {
+  font-weight: 500;
+  line-height: var(--28);
+  color: var(--neutral-700);
+  padding: 0;
+  margin: 0;
+}

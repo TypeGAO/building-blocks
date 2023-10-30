@@ -1,7 +1,8 @@
 import { Server, Socket } from "socket.io";
 import { Player, GameActivity } from '../../types';
 import { addPlayer } from "../../../services/generateGameService";
-import { getGameActivity, setGameActivity } from "../../../services/gameManagerService";
+import { getGameActivity, setGameActivity, getExpectedOutput, runCode } from "../../../services/gameManagerService";
+
 
 /**
  * playerSocketConnection(io)
@@ -73,13 +74,50 @@ const playerSocketConnection = (io: Server) => {
       }
     });
 
-    socket.on("runCode",  async (roomId: string, code: string, nickname: string) => {
-        // TODO: actually run code
-        // TODO: scoring criteria
+    socket.on("runCode",  async (roomId: string, code: string, nickname: string, questionId: number) => {
         const game_activity = await getGameActivity(roomId);
 
-        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestion += 1;
-        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).score += 1;
+
+        // Test for malicious code (not ideal)
+        const regexTest = /\b(exec|eval|open|input|os\.system|os\.popen|os\.remove|os\.unlink|os\.rmdir|os\.makedirs|os\.chmod|os\.chown|os\.symlink|os\.link|os\.rename|os\.startfile|os\.kill|os\.killpg|os\.fork|os\.pipe|os\.dup|os\.dup2|os\.wait|os\.waitpid|shutil\.rmtree|__import__|imp\.load_source|os\.spawn.|os\.execl.|callable|compile|del|execfile|reload|load_module|import\s+os|import\s+sys|import\s+shutil|import\s+fileinput|from\s+os\s+import|from\s+sys\s+import|from\s+shutil\s+import|from\s+fileinput\s+import)\b/g;
+        const matches = code.match(regexTest);
+        if (matches && matches.length > 0) {
+              socket.emit("wrong", "Potentially malicious patterns detected");
+              return;
+        } 
+
+        // Run code, get test case expected output, compare it to output
+        const output = await runCode(code);
+        const expected_output = await getExpectedOutput(questionId);
+        const code_correct = output === expected_output;
+
+        // Get submissions
+        const submissions = game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).submissions;
+
+        if (code_correct) {
+            game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestion += 1;
+
+            // Score based on submissions and random value
+            const rand = Math.floor(Math.random() * 5) + 1;
+            game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).score += (100 - submissions*10 + rand);
+
+            // Reset submisisons
+            game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).submissions = 0;
+
+            // Add building block id
+            const block_id = Math.floor(Math.random() * 30) + 1;
+            game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).buildingBlocksId.push(block_id);
+
+            socket.emit("correct", output);
+        } else {
+            // Increase submissions (max 5 for score penalty)
+            if (submissions <= 5) {
+                game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).submissions += 1;
+            }
+            socket.emit("wrong", output);
+        }
+
+        // Save and send game activity
         await setGameActivity(game_activity, roomId);
 
         game_activity.role = "host";
