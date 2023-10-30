@@ -1,11 +1,10 @@
 import React from "react"
-import { useState } from "react"
 import ReactDOM from "react-dom/client"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 
-import App from "./App.tsx"
-import QuizCreation from "./pages/CreateQuestions.tsx"
-import { GameActivityProvider } from "./contexts/GameActivityProvider.tsx"
+import App from "./App"
+import QuizCreation from "./pages/CreateQuestions"
+import { GameActivityProvider } from "./contexts/GameActivityProvider"
 
 import "./index.css"
 import "./styles/colors.css"
@@ -13,7 +12,6 @@ import "./styles/spacing.css"
 import "./styles/cursors.css"
 import { QueryClient, QueryClientProvider } from "react-query"
 import { Toaster } from "react-hot-toast"
-import { TextEditor } from "./components"
 
 const router = createBrowserRouter([
   {
@@ -22,8 +20,8 @@ const router = createBrowserRouter([
   },
   {
     path: "/host/create",
-    element: <QuizCreation />
-  }
+    element: <QuizCreation />,
+  },
 ])
 
 const queryClient = new QueryClient({
@@ -33,14 +31,6 @@ const queryClient = new QueryClient({
     },
   },
 })
-
-function TextEditorWrapper() {
-  const [editorContent, setEditorContent] = useState("")
-
-  return (
-    <TextEditor value={editorContent} onChange={setEditorContent} />
-  )
-}
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
