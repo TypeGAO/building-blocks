@@ -1,5 +1,5 @@
 import styles from "./CoinAmount.module.css"
-import coin from './coin.png'
+import coin from '../../assets/coin.svg'
 
 interface CoinAmountProps {
     amount: number,

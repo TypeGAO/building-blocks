@@ -1,4 +1,5 @@
 import React from "react"
+import { useState } from "react"
 import ReactDOM from "react-dom/client"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 
@@ -11,17 +12,17 @@ import "./styles/spacing.css"
 import "./styles/cursors.css"
 import { QueryClient, QueryClientProvider } from "react-query"
 import { Toaster } from "react-hot-toast"
-// import { Question } from "./components"
+import { TextEditor } from "./components"
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
   },
-  // {
-  //   path: '/test',
-  //   element: <Question title="Even or Odd?" description="Get an input that takes in a number. If the number is even, print True. If odd, print False." />
-  // }
+  {
+    path: '/test',
+    element: <TextEditorWrapper />
+  }
 ])
 
 const queryClient = new QueryClient({
@@ -31,6 +32,14 @@ const queryClient = new QueryClient({
     },
   },
 })
+
+function TextEditorWrapper() {
+  const [editorContent, setEditorContent] = useState("")
+
+  return (
+    <TextEditor value={editorContent} onChange={setEditorContent} />
+  )
+}
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
