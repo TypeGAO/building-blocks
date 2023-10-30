@@ -5,6 +5,8 @@ import useGameActivity from "../hooks/useGameActivity"
 import { Player } from "../types"
 import { Code } from "../features/code"
 import { GameHeader } from "../components"
+import { Question } from "../features/question"
+import { HintButton } from "../features/hint"
 
 function PlayerGame() {
   const { gameActivity } = useGameActivity()
@@ -13,7 +15,10 @@ function PlayerGame() {
     <>
       <GameHeader />
       <div className={styles.container}>
-        <div className={styles.col}>question col</div>
+        <div className={styles.col}>
+          <Question />
+          <HintButton />
+        </div>
         <div className={styles.col}>
           <Code />
           <h2>

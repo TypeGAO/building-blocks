@@ -1,42 +1,39 @@
 .question {
-    display: block;
-    align-items: center;
-    text-align: left;
-    padding: var(--16) var(--20);
-    height: var(--144);
-    width: 100%;
-    background-color: transparent;
+  display: block;
+  align-items: center;
+  text-align: left;
+  width: 100%;
+  background-color: transparent;
 }
 
 .left {
-    justify-self: flex-start;
-    display: flex;
-    align-self: flex-start;
-    flex-direction: row;
+  justify-self: flex-start;
+  display: flex;
+  align-self: flex-start;
+  flex-direction: row;
 }
 
 .mid {
-    display: inline-block;
+  display: inline-block;
 }
 
 .right {
-    justify-self: flex-end;
-    display: flex;
-    align-self: flex-start;
-    flex-direction: row;
+  justify-self: flex-end;
+  display: flex;
+  align-self: flex-start;
+  flex-direction: row;
 }
 
 .title {
-    font-weight: 750;
-    font-size: var(--20);
-    color: black;
-    font-family: 'Lato';
-    line-height: 2;
+  font-weight: 750;
+  font-size: var(--20);
+  color: var(--neutral-900);
+  line-height: 2;
 }
 
 .description {
-    font-size: var(--16);
-    color: black;
-    font-family: 'Lato';
-    font-weight: 400;
+  font-size: var(--16);
+  color: var(--neutral-800);
+  line-height: var(--24);
+  font-weight: 400;
 }
