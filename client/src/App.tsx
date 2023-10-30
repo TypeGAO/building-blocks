@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { socket } from "./socket"
 import toast from "react-hot-toast"
 
@@ -84,6 +84,7 @@ function App() {
       toast.error(`Correct! Output: ${output}`)
     }
 
+    /**
     function onSaveCode() {
       let text = document.getElementById("IDE").value
       localStorage.setItem("savedCode", text)
@@ -93,6 +94,7 @@ function App() {
       document.getElementById("IDE").value = localStorage.getItem("savedCode")
       localStorage.clear()
     }
+    **/
 
     socket.on("roomCreated", onRoomCreated)
     socket.on("roomJoined", onRoomJoined)
@@ -103,8 +105,8 @@ function App() {
     socket.on("cannotJoinGame", onCannotJoinGame)
     socket.on("correct", onCorrect)
     socket.on("wrong", onWrong)
-    socket.on("saveCode", onSaveCode)
-    socket.on("restoreCode", onRestoreCode)
+    //socket.on("saveCode", onSaveCode)
+    //socket.on("restoreCode", onRestoreCode)
 
     return () => {
       socket.off("roomCreated", onRoomCreated)
@@ -116,8 +118,8 @@ function App() {
       socket.off("cannotJoinGame", onCannotJoinGame)
       socket.off("correct", onCorrect)
       socket.off("wrong", onWrong)
-      socket.off("saveCode", onSaveCode)
-      socket.off("restoreCode", onRestoreCode)
+      //socket.off("saveCode", onSaveCode)
+      //socket.off("restoreCode", onRestoreCode)
     }
   }, [gameActivity, setGameActivity])
 
