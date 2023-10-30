@@ -4,3 +4,4 @@
 .DS_Store
 /node_modules
 client/src/components/text-editor/
+server/node_modules
