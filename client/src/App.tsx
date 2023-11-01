@@ -12,6 +12,8 @@ import HostLobby from "./pages/HostLobby"
 import HostGame from "./pages/HostGame"
 import PlayerPaused from "./pages/PlayerPaused"
 
+import { StartGameButton } from "./features/start-game"
+
 /**
  * App Component
  *
@@ -84,6 +86,10 @@ function App() {
       toast.error(`Correct! Output: ${output}`)
     }
 
+    function onMessage(msg: string) {
+      toast.error(`${msg}`);
+    }
+
     /**
     function onSaveCode() {
       let text = document.getElementById("IDE").value
@@ -105,6 +111,7 @@ function App() {
     socket.on("cannotJoinGame", onCannotJoinGame)
     socket.on("correct", onCorrect)
     socket.on("wrong", onWrong)
+    socket.on("message", onMessage)
     //socket.on("saveCode", onSaveCode)
     //socket.on("restoreCode", onRestoreCode)
 
@@ -118,6 +125,7 @@ function App() {
       socket.off("cannotJoinGame", onCannotJoinGame)
       socket.off("correct", onCorrect)
       socket.off("wrong", onWrong)
+      socket.off("message", onMessage)
       //socket.off("saveCode", onSaveCode)
       //socket.off("restoreCode", onRestoreCode)
     }
@@ -130,7 +138,12 @@ function App() {
       case "started":
         return <HostGame />
       case "paused":
-        return <HostGame />
+        return (
+            <div>
+                <HostGame />
+                <StartGameButton roomId={gameActivity.roomId} players={gameActivity.players}/>
+            </div>
+        )
     }
   }
 

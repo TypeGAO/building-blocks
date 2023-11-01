@@ -43,6 +43,7 @@ export const GameActivityProvider = ({
     gameActivity,
     setGameActivity,
     currentPlayer,
+    setCurrentPlayer
   }
 
   return (

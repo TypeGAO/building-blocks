@@ -55,7 +55,7 @@ export async function getExpectedOutput(questionId: number) {
 
 export async function runCode(code: string) {
     // Timeout for 5 seconds, python -I is for isolated environment
-    const command = `python -I -c "${code}"`;
+    const command = `python3 -I -c "${code}"`;
     try {
         const { stdout, stderr } = await exec(command, { timeout: 5000 });
         if (stderr) {
