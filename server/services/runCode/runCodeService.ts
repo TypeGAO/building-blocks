@@ -8,7 +8,8 @@ export function runCode(userCode: string, dockerName: string): string {
     let dExec = [
         'exec',
         dockerName,
-        'python',
+        'python3',
+        '-I',
         '-c',
         code
     ];
