@@ -19,7 +19,9 @@ export function addPlayer(roomId: string, nickname: string): Player {
         currentQuestion: 0,
         score: 0,
         buildingBlocksId: [],
-        submissions: 0
+        submissions: 0,
+        currentCode: "",
+        lastOutput: ""
     }
 }
 

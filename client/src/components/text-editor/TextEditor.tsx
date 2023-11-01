@@ -1,6 +1,7 @@
 import Editor from "@monaco-editor/react"
 import styles from "./TextEditor.module.css"
 import { Spinner } from ".."
+import useGameActivity from "../../hooks/useGameActivity"
 
 interface TextEditorProps {
   code: string
@@ -21,8 +22,13 @@ const options = {
 }
 
 function TextEditor({ code, setCode }: TextEditorProps) {
+  const { currentPlayer, setCurrentPlayer } = useGameActivity()
+
   const handleChange = (value: string | undefined) => {
     if (value) {
+      let player = currentPlayer
+      player.currentCode = value
+      setCurrentPlayer(player)
       setCode(value)
     }
   }

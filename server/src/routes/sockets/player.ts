@@ -74,15 +74,30 @@ const playerSocketConnection = (io: Server) => {
       }
     });
 
+    socket.on("createHint", async (roomId: string, nickname: string) => {
+        const game_activity = await getGameActivity(roomId);
+        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).score -= 150;
+            
+        // Save and send game activity
+        await setGameActivity(game_activity, roomId);
+
+        game_activity.role = "host";
+        socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
+
+        game_activity.role = "player";
+        game_activity.nickname = nickname;
+        socket.emit("updateGameActivity", game_activity);
+            
+    });
+
     socket.on("runCode",  async (roomId: string, code: string, nickname: string, questionId: number) => {
         const game_activity = await getGameActivity(roomId);
-
 
         // Test for malicious code (not ideal)
         const regexTest = /\b(exec|eval|open|input|os\.system|os\.popen|os\.remove|os\.unlink|os\.rmdir|os\.makedirs|os\.chmod|os\.chown|os\.symlink|os\.link|os\.rename|os\.startfile|os\.kill|os\.killpg|os\.fork|os\.pipe|os\.dup|os\.dup2|os\.wait|os\.waitpid|shutil\.rmtree|__import__|imp\.load_source|os\.spawn.|os\.execl.|callable|compile|del|execfile|reload|load_module|import\s+os|import\s+sys|import\s+shutil|import\s+fileinput|from\s+os\s+import|from\s+sys\s+import|from\s+shutil\s+import|from\s+fileinput\s+import)\b/g;
         const matches = code.match(regexTest);
         if (matches && matches.length > 0) {
-              socket.emit("wrong", "Potentially malicious patterns detected");
+              socket.emit("message", "Potentially malicious patterns detected");
               return;
         } 
 
@@ -108,6 +123,10 @@ const playerSocketConnection = (io: Server) => {
             const block_id = Math.floor(Math.random() * 30) + 1;
             game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).buildingBlocksId.push(block_id);
 
+            // Clear hint and last output
+            game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentHint = "";
+            game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).lastOutput = "";
+
             socket.emit("correct", output);
         } else {
             // Increase submissions (max 5 for score penalty)
@@ -116,6 +135,9 @@ const playerSocketConnection = (io: Server) => {
             }
             socket.emit("wrong", output);
         }
+
+        // Record last output
+        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).lastOutput = output;
 
         // Save and send game activity
         await setGameActivity(game_activity, roomId);
