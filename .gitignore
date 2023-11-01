@@ -2,6 +2,5 @@
 *.swo
 .env
 .DS_Store
-/node_modules
-client/src/components/text-editor/
-server/node_modules
+node_modules/
+server/node_modules/

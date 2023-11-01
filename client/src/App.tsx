@@ -79,11 +79,11 @@ function App() {
     }
 
     function onWrong(output: string) {
-      toast.error(`Wrong! Output: ${output}`)
+      toast.error(`Incorrect!`)
     }
 
     function onCorrect(output: string) {
-      toast.error(`Correct! Output: ${output}`)
+      toast.success(`Correct!`)
     }
 
     function onMessage(msg: string) {
