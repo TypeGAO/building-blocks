@@ -4,7 +4,7 @@ import { socket } from "../../socket"
 import useGameActivity from "../../hooks/useGameActivity"
 import { useQuery } from "react-query"
 import { useState } from "react"
-import { fetchHint } from "../../api"
+import { fetchHint, fetchQuestion } from "../../api"
 import toast from "react-hot-toast"
 import useDelayedLoadingState from "../../hooks/useDelayedLoadingState"
 
@@ -20,7 +20,8 @@ function HintButton() {
     queryKey: ["fetchHint", isSubmitted],
     queryFn: async () => {
         if (currentPlayer.score >= 150) {
-            const res = await fetchHint(currentPlayer.currentCode, "FIND ERROR")
+            const question = await fetchQuestion(currentPlayer.currentQuestionId);
+            const res = await fetchHint(currentPlayer.currentCode, question.data.question)
             toast.error(res.data)
         } else {
           toast.error("Not Enough Coins!")

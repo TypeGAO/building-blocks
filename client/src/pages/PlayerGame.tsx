@@ -15,7 +15,7 @@ function PlayerGame() {
       <GameHeader />
       <div className={styles.container}>
         <div className={styles.col}>
-          <Question />
+          <Question questionId={currentPlayer.currentQuestionId}/>
           <HintButton />
         </div>
         <div className={styles.col}>

@@ -21,7 +21,8 @@ export function addPlayer(roomId: string, nickname: string): Player {
         buildingBlocksId: [],
         submissions: 0,
         currentCode: "",
-        lastOutput: ""
+        lastOutput: "",
+        currentQuestionId: 1
     }
 }
 
@@ -32,6 +33,7 @@ export function newGameActivity(masterSocket: string, roomId: string): GameActiv
         nickname: "",
         time: -1,
         players: [],
-        stage: "lobby"
+        stage: "lobby",
+        questionSetId: 1
     };
 }

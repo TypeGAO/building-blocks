@@ -1,12 +1,33 @@
 import { Question as QuestionComponent } from "../../components"
+import { useState } from "react"
+import { useQuery } from "react-query"
+import { fetchQuestion } from "../../api"
+import toast from "react-hot-toast"
 
-function Question() {
-  // TODO: get question to display
+interface QuestionProps {
+    questionId: number
+}
+
+function Question({ questionId }: QuestionProps) {
+  const [title, setTitle] = useState<string>("")
+  const [desc, setDesc] = useState<string>("")
+  const { data } = useQuery({
+    queryKey: ["fetchQuestion"],
+    queryFn: async () => {
+      const question = await fetchQuestion(questionId);
+      setTitle(question.data.title);
+      setDesc(question.data.question);
+    },
+    retry: 0,
+    onError: () => {
+      toast.error("Error Getting Question")
+    },
+  })
 
   return (
     <QuestionComponent
-      title="Even or Odd?"
-      description="Get an input that takes in a number. If the number is even, print True. If odd, print False."
+      title={ title }
+      description={ desc }
     />
   )
 }
