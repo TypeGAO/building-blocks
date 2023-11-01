@@ -23,7 +23,7 @@
   },
   "scripts": {
     "start": "set NODE_DEV=false && export NODE_DEV=false && ts-node src/index.ts",
-    "dev": "set NODE_DEV=true && export NODE_DEV=true && ts-node src/index.ts",
+    "dev": "set NODE_DEV=true && ts-node src/index.ts",
     "build": "tsc",
     "serve": "node dist/index.js"
   }

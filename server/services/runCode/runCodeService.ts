@@ -18,10 +18,10 @@ export function runCode(userCode: string, dockerName: string): string {
         dockerName
     ];
 
-    execSync('docker run --name test --rm -d -t -i test');
+    execSync('docker run --name ' + dockerName + ' --rm -d -t -i ' + dockerName);
 
+    //Run code on container
     let code = '"' + userCode + '"';
-    //let dockerExec = 'docker exec ' + dockerName + ' python -c ' + code;
 
     let dExec = [
         'exec',
@@ -31,37 +31,24 @@ export function runCode(userCode: string, dockerName: string): string {
         code
     ];
 
-    const dockerRun = spawn('docker', dExec);
+    const dockerRun = spawnSync('docker', dExec,{ 
+        shell: true,
+        stdio: ['inherit', 'pipe', 'pipe'],
+        encoding: 'utf-8' 
+    });
+
+    //Close container
+    execSync('docker container kill ' + dockerName);
 
     //Get output
     let output = '';
-    let errorOutput = '';
 
-    dockerRun.stdout.on('data', (data: any) => {
-        console.log("date: " + data);
-        output += data.toString();
-    });
 
-    dockerRun.stderr.on('data', (data: any) => {
-        errorOutput += data.toString();
-    });
-
-    dockerRun.on('close', (code: any) => {
-        if (code === 0) {
-            console.log('Code execution successful.');
-            console.log('Output:', output);
-            return output;
-        } else {
-            console.error('Code execution failed. Exit code:', code);
-            console.error('Error output:', errorOutput);
-            return errorOutput;           
-        }
-    });
-
-    dockerRun.on('error', (err: any) => {
-        console.error('Error while spawning Docker process:', err);
-        return errorOutput;
-    });
+    if(dockerRun.status === 0){
+        output += dockerRun.output[1];
+    } else {
+        output += dockerRun.output[2];
+    }
 
     return output;
 }
