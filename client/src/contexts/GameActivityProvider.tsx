@@ -1,17 +1,19 @@
-import { ReactNode, createContext, useState } from "react"
-import { GameActivity } from "../types"
+import { ReactNode, createContext, useState, useEffect } from "react"
+import { GameActivity, Player } from "../types"
 
 interface GameActivityContextProps {
   children: ReactNode
 }
 
-const GameActivityContext = createContext<
-  | {
-      gameActivity: GameActivity
-      setGameActivity: React.Dispatch<React.SetStateAction<GameActivity>>
-    }
-  | undefined
->(undefined)
+interface GameActivityContextValue {
+  gameActivity: GameActivity
+  setGameActivity: React.Dispatch<React.SetStateAction<GameActivity>>
+  currentPlayer: Player | null
+}
+
+const GameActivityContext = createContext<GameActivityContextValue | undefined>(
+  undefined
+)
 
 export const GameActivityProvider = ({
   children,
@@ -25,8 +27,27 @@ export const GameActivityProvider = ({
     players: [],
   })
 
+  const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null)
+
+  useEffect(() => {
+    // Get player
+    const foundPlayer = gameActivity.players.find(
+      (player: Player) =>
+        player.nickname === gameActivity.nickname &&
+        player.roomId === gameActivity.roomId
+    )
+    setCurrentPlayer(foundPlayer || null)
+  }, [gameActivity.nickname, gameActivity.players, gameActivity.roomId])
+
+  const contextValue: GameActivityContextValue = {
+    gameActivity,
+    setGameActivity,
+    currentPlayer,
+    setCurrentPlayer
+  }
+
   return (
-    <GameActivityContext.Provider value={{ gameActivity, setGameActivity }}>
+    <GameActivityContext.Provider value={contextValue}>
       {children}
     </GameActivityContext.Provider>
   )

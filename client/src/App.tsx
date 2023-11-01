@@ -1,13 +1,18 @@
 import { useEffect } from "react"
 import { socket } from "./socket"
+import toast from "react-hot-toast"
+
 import useGameActivity from "./hooks/useGameActivity"
+import { GameActivity } from "./types"
+
 import Landing from "./pages/Landing"
 import PlayerLobby from "./pages/PlayerLobby"
-import { GameActivity } from "./types"
+import PlayerGame from "./pages/PlayerGame"
 import HostLobby from "./pages/HostLobby"
-import toast from "react-hot-toast"
-import { RunCodeButton } from "./features/run-code"
-import { Player } from "./types/index"
+import HostGame from "./pages/HostGame"
+import PlayerPaused from "./pages/PlayerPaused"
+
+import { StartGameButton } from "./features/start-game"
 
 /**
  * App Component
@@ -53,79 +58,103 @@ function App() {
     }
 
     function onDuplicateName() {
-      toast.error("Name is Taken!");
+      toast.error("Name is Taken!")
     }
 
     function onHostLeft(data: GameActivity) {
-      window.location.reload();
-      socket.emit("hostLeft", data.roomId);
+      window.location.reload()
+      localStorage.clear()
+      socket.emit("hostLeft", data.roomId)
     }
 
     function onKickPlayer(nickname: string) {
       if (gameActivity.nickname === nickname) {
-        window.location.reload();
+        window.location.reload()
+        localStorage.clear()
       }
     }
 
     function onCannotJoinGame() {
-      toast.error("Can't Join Game!");
+      toast.error("Can't Join Game!")
     }
+
+    function onWrong(output: string) {
+      toast.error(`Incorrect!`)
+    }
+
+    function onCorrect(output: string) {
+      toast.success(`Correct!`)
+    }
+
+    function onMessage(msg: string) {
+      toast.error(`${msg}`);
+    }
+
+    /**
+    function onSaveCode() {
+      let text = document.getElementById("IDE").value
+      localStorage.setItem("savedCode", text)
+    }
+
+    function onRestoreCode() {
+      document.getElementById("IDE").value = localStorage.getItem("savedCode")
+      localStorage.clear()
+    }
+    **/
 
     socket.on("roomCreated", onRoomCreated)
     socket.on("roomJoined", onRoomJoined)
     socket.on("updateGameActivity", onUpdateGameActivity)
-    socket.on("duplicateName", onDuplicateName);
-    socket.on("hostLeft", onHostLeft);
-    socket.on("kickPlayer", onKickPlayer);
-    socket.on("cannotJoinGame", onCannotJoinGame);
+    socket.on("duplicateName", onDuplicateName)
+    socket.on("hostLeft", onHostLeft)
+    socket.on("kickPlayer", onKickPlayer)
+    socket.on("cannotJoinGame", onCannotJoinGame)
+    socket.on("correct", onCorrect)
+    socket.on("wrong", onWrong)
+    socket.on("message", onMessage)
+    //socket.on("saveCode", onSaveCode)
+    //socket.on("restoreCode", onRestoreCode)
 
     return () => {
       socket.off("roomCreated", onRoomCreated)
       socket.off("roomJoined", onRoomJoined)
       socket.off("updateGameActivity", onUpdateGameActivity)
-      socket.off("duplicateName", onDuplicateName);
-      socket.off("hostLeft", onHostLeft);
-      socket.off("kickPlayer", onKickPlayer);
-      socket.off("cannotJoinGame", onCannotJoinGame);
+      socket.off("duplicateName", onDuplicateName)
+      socket.off("hostLeft", onHostLeft)
+      socket.off("kickPlayer", onKickPlayer)
+      socket.off("cannotJoinGame", onCannotJoinGame)
+      socket.off("correct", onCorrect)
+      socket.off("wrong", onWrong)
+      socket.off("message", onMessage)
+      //socket.off("saveCode", onSaveCode)
+      //socket.off("restoreCode", onRestoreCode)
     }
   }, [gameActivity, setGameActivity])
 
   if (gameActivity.role === "host") {
-    if (gameActivity.stage === "lobby") {
-      return <HostLobby />
-    }
-    else if (gameActivity.stage == "started") {
-      return (
-        <div>
-          <h1>Host View Game Started</h1>
-          <ul>
-            {gameActivity.players.map((player: Player) => (
-              <li>
-                {player.nickname}: {player.currentQuestion}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )
+    switch (gameActivity.stage) {
+      case "lobby":
+        return <HostLobby />
+      case "started":
+        return <HostGame />
+      case "paused":
+        return (
+            <div>
+                <HostGame />
+                <StartGameButton roomId={gameActivity.roomId} players={gameActivity.players}/>
+            </div>
+        )
     }
   }
 
   if (gameActivity.role === "player") {
-    if (gameActivity.stage === "lobby") {
-      return <PlayerLobby />
-    }
-    else if (gameActivity.stage == "started") {
-      return (
-        <div>
-          <h1>Player View Game Started</h1>
-          <h2>Question:  {gameActivity.players.find(
-            (player: Player) =>
-              player.nickname === gameActivity.nickname &&
-              player.roomId === gameActivity.roomId
-          )?.currentQuestion ?? 0}</h2>
-          <RunCodeButton roomId={gameActivity.roomId} code={"print('howdy world')"} nickname={gameActivity.nickname} />
-        </div>
-      )
+    switch (gameActivity.stage) {
+      case "lobby":
+        return <PlayerLobby />
+      case "started":
+        return <PlayerGame />
+      case "paused":
+        return <PlayerPaused />
     }
   }
 

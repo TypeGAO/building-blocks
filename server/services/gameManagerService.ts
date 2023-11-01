@@ -1,7 +1,18 @@
 import { Player, GameActivity } from '../src/types';
 const query = require('../src/db/index.ts');
+const util = require('node:util');
+const exec = util.promisify(require('node:child_process').exec);
 
 // Helper functions for getting, setting, and inserting game activities into the database
+
+export async function gameStarted(roomId: string) {
+    let strSQL = `SELECT is_active 
+                  FROM rooms WHERE pin = $1`
+    const { rows } = await query(strSQL, [roomId]);
+    const is_active = rows[0].is_active;
+    return is_active;
+}
+
 export async function getGameActivity(roomId: string) {
     let strSQL = `SELECT game_activity 
                   FROM rooms WHERE pin = $1`
@@ -30,4 +41,28 @@ export async function endGame(roomId: string) {
         `;
 
     await query(strSQL, [roomId]);
+}
+
+export async function getExpectedOutput(questionId: number) {
+    const strSQL = `
+            SELECT test_cases
+            FROM questions WHERE id = $1
+        `;
+    const { rows } = await query(strSQL, [questionId]);
+    const expected_output = rows[0].test_cases.expected_output;
+    return expected_output;
+}
+
+export async function runCode(code: string) {
+    // Timeout for 5 seconds, python -I is for isolated environment
+    const command = `python3 -I -c "${code}"`;
+    try {
+        const { stdout, stderr } = await exec(command, { timeout: 5000 });
+        if (stderr) {
+            return stderr.trim();
+        }
+        return stdout.trim();
+    } catch (error: any) {
+        return error.message;
+    }
 }

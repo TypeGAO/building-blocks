@@ -25,6 +25,8 @@ app.use(
     origin: (process.env.NODE_DEV == "true" ? "http://localhost:5173" : "http://bblocks.live"),
   }),
 );
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 hostSocketConnection(io);
 playerSocketConnection(io);
