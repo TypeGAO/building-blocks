@@ -89,20 +89,6 @@ function App() {
     function onMessage(msg: string) {
       toast.error(`${msg}`);
     }
-
-    function onSaveCode() {
-      //let text = document.getElementById("IDE").value
-      //localStorage.setItem("savedCode", text)
-      socket.emit("saveCode");
-    }
-
-    /**
-    function onRestoreCode() {
-      document.getElementById("IDE").value = localStorage.getItem("savedCode")
-      localStorage.clear()
-    }
-    **/
-
     socket.on("roomCreated", onRoomCreated)
     socket.on("roomJoined", onRoomJoined)
     socket.on("updateGameActivity", onUpdateGameActivity)
@@ -113,8 +99,6 @@ function App() {
     socket.on("correct", onCorrect)
     socket.on("wrong", onWrong)
     socket.on("message", onMessage)
-    socket.on("saveCode", onSaveCode)
-    //socket.on("restoreCode", onRestoreCode)
 
     return () => {
       socket.off("roomCreated", onRoomCreated)
@@ -127,8 +111,6 @@ function App() {
       socket.off("correct", onCorrect)
       socket.off("wrong", onWrong)
       socket.off("message", onMessage)
-      //socket.off("saveCode", onSaveCode)
-      //socket.off("restoreCode", onRestoreCode)
     }
   }, [gameActivity, setGameActivity])
 

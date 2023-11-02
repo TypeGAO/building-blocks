@@ -104,7 +104,7 @@ const playerSocketConnection = (io: Server) => {
               return;
         } 
 
-        // Save currentCode
+        // Save current code (for pause)
         game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentCode = code;
 
         // Run code, get test case expected output, compare it to output
@@ -178,21 +178,6 @@ const playerSocketConnection = (io: Server) => {
         // Delete it from the Map of all players
         connectedPlayers.delete(socket.id);
       }
-    });
-
-    socket.on("saveCode",  async () => {
-        //const game_activity = await getGameActivity(roomId);
-        //game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentCode;
-            
-        //// Save and send game activity
-        //await setGameActivity(game_activity, roomId);
-
-        //game_activity.role = "host";
-        //socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
-
-        //game_activity.role = "player";
-        //game_activity.nickname = nickname;
-        //socket.emit("updateGameActivity", game_activity);
     });
 
     socket.on("disconnect", async () => {

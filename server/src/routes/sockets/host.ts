@@ -78,9 +78,6 @@ const hostSocketConnection = (io: Server) => {
         game_activity.role = "host";
         socket.emit("updateGameActivity", game_activity);
 
-        // Save current code, restore after pause
-        // TODO: fix with currentCode (emit something, save, emit)
-        socket.broadcast.to(roomId).emit("saveCode");
         game_activity.role = "player";
         socket.broadcast.to(roomId).emit("updateGameActivity", game_activity);
     });
