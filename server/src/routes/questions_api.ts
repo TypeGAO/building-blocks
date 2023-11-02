@@ -22,7 +22,7 @@ router.post('/addQuestion', async (req: Request, res: Response) => {
 router.get('/getQuestion/:id', async (req: Request, res: Response) => {
     try { 
         const id = req.params.id;
-        let strSQL = `SELECT * 
+        let strSQL = `SELECT id, question, starter_code, question_set_id, title
                       FROM questions
                       WHERE id = $1`;
         const { rows }  = await query(strSQL, [id]);

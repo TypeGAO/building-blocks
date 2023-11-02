@@ -63,7 +63,7 @@ export async function runCode(code: string) {
         }
         return stdout.trim();
     } catch (error: any) {
-        return error.message;
+        return error.message.substr(error.message.indexOf('Traceback'));;
     }
 }
 
