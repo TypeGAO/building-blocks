@@ -31,7 +31,7 @@ function HintButton() {
     retry: 0,
     onSuccess: (data) => {
       if (currentPlayer.score >= 150) {
-          socket.emit("createHint", gameActivity.roomId, gameActivity.nickname)
+          socket.emit("createHint", gameActivity.roomId, gameActivity.nickname, gameActivity)
       } 
       setIsSubmitted(false)
     },

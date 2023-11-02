@@ -64,6 +64,7 @@ const playerSocketConnection = (io: Server) => {
 
             // Send the new game activity to the host and all clients
             game_activity.role = "host";
+            game_activity.nickname = "";
             socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
 
             game_activity.role = "player";
@@ -79,14 +80,15 @@ const playerSocketConnection = (io: Server) => {
       }
     });
 
-    socket.on("createHint", async (roomId: string, nickname: string) => {
-        const game_activity = await getGameActivity(roomId);
+    socket.on("createHint", async (roomId: string, nickname: string, game_activity: any) => {
+        //const game_activity = await getGameActivity(roomId);
         game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).score -= 150;
             
         // Save and send game activity
         await setGameActivity(game_activity, roomId);
 
         game_activity.role = "host";
+        game_activity.nickname = "";
         socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
 
         game_activity.role = "player";
@@ -165,6 +167,7 @@ const playerSocketConnection = (io: Server) => {
         await setGameActivity(game_activity, roomId);
 
         game_activity.role = "host";
+        game_activity.nickname = "";
         socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
 
         if (done) {
@@ -207,6 +210,7 @@ const playerSocketConnection = (io: Server) => {
 
             // Send new game activity to host
             game_activity.role = "host";
+            game_activity.nickname = "";
             socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
           }
         }
