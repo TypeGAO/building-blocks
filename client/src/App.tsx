@@ -90,17 +90,12 @@ function App() {
       toast.error(`${msg}`);
     }
 
-    /**
-    function onSaveCode() {
-      let text = document.getElementById("IDE").value
-      localStorage.setItem("savedCode", text)
+    function onStageChange(stage: string) {
+      setGameActivity({
+        ...gameActivity,
+        stage: stage
+      })
     }
-
-    function onRestoreCode() {
-      document.getElementById("IDE").value = localStorage.getItem("savedCode")
-      localStorage.clear()
-    }
-    **/
 
     socket.on("roomCreated", onRoomCreated)
     socket.on("roomJoined", onRoomJoined)
@@ -112,8 +107,7 @@ function App() {
     socket.on("correct", onCorrect)
     socket.on("wrong", onWrong)
     socket.on("message", onMessage)
-    //socket.on("saveCode", onSaveCode)
-    //socket.on("restoreCode", onRestoreCode)
+    socket.on("stageChange", onStageChange);
 
     return () => {
       socket.off("roomCreated", onRoomCreated)
@@ -126,11 +120,13 @@ function App() {
       socket.off("correct", onCorrect)
       socket.off("wrong", onWrong)
       socket.off("message", onMessage)
-      //socket.off("saveCode", onSaveCode)
-      //socket.off("restoreCode", onRestoreCode)
+      socket.off("stageChange", onStageChange);
     }
   }, [gameActivity, setGameActivity])
 
+  // TODO: Host done page
+  //  - no players
+  //  - all done
   if (gameActivity.role === "host") {
     switch (gameActivity.stage) {
       case "lobby":
@@ -140,7 +136,7 @@ function App() {
       case "paused":
         return (
             <div>
-                <HostGame />
+                <h1>Game Paused</h1>
                 <StartGameButton roomId={gameActivity.roomId} players={gameActivity.players}/>
             </div>
         )
@@ -155,6 +151,8 @@ function App() {
         return <PlayerGame />
       case "paused":
         return <PlayerPaused />
+      case "done":
+        return <h1>DONE!</h1>
     }
   }
 

@@ -15,13 +15,12 @@ function PlayerGame() {
       <GameHeader />
       <div className={styles.container}>
         <div className={styles.col}>
-          <Question />
+          <Question questionId={currentPlayer.currentQuestionId}/>
           <HintButton />
+          <h2>Coins: {currentPlayer?.score ?? 0} </h2>
         </div>
         <div className={styles.col}>
           <Code />
-          <h2>Question: {currentPlayer?.currentQuestion ?? 0}</h2>
-          <h2>Score: {currentPlayer?.score ?? 0} </h2>
         </div>
         <div className={styles.col}>
           <Scene />
