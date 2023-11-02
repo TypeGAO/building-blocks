@@ -1,5 +1,5 @@
 import { ArrowsOutSimple, ArrowsInSimple } from "@phosphor-icons/react"
-import {  HostControls } from "../components"
+import { HostControls } from "../components"
 import useGameActivity from "../hooks/useGameActivity"
 import styles from "./HostLobby.module.css"
 import { StartGameButton } from "../features/start-game"
@@ -14,7 +14,7 @@ function getJoinUrl() {
 }
 
 function kickPlayer(nickname: string) {
-    socket.emit("kickPlayer", nickname);
+  socket.emit("kickPlayer", nickname)
 }
 
 function HostLobby() {
@@ -60,7 +60,7 @@ function HostLobby() {
               <span>
                 {playerCount} {playerCount === 1 ? "player" : "players"}
               </span>
-              <StartGameButton roomId={gameActivity.roomId} players={gameActivity.players}/>
+              <StartGameButton />
             </>
           )}
         </div>

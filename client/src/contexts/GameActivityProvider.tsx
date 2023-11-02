@@ -8,7 +8,8 @@ interface GameActivityContextProps {
 interface GameActivityContextValue {
   gameActivity: GameActivity
   setGameActivity: React.Dispatch<React.SetStateAction<GameActivity>>
-  currentPlayer: Player | null
+  currentPlayer: Player
+  setCurrentPlayer: React.Dispatch<React.SetStateAction<Player>>
 }
 
 const GameActivityContext = createContext<GameActivityContextValue | undefined>(
@@ -27,7 +28,16 @@ export const GameActivityProvider = ({
     players: [],
   })
 
-  const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null)
+  const [currentPlayer, setCurrentPlayer] = useState<Player>({
+    roomId: null,
+    nickname: "",
+    score: 0,
+    currentQuestion: 1,
+    buildingBlocksId: [],
+    submissions: 150,
+    currentCode: "",
+    lastOutput: "",
+  })
 
   useEffect(() => {
     // Get player
@@ -36,14 +46,16 @@ export const GameActivityProvider = ({
         player.nickname === gameActivity.nickname &&
         player.roomId === gameActivity.roomId
     )
-    setCurrentPlayer(foundPlayer || null)
+    if (foundPlayer) {
+      setCurrentPlayer(foundPlayer)
+    }
   }, [gameActivity.nickname, gameActivity.players, gameActivity.roomId])
 
   const contextValue: GameActivityContextValue = {
     gameActivity,
     setGameActivity,
     currentPlayer,
-    setCurrentPlayer
+    setCurrentPlayer,
   }
 
   return (

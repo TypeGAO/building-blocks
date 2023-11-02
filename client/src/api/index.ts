@@ -13,8 +13,7 @@ export async function startGame(id: string) {
 export async function fetchHint(code: string, question: string) {
   const res = await axiosClient.post(`/hints/getHint`, {
     code: code,
-    question: question
+    question: question,
   })
   return res
 }
-

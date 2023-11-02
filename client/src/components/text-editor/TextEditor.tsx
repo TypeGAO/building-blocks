@@ -26,7 +26,7 @@ function TextEditor({ code, setCode }: TextEditorProps) {
 
   const handleChange = (value: string | undefined) => {
     if (value) {
-      let player = currentPlayer
+      const player = currentPlayer
       player.currentCode = value
       setCurrentPlayer(player)
       setCode(value)

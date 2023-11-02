@@ -1,8 +1,13 @@
 import { PauseGameButton } from "../features/pause-game"
+import { StartGameButton } from "../features/start-game"
 import useGameActivity from "../hooks/useGameActivity"
 import { Player } from "../types"
 
-function HostGame() {
+interface HostGameProps {
+  isPaused?: boolean
+}
+
+function HostGame({ isPaused }: HostGameProps) {
   const { gameActivity } = useGameActivity()
 
   return (
@@ -16,6 +21,7 @@ function HostGame() {
         ))}
       </ul>
       <PauseGameButton />
+      {isPaused && <StartGameButton />}
     </div>
   )
 }

@@ -1,5 +1,5 @@
 export type Player = {
-  roomId: string
+  roomId: string | null
   nickname: string
   score: number
   currentQuestion: number
