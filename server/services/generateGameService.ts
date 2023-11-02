@@ -34,6 +34,6 @@ export function newGameActivity(masterSocket: string, roomId: string): GameActiv
         time: -1,
         players: [],
         stage: "lobby",
-        questionSetId: 1
+        questionSetId: 2
     };
 }

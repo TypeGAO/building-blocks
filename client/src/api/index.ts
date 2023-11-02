@@ -25,5 +25,6 @@ export async function fetchQuestion(questionId: number) {
 
 export async function fetchQuestionSetLength(questionSetId: number) {
   const res = await axiosClient.get(`/questionSets/getQuestionsInSet/${questionSetId}`)
+  console.log(res)
   return res.data.length
 }

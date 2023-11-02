@@ -43,6 +43,7 @@ const hostSocketConnection = (io: Server) => {
       socket.emit("roomCreated", game_activity);
     });
 
+    // TODO: must run to save code, keep or change?
     socket.on("startGame", async (roomId: string) => {
 
         // Get game activity from database, set it as started
@@ -58,11 +59,6 @@ const hostSocketConnection = (io: Server) => {
 
         game_activity.role = "player";
         socket.broadcast.to(roomId).emit("updateGameActivity", game_activity);
-
-        // If game already started (unpause), restore code
-        if (await gameStarted(roomId)) {
-            socket.broadcast.to(roomId).emit("restoreCode");
-        }
     });
 
     socket.on("pauseGame", async (roomId: string) => {

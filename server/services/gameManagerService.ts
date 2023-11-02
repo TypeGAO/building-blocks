@@ -74,3 +74,11 @@ export async function getQuestionIds(questionSetId: number) {
     const { rows }  = await query(strSQL, [questionSetId]);
     return rows.map((o: any) => o.id);
 }
+
+export async function getStarterCode(questionId: number) {
+    let strSQL = `SELECT starter_code
+                  FROM questions
+                  WHERE (id = $1)`;
+    const { rows }  = await query(strSQL, [questionId]);
+    return rows[0].starter_code;
+}

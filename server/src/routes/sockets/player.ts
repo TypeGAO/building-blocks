@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { Player, GameActivity } from '../../types';
 import { addPlayer } from "../../../services/generateGameService";
-import { getGameActivity, setGameActivity, getExpectedOutput, runCode, getQuestionIds } from "../../../services/gameManagerService";
+import { getGameActivity, setGameActivity, getExpectedOutput, runCode, getQuestionIds, getStarterCode } from "../../../services/gameManagerService";
 
 
 /**
@@ -53,9 +53,13 @@ const playerSocketConnection = (io: Server) => {
             const new_player = addPlayer(roomId, nickname);
             connectedPlayers.set(socket.id, new_player);
 
-            // Add a player, and save it
+            // Get question id and starter code
+            const questionIds = await getQuestionIds(game_activity.questionSetId)
+            new_player.currentQuestionId = questionIds[0];
+            new_player.currentCode = await getStarterCode(questionIds[0]);
+
+            // Add a player, and save game activity
             game_activity.players.push(new_player);
-            // TODO: starter code, set questionId
             await setGameActivity(game_activity, roomId);
 
             // Send the new game activity to the host and all clients
@@ -105,8 +109,9 @@ const playerSocketConnection = (io: Server) => {
         } 
 
         // Save current code (for pause)
-        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentCode = code;
+        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentCode = code.replace(/\\"/g, '"');
 
+        // TODO: multiple test cases?
         // Run code, get test case expected output, compare it to output
         const output = await runCode(code);
         const expected_output = await getExpectedOutput(questionId);
@@ -132,9 +137,6 @@ const playerSocketConnection = (io: Server) => {
             // Clear hint, output, currentCode
             game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentHint = "";
             game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).lastOutput = "";
-            // TODO: add starter code
-            game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentCode = "";
-
             // Check if player is done
             const ids = await getQuestionIds(game_activity.questionSetId);
             if (game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestion == ids.length) {
@@ -142,6 +144,9 @@ const playerSocketConnection = (io: Server) => {
             } else {
                 // Update question id to next one in the question set
                 game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestionId = ids[game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestion];
+
+                // Set starter code for next question
+                game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentCode = await getStarterCode(game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestionId);
             }
 
             socket.emit("correct", output);
@@ -168,6 +173,9 @@ const playerSocketConnection = (io: Server) => {
         game_activity.role = "player";
         game_activity.nickname = nickname;
         socket.emit("updateGameActivity", game_activity);
+        if (done) {
+            socket.disconnect();
+        }
     });
 
     socket.on("hostLeft",  async (roomId: string) => {

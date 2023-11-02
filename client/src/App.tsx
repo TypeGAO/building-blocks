@@ -89,6 +89,7 @@ function App() {
     function onMessage(msg: string) {
       toast.error(`${msg}`);
     }
+
     socket.on("roomCreated", onRoomCreated)
     socket.on("roomJoined", onRoomJoined)
     socket.on("updateGameActivity", onUpdateGameActivity)
@@ -114,6 +115,9 @@ function App() {
     }
   }, [gameActivity, setGameActivity])
 
+  // TODO: Host done page
+  //  - no players
+  //  - all done
   if (gameActivity.role === "host") {
     switch (gameActivity.stage) {
       case "lobby":
@@ -123,7 +127,7 @@ function App() {
       case "paused":
         return (
             <div>
-                <HostGame />
+                <h1>Game Paused</h1>
                 <StartGameButton roomId={gameActivity.roomId} players={gameActivity.players}/>
             </div>
         )

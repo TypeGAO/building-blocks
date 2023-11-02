@@ -8,7 +8,7 @@ import { fetchQuestionSetLength } from "../../api"
 
 function GameHeader() {
   const { gameActivity, currentPlayer } = useGameActivity()
-  const [questionSetLength, setQuestionSetLength] = useState<number>(1)
+  const [questionSetLength, setQuestionSetLength] = useState<number>(null)
   const { data } = useQuery({
     queryKey: ["fetchQuestionSetLength"],
     queryFn: async () => {

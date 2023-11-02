@@ -1,10 +1,11 @@
 import { Button } from "../../components"
 import { socket } from "../../socket"
+import useGameActivity from "../../hooks/useGameActivity"
 
 function CreateGameButton() {
+  const { gameActivity } = useGameActivity()
   const handleClick = () => {
-    // TODO: Change parameter in emit to questionSetId
-    socket.emit("createRoom", 1)
+    socket.emit("createRoom", gameActivity.questionSetId)
   }
 
   return (
