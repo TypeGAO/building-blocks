@@ -22,7 +22,7 @@ const hostSocketConnection = (io: Server) => {
   const connectedHosts = new Map();
 
   io.on("connection", (socket: Socket) => {
-    socket.on("createRoom", async () => {
+    socket.on("createRoom", async (questionSetId: number) => {
       // Generate unique code
       const roomId = generateUniqueCode();
       socket.join(roomId);
@@ -31,6 +31,9 @@ const hostSocketConnection = (io: Server) => {
       connectedHosts.set(socket.id, roomId);
 
       const game_activity = newGameActivity(socket.id, roomId);
+
+      // Set question set id
+      game_activity.questionSetId = questionSetId;
 
       // Add room in database
       await insertGameActivity(game_activity, roomId);
@@ -76,6 +79,7 @@ const hostSocketConnection = (io: Server) => {
         socket.emit("updateGameActivity", game_activity);
 
         // Save current code, restore after pause
+        // TODO: fix with currentCode (emit something, save, emit)
         socket.broadcast.to(roomId).emit("saveCode");
         game_activity.role = "player";
         socket.broadcast.to(roomId).emit("updateGameActivity", game_activity);

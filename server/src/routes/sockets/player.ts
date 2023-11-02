@@ -55,6 +55,7 @@ const playerSocketConnection = (io: Server) => {
 
             // Add a player, and save it
             game_activity.players.push(new_player);
+            // TODO: starter code, set questionId
             await setGameActivity(game_activity, roomId);
 
             // Send the new game activity to the host and all clients
@@ -103,6 +104,9 @@ const playerSocketConnection = (io: Server) => {
               return;
         } 
 
+        // Save currentCode
+        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentCode = code;
+
         // Run code, get test case expected output, compare it to output
         const output = await runCode(code);
         const expected_output = await getExpectedOutput(questionId);
@@ -125,9 +129,11 @@ const playerSocketConnection = (io: Server) => {
             const block_id = Math.floor(Math.random() * 30) + 1;
             game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).buildingBlocksId.push(block_id);
 
-            // Clear hint and last output
+            // Clear hint, output, currentCode
             game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentHint = "";
             game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).lastOutput = "";
+            // TODO: add starter code
+            game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentCode = "";
 
             // Check if player is done
             const ids = await getQuestionIds(game_activity.questionSetId);
@@ -172,6 +178,21 @@ const playerSocketConnection = (io: Server) => {
         // Delete it from the Map of all players
         connectedPlayers.delete(socket.id);
       }
+    });
+
+    socket.on("saveCode",  async () => {
+        //const game_activity = await getGameActivity(roomId);
+        //game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentCode;
+            
+        //// Save and send game activity
+        //await setGameActivity(game_activity, roomId);
+
+        //game_activity.role = "host";
+        //socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
+
+        //game_activity.role = "player";
+        //game_activity.nickname = nickname;
+        //socket.emit("updateGameActivity", game_activity);
     });
 
     socket.on("disconnect", async () => {

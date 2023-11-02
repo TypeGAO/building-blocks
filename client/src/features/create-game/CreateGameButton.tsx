@@ -3,7 +3,8 @@ import { socket } from "../../socket"
 
 function CreateGameButton() {
   const handleClick = () => {
-    socket.emit("createRoom")
+    // TODO: Change parameter in emit to questionSetId
+    socket.emit("createRoom", 1)
   }
 
   return (

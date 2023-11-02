@@ -90,12 +90,13 @@ function App() {
       toast.error(`${msg}`);
     }
 
-    /**
     function onSaveCode() {
-      let text = document.getElementById("IDE").value
-      localStorage.setItem("savedCode", text)
+      //let text = document.getElementById("IDE").value
+      //localStorage.setItem("savedCode", text)
+      socket.emit("saveCode");
     }
 
+    /**
     function onRestoreCode() {
       document.getElementById("IDE").value = localStorage.getItem("savedCode")
       localStorage.clear()
@@ -112,7 +113,7 @@ function App() {
     socket.on("correct", onCorrect)
     socket.on("wrong", onWrong)
     socket.on("message", onMessage)
-    //socket.on("saveCode", onSaveCode)
+    socket.on("saveCode", onSaveCode)
     //socket.on("restoreCode", onRestoreCode)
 
     return () => {
