@@ -13,6 +13,7 @@ function HostGame({ isPaused }: HostGameProps) {
   return (
     <div>
       <h1>Host View Game Started</h1>
+      {isPaused && "GAME PAUSED"}
       <ul>
         {gameActivity.players.map((player: Player, index) => (
           <li key={index}>

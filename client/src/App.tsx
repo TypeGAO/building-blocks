@@ -88,6 +88,13 @@ function App() {
       toast.error(`${msg}`)
     }
 
+    const onStageChange = (stage: string) => {
+      setGameActivity({
+        ...gameActivity,
+        stage: stage,
+      })
+    }
+
     socket.on("roomCreated", onRoomCreated)
     socket.on("roomJoined", onRoomJoined)
     socket.on("updateGameActivity", onUpdateGameActivity)
@@ -98,6 +105,7 @@ function App() {
     socket.on("correct", onCorrect)
     socket.on("wrong", onWrong)
     socket.on("message", onMessage)
+    socket.on("stageChange", onStageChange)
 
     return () => {
       socket.off("roomCreated", onRoomCreated)
@@ -110,6 +118,7 @@ function App() {
       socket.off("correct", onCorrect)
       socket.off("wrong", onWrong)
       socket.off("message", onMessage)
+      socket.off("stageChange", onStageChange)
     }
   }, [gameActivity, setGameActivity])
 
@@ -132,6 +141,8 @@ function App() {
         return <PlayerGame />
       case "paused":
         return <PlayerPaused />
+      case "done":
+        return <h1>DONE!</h1>
     }
   }
 

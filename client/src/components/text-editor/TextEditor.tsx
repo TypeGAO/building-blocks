@@ -3,11 +3,6 @@ import styles from "./TextEditor.module.css"
 import { Spinner } from ".."
 import useGameActivity from "../../hooks/useGameActivity"
 
-interface TextEditorProps {
-  code: string
-  setCode: React.Dispatch<React.SetStateAction<string>>
-}
-
 const options = {
   selectOnLineNumbers: true,
   fontSize: 16,
@@ -21,22 +16,20 @@ const options = {
   },
 }
 
-function TextEditor({ code, setCode }: TextEditorProps) {
+function TextEditor() {
   const { currentPlayer, setCurrentPlayer } = useGameActivity()
 
   const handleChange = (value: string | undefined) => {
     if (value) {
-      const player = currentPlayer
-      player.currentCode = value
-      setCurrentPlayer(player)
-      setCode(value)
+      currentPlayer.currentCode = value
+      setCurrentPlayer(currentPlayer)
     }
   }
 
   return (
     <div className={styles.editor}>
       <Editor
-        value={code}
+        value={currentPlayer.currentCode}
         height="100%"
         defaultValue="# Start writing code here!"
         defaultLanguage="python"

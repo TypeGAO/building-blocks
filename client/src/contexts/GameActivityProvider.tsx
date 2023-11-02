@@ -26,6 +26,7 @@ export const GameActivityProvider = ({
     stage: "landing",
     time: -1,
     players: [],
+    questionSetId: 3,
   })
 
   const [currentPlayer, setCurrentPlayer] = useState<Player>({
@@ -34,7 +35,8 @@ export const GameActivityProvider = ({
     score: 0,
     currentQuestion: 1,
     buildingBlocksId: [],
-    submissions: 150,
+    currentQuestionId: 0,
+    submissions: 0,
     currentCode: "",
     lastOutput: "",
   })

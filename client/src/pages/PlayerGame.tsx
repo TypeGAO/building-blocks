@@ -3,7 +3,7 @@ import styles from "./PlayerGame.module.css"
 
 import useGameActivity from "../hooks/useGameActivity"
 import { Code } from "../features/code"
-import { GameHeader } from "../components"
+import { GameHeader } from "../features/game-header"
 import { Question } from "../features/question"
 import { HintButton } from "../features/hint"
 
@@ -15,13 +15,12 @@ function PlayerGame() {
       <GameHeader />
       <div className={styles.container}>
         <div className={styles.col}>
-          <Question />
+          <Question questionId={currentPlayer.currentQuestionId} />
           <HintButton />
+          <h2>Coins: {currentPlayer?.score ?? 0} </h2>
         </div>
         <div className={styles.col}>
           <Code />
-          <h2>Question: {currentPlayer?.currentQuestion ?? 0}</h2>
-          <h2>Score: {currentPlayer?.score ?? 0} </h2>
         </div>
         <div className={styles.col}>
           <Scene />

@@ -3,24 +3,19 @@ import { socket } from "../../socket"
 import toast from "react-hot-toast"
 import useGameActivity from "../../hooks/useGameActivity"
 
-interface RunGameButtonProps {
-  code: string
-  questionId: number | null
-}
-
-function RunCodeButton({ code, questionId }: RunGameButtonProps) {
-  const { gameActivity } = useGameActivity()
+function RunCodeButton() {
+  const { gameActivity, currentPlayer } = useGameActivity()
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (gameActivity.roomId && code) {
+    if (gameActivity.roomId && currentPlayer.currentCode) {
       socket.emit(
         "runCode",
         gameActivity.roomId,
-        code.replace(/"/g, '\\"'),
+        currentPlayer.currentCode.replace(/"/g, '\\"'),
         gameActivity.nickname,
-        questionId
+        currentPlayer.currentQuestionId
       )
       return
     }

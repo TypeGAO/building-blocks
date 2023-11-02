@@ -17,3 +17,15 @@ export async function fetchHint(code: string, question: string) {
   })
   return res
 }
+
+export async function fetchQuestion(questionId: number) {
+  const res = await axiosClient.get(`/questions/getQuestion/${questionId}`)
+  return res
+}
+
+export async function fetchQuestionSetLength(questionSetId: number) {
+  const res = await axiosClient.get(
+    `/questionSets/getQuestionsInSet/${questionSetId}`
+  )
+  return res.data.length
+}

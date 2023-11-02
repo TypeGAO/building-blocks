@@ -7,6 +7,7 @@ export type Player = {
   submissions: number
   currentCode: string
   lastOutput: string
+  currentQuestionId: number
 }
 
 export type GameActivity = {
@@ -17,4 +18,5 @@ export type GameActivity = {
   stage: string
   time: number
   players: [Player] | []
+  questionSetId: number
 }

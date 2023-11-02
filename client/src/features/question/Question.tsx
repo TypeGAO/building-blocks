@@ -1,12 +1,26 @@
+import { useQuery } from "react-query"
+import toast from "react-hot-toast"
+import { fetchQuestion } from "../../api"
 import { Question as QuestionComponent } from "../../components"
 
-function Question() {
-  // TODO: get question to display
+interface QuestionProps {
+  questionId: number
+}
+
+function Question({ questionId }: QuestionProps) {
+  const { data: question } = useQuery({
+    queryKey: ["fetchQuestion", questionId],
+    queryFn: () => fetchQuestion(questionId),
+    enabled: !!questionId,
+    onError: () => {
+      toast.error("Yikes. There was a problem preparing your question.")
+    },
+  })
 
   return (
     <QuestionComponent
-      title="Even or Odd?"
-      description="Get an input that takes in a number. If the number is even, print True. If odd, print False."
+      title={question?.data.title}
+      description={question?.data.question}
     />
   )
 }
