@@ -155,6 +155,8 @@ function App() {
         return <PlayerGame />
       case "paused":
         return <PlayerPaused />
+      case "done":
+        return <h1>DONE!</h1>
     }
   }
 

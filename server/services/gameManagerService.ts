@@ -66,3 +66,11 @@ export async function runCode(code: string) {
         return error.message;
     }
 }
+
+export async function getQuestionIds(questionSetId: number) {
+    let strSQL = `SELECT id
+                  FROM questions
+                  WHERE (question_set_id = $1)`;
+    const { rows }  = await query(strSQL, [questionSetId]);
+    return rows.map((o: any) => o.id);
+}

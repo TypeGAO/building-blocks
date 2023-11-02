@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { Player, GameActivity } from '../../types';
 import { addPlayer } from "../../../services/generateGameService";
-import { getGameActivity, setGameActivity, getExpectedOutput, runCode } from "../../../services/gameManagerService";
+import { getGameActivity, setGameActivity, getExpectedOutput, runCode, getQuestionIds } from "../../../services/gameManagerService";
 
 
 /**
@@ -91,6 +91,8 @@ const playerSocketConnection = (io: Server) => {
     });
 
     socket.on("runCode",  async (roomId: string, code: string, nickname: string, questionId: number) => {
+        let done = false;
+        
         const game_activity = await getGameActivity(roomId);
 
         // Test for malicious code (not ideal)
@@ -127,6 +129,15 @@ const playerSocketConnection = (io: Server) => {
             game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentHint = "";
             game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).lastOutput = "";
 
+            // Check if player is done
+            const ids = await getQuestionIds(game_activity.questionSetId);
+            if (game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestion == ids.length) {
+                done = true;
+            } else {
+                // Update question id to next one in the question set
+                game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestionId = ids[game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestion];
+            }
+
             socket.emit("correct", output);
         } else {
             // Increase submissions (max 5 for score penalty)
@@ -145,6 +156,9 @@ const playerSocketConnection = (io: Server) => {
         game_activity.role = "host";
         socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
 
+        if (done) {
+            game_activity.stage = "done";
+        }
         game_activity.role = "player";
         game_activity.nickname = nickname;
         socket.emit("updateGameActivity", game_activity);

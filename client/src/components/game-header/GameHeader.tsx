@@ -1,9 +1,22 @@
 import { ProgressBar } from ".."
 import useGameActivity from "../../hooks/useGameActivity"
 import styles from "./GameHeader.module.css"
+import { useState } from "react"
+import { useQuery } from "react-query"
+import toast from "react-hot-toast"
+import { fetchQuestionSetLength } from "../../api"
 
 function GameHeader() {
-  const { gameActivity } = useGameActivity()
+  const { gameActivity, currentPlayer } = useGameActivity()
+  const [questionSetLength, setQuestionSetLength] = useState<number>(1)
+  const { data } = useQuery({
+    queryKey: ["fetchQuestionSetLength"],
+    queryFn: async () => {
+      const questionSetLength = await fetchQuestionSetLength(gameActivity.questionSetId);
+      setQuestionSetLength(questionSetLength);
+    },
+    retry: 0,
+  })
 
   return (
     <div className={styles.header}>
@@ -12,11 +25,11 @@ function GameHeader() {
           {gameActivity.stage === "started" && (
             <>
               <div className={styles.leftItem}>
-                <ProgressBar percentage={0} />
+                <ProgressBar percentage={currentPlayer.currentQuestion / questionSetLength * 100} />
               </div>
               <div className={styles.leftItem}>
                 <span>
-                  <strong>0</strong>/2 solved
+                  <strong>{currentPlayer.currentQuestion}</strong>/{questionSetLength} solved
                 </span>
               </div>
             </>

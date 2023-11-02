@@ -25,6 +25,7 @@ export const GameActivityProvider = ({
     stage: "landing",
     time: -1,
     players: [],
+    questionSetId: 1
   })
 
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null)
