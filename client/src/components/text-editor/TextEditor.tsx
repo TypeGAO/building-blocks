@@ -16,12 +16,12 @@ const options = {
   },
 }
 
-function TextEditor({ code, setCode }: TextEditorProps) {
+function TextEditor() {
   const { currentPlayer, setCurrentPlayer } = useGameActivity()
 
   const handleChange = (value: string | undefined) => {
     if (value) {
-      currentPlayer.currentCode = value;
+      currentPlayer.currentCode = value
       setCurrentPlayer(currentPlayer)
     }
   }

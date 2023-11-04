@@ -1,49 +1,49 @@
+button .currency {
+  margin-right: var(--6);
+  margin-left: var(--4);
+}
+
 .currency {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    background-color: transparent;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  background-color: transparent;
 }
 
 .coin {
+  width: 16px;
+  height: auto;
+  margin-right: var(--2);
+  padding-right: var(--2);
+
+  &.small {
+    width: 16px;
+    height: auto;
+  }
+
+  &.medium {
     width: 15px;
     height: auto;
-    padding-right: 5px;
-
-    &.small {
-        width: 10px;
-        height: auto;
-        padding-right: 3px;
-    }
-
-    &.medium {
-        width: 15px;
-        height: auto;
-        padding-right: 5px;
-    }
+  }
 }
 
 .quantity {
-    font-weight: 900;
-    color: black;
-    font-family: 'Lato';
+  font-weight: 900;
+  color: var(--neutral-900);
 }
 
 .small {
-    display: flex;
-    align-items: center;
-    width: 30px;
-    height: 15px;
-    padding: 5px 10px;
-    font-size: smaller;
+  display: flex;
+  align-items: center;
+  width: 30px;
+  height: 15px;
 }
 
 .medium {
-    display: flex;
-    align-items: center;
-    width: 40px;
-    height: 20px;
-    padding: 8px 12px;
-    font-size: large;
+  display: flex;
+  align-items: center;
+  width: 40px;
+  height: 20px;
+  padding: 8px 12px;
 }

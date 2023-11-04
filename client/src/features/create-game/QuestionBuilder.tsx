@@ -2,31 +2,34 @@ import { useState } from "react"
 import { Button, Input } from "../../components"
 
 function QuestionBuilder() {
-  const [questions, setQuestions] = useState([{
-    ques: '',
-    desc: ''
-  }
+  const [questions, setQuestions] = useState([
+    {
+      ques: "",
+      desc: "",
+    },
   ])
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const newQuestions = [...questions];
-    const updatedQuestion = { ...newQuestions[index] };
-
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const newQuestions = [...questions]
+    const updatedQuestion = { ...newQuestions[index] }
 
     if (e.target.name === "ques") {
-      updatedQuestion.ques = e.target.value;
+      updatedQuestion.ques = e.target.value
     }
 
     if (e.target.name === "desc") {
-      updatedQuestion.desc = e.target.value;
+      updatedQuestion.desc = e.target.value
     }
 
-    newQuestions[index] = updatedQuestion;
-    setQuestions(newQuestions);
+    newQuestions[index] = updatedQuestion
+    setQuestions(newQuestions)
   }
 
   const handleClick = () => {
-    setQuestions([...questions, { ques: "", desc: "" }]);
+    setQuestions([...questions, { ques: "", desc: "" }])
   }
 
   return (

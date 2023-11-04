@@ -4,6 +4,7 @@ import useGameActivity from "../../hooks/useGameActivity"
 
 function CreateGameButton() {
   const { gameActivity } = useGameActivity()
+
   const handleClick = () => {
     socket.emit("createRoom", gameActivity.questionSetId)
   }

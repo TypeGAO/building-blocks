@@ -8,6 +8,7 @@ function RunCodeButton() {
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
+
     if (gameActivity.roomId && currentPlayer.currentCode) {
       socket.emit(
         "runCode",
@@ -16,9 +17,10 @@ function RunCodeButton() {
         gameActivity.nickname,
         currentPlayer.currentQuestionId
       )
-    } else {
-      toast.error("Error Running Code")
+      return
     }
+
+    toast.error("Uh-oh, something went wrong. Please try again!")
   }
 
   return (

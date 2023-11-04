@@ -9,4 +9,6 @@
   background-color: var(--blue-400);
   box-shadow: 0px -9px 0px var(--blue-500) inset;
   height: var(--16);
+  transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
 }

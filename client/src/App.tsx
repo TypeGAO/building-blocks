@@ -1,7 +1,7 @@
 import { useEffect } from "react"
-import { socket } from "./socket"
 import toast from "react-hot-toast"
 
+import { socket } from "./socket"
 import useGameActivity from "./hooks/useGameActivity"
 import { GameActivity } from "./types"
 
@@ -11,8 +11,6 @@ import PlayerGame from "./pages/PlayerGame"
 import HostLobby from "./pages/HostLobby"
 import HostGame from "./pages/HostGame"
 import PlayerPaused from "./pages/PlayerPaused"
-
-import { StartGameButton } from "./features/start-game"
 
 /**
  * App Component
@@ -24,7 +22,7 @@ function App() {
   const { gameActivity, setGameActivity } = useGameActivity()
 
   useEffect(() => {
-    function onRoomCreated(data: GameActivity) {
+    const onRoomCreated = (data: GameActivity) => {
       setGameActivity({
         ...gameActivity,
         roomId: data.roomId,
@@ -35,7 +33,7 @@ function App() {
       })
     }
 
-    function onUpdateGameActivity(data: GameActivity) {
+    const onUpdateGameActivity = (data: GameActivity) => {
       setGameActivity({
         ...gameActivity,
         roomId: data.roomId,
@@ -46,7 +44,7 @@ function App() {
       })
     }
 
-    function onRoomJoined(data: GameActivity) {
+    const onRoomJoined = (data: GameActivity) => {
       setGameActivity({
         ...gameActivity,
         roomId: data.roomId,
@@ -57,43 +55,43 @@ function App() {
       })
     }
 
-    function onDuplicateName() {
+    const onDuplicateName = () => {
       toast.error("Name is Taken!")
     }
 
-    function onHostLeft(data: GameActivity) {
+    const onHostLeft = (data: GameActivity) => {
       window.location.reload()
       localStorage.clear()
       socket.emit("hostLeft", data.roomId)
     }
 
-    function onKickPlayer(nickname: string) {
+    const onKickPlayer = (nickname: string) => {
       if (gameActivity.nickname === nickname) {
         window.location.reload()
         localStorage.clear()
       }
     }
 
-    function onCannotJoinGame() {
+    const onCannotJoinGame = () => {
       toast.error("Can't Join Game!")
     }
 
-    function onWrong(output: string) {
+    const onWrong = () => {
       toast.error(`Incorrect!`)
     }
 
-    function onCorrect(output: string) {
+    const onCorrect = () => {
       toast.success(`Correct!`)
     }
 
-    function onMessage(msg: string) {
-      toast.error(`${msg}`);
+    const onMessage = (msg: string) => {
+      toast.error(`${msg}`)
     }
 
-    function onStageChange(stage: string) {
+    const onStageChange = (stage: string) => {
       setGameActivity({
         ...gameActivity,
-        stage: stage
+        stage: stage,
       })
     }
 
@@ -107,7 +105,7 @@ function App() {
     socket.on("correct", onCorrect)
     socket.on("wrong", onWrong)
     socket.on("message", onMessage)
-    socket.on("stageChange", onStageChange);
+    socket.on("stageChange", onStageChange)
 
     return () => {
       socket.off("roomCreated", onRoomCreated)
@@ -120,13 +118,10 @@ function App() {
       socket.off("correct", onCorrect)
       socket.off("wrong", onWrong)
       socket.off("message", onMessage)
-      socket.off("stageChange", onStageChange);
+      socket.off("stageChange", onStageChange)
     }
   }, [gameActivity, setGameActivity])
 
-  // TODO: Host done page
-  //  - no players
-  //  - all done
   if (gameActivity.role === "host") {
     switch (gameActivity.stage) {
       case "lobby":
@@ -134,12 +129,7 @@ function App() {
       case "started":
         return <HostGame />
       case "paused":
-        return (
-            <div>
-                <h1>Game Paused</h1>
-                <StartGameButton roomId={gameActivity.roomId} players={gameActivity.players}/>
-            </div>
-        )
+        return <HostGame isPaused />
     }
   }
 
