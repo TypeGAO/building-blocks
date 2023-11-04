@@ -20,19 +20,20 @@ function GameHeader() {
     <div className={styles.header}>
       <div className={styles.left}>
         <div className={styles.leftContainer}>
-          {gameActivity.stage === "started" && (
-            <>
-              <div className={styles.leftItem}>
-                <ProgressBar percentage={percentage} />
-              </div>
-              <div className={styles.leftItem}>
-                <span>
-                  <strong>{currentPlayer.currentQuestion}</strong>/
-                  {questionSetLength} solved
-                </span>
-              </div>
-            </>
-          )}
+          {gameActivity.stage === "started" ||
+            (gameActivity.stage === "paused" && (
+              <>
+                <div className={styles.leftItem}>
+                  <ProgressBar percentage={percentage} />
+                </div>
+                <div className={styles.leftItem}>
+                  <span>
+                    <strong>{currentPlayer.currentQuestion}</strong>/
+                    {questionSetLength} solved
+                  </span>
+                </div>
+              </>
+            ))}
         </div>
       </div>
       <div className={styles.mid}></div>
