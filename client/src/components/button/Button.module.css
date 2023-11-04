@@ -13,6 +13,7 @@ button {
   display: flex;
   align-items: center;
   gap: var(--12);
+  justify-content: center;
 }
 
 button:hover {

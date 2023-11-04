@@ -10,6 +10,8 @@
 
 .left {
   text-align: start;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .mid {
@@ -18,4 +20,6 @@
 
 .right {
   text-align: end;
+  display: flex;
+  justify-content: flex-end;
 }
