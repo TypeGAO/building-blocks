@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  gap: var(--8);
+}
+
+.half {
+  flex: 1;
+}
+
+.buttonContainer {
+  position: absolute;
+  bottom: var(--12);
+  right: var(--24);
+  z-index: 15;
+}

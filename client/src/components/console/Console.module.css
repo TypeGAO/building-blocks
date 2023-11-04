@@ -2,8 +2,9 @@
   display: block;
   align-items: center;
   text-align: left;
-  height: var(--144);
+  height: 30vh;
   border: var(--6) solid var(--neutral-950);
+  border-bottom-width: var(--12);
   border-radius: var(--8);
   background-color: var(--neutral-900);
   font-family: "Roboto Mono";
@@ -13,7 +14,7 @@
 .title {
   font-weight: 700;
   font-size: var(--16);
-  color: var(--neutral-400);
+  color: var(--neutral-300);
   padding: var(--6) var(--0);
 }
 

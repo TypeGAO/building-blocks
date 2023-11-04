@@ -1,6 +1,6 @@
 import { useQuery } from "react-query"
 
-import { ProgressBar } from "../../components"
+import { CoinAmount, ProgressBar } from "../../components"
 import useGameActivity from "../../hooks/useGameActivity"
 import styles from "./styles.module.css"
 import { fetchQuestionSetLength } from "../../api"
@@ -37,7 +37,10 @@ function GameHeader() {
       </div>
       <div className={styles.mid}></div>
       <div className={styles.right}>
-        <div className={styles.nickname}>{gameActivity.nickname}</div>
+        <div className={styles.nickname}>{currentPlayer.nickname}</div>
+        <div>
+          <CoinAmount amount={currentPlayer.score} size="sm" />
+        </div>
       </div>
     </div>
   )

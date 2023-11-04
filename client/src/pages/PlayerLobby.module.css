@@ -9,6 +9,7 @@
   width: 500px;
   margin-left: auto;
   margin-right: auto;
+  padding: 0 var(--24);
   text-align: center;
   font-size: var(--20);
   gap: var(--36);
