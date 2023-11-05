@@ -50,4 +50,5 @@
 .nickname {
   font-weight: 700;
   font-size: var(--16);
+  color: var(--neutral-900);
 }

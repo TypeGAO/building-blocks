@@ -6,7 +6,7 @@ button {
   border: var(--4) solid;
   border-color: var(--neutral-600);
   font-family: inherit;
-  font-weight: 900;
+  font-weight: 700;
   transition: 0.1s;
   box-shadow: inset 0px -6px 0px rgba(0, 0, 0, 0.1);
   border-color: rgba(0, 0, 0, 0.25);

@@ -12,9 +12,11 @@
 
 .title {
   font-weight: 700;
+  font-family: var(--font);
   font-size: var(--16);
   color: var(--neutral-300);
   padding: var(--6) var(--0);
+  margin-bottom: var(--8);
 }
 
 .content {

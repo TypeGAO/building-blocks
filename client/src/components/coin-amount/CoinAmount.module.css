@@ -12,7 +12,6 @@ button .currency {
 }
 
 .coin {
-  width: 16px;
   height: auto;
   margin-right: var(--2);
   padding-right: var(--2);
@@ -29,21 +28,19 @@ button .currency {
 }
 
 .quantity {
-  font-weight: 900;
+  font-weight: 700;
   color: var(--neutral-900);
 }
 
 .small {
   display: flex;
   align-items: center;
-  width: 30px;
   height: 15px;
 }
 
 .medium {
   display: flex;
   align-items: center;
-  width: 40px;
   height: 20px;
   padding: 8px 12px;
 }

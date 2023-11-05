@@ -11,7 +11,7 @@
 }
 
 .title {
-  font-weight: 750;
+  font-weight: 700;
   font-size: var(--20);
   color: var(--neutral-900);
   line-height: 2;
@@ -44,7 +44,7 @@
   border-radius: 2px;
   display: inline-block;
   padding: 7px 8px;
-  font-weight: 800;
+  font-weight: 700;
   color: #f6e5d3;
   transform: rotate(-2deg);
   margin-bottom: 8px;
