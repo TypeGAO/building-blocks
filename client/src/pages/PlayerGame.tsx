@@ -3,9 +3,9 @@ import styles from "./PlayerGame.module.css"
 
 import useGameActivity from "../hooks/useGameActivity"
 import { Code } from "../features/code"
-import { GameHeader } from "../components"
+import { GameHeader } from "../features/game-header"
 import { Question } from "../features/question"
-import { HintButton } from "../features/hint"
+import { Hint } from "../features/hint"
 
 function PlayerGame() {
   const { currentPlayer } = useGameActivity()
@@ -15,9 +15,10 @@ function PlayerGame() {
       <GameHeader />
       <div className={styles.container}>
         <div className={styles.col}>
-          <Question questionId={currentPlayer.currentQuestionId}/>
-          <HintButton />
-          <h2>Coins: {currentPlayer?.score ?? 0} </h2>
+          <Question questionId={currentPlayer.currentQuestionId} />
+          <div className={styles.hintContainer}>
+            <Hint />
+          </div>
         </div>
         <div className={styles.col}>
           <Code />

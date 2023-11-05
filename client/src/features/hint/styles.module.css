@@ -1,0 +1,34 @@
+@keyframes popOut {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.hint {
+  border: var(--4) dashed var(--blue-200);
+  padding: var(--16);
+  margin-top: var(--14);
+  border-radius: var(--8);
+  background: var(--blue-50);
+  animation: popOut 0.3s ease-out;
+  -webkit-animation: popOut 0.3s ease-out;
+}
+.hintText {
+  font-size: var(--16);
+  color: var(--neutral-900);
+  line-height: var(--24);
+  margin: 0;
+}
+
+.hintText span {
+  font-weight: 700;
+  border-bottom: var(--4) solid var(--blue-300);
+}

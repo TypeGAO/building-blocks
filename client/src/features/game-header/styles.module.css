@@ -6,6 +6,9 @@
   padding: var(--16) var(--20);
   height: var(--20);
   border-bottom: var(--2) solid var(--neutral-200);
+  z-index: 5;
+  position: relative;
+  background-color: var(--neutral-50);
 }
 
 .left {
@@ -40,9 +43,12 @@
   display: flex;
   align-self: flex-start;
   flex-direction: row;
+  gap: var(--16);
+  align-items: center;
 }
 
 .nickname {
   font-weight: 700;
   font-size: var(--16);
+  color: var(--neutral-900);
 }

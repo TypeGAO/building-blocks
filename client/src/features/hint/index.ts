@@ -1,1 +1,1 @@
-export { default as HintButton } from "./HintButton"
+export { default as Hint } from "./Hint"

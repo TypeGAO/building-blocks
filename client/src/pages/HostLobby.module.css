@@ -33,11 +33,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: var(--20);
   background-color: var(--neutral-50);
   padding: var(--4) var(--20);
-  max-width: 800px;
+  max-width: 859px;
   margin: var(--36) auto;
+  border-radius: var(--4);
   border-bottom: var(--6) solid var(--neutral-100);
 }
 
@@ -48,7 +48,7 @@
 
 .banner .bannerRight {
   flex: 1;
-  text-align: left;
+  text-align: center;
 }
 
 .banner .bannerLabel {
@@ -72,6 +72,7 @@
   margin-left: var(--10);
   margin-bottom: var(--8);
   font-weight: 800;
+  border-radius: var(--1);
 }
 
 .container {
@@ -136,10 +137,12 @@
   color: var(--blue-50);
   font-weight: 600;
   font-size: var(--24);
+  border-radius: var(--2);
 }
 
 .playerList .player:hover {
   text-decoration: line-through;
+  cursor: var(--cursor-pointer);
 }
 
 .playerList .playerAnimate {

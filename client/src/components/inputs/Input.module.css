@@ -7,6 +7,7 @@ input {
   height: var(--20);
   width: 100%;
   box-sizing: border-box;
+  font-family: var(--font);
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
 }

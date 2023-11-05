@@ -16,7 +16,7 @@
 
 .col:first-child {
   flex-basis: 25%;
-  padding: var(--20);
+  padding: var(--28);
 }
 
 .col:nth-child(2) {
@@ -47,7 +47,7 @@
 }
 
 .col::-webkit-scrollbar {
-  max-width: var(--10);
+  max-width: var(--12);
 }
 
 .col::-webkit-scrollbar-corner {
@@ -55,11 +55,14 @@
 }
 
 .col::-webkit-scrollbar-thumb {
-  background: var(--neutral-200);
-  border-radius: var(--4);
-  width: var(--10);
+  background: var(--neutral-100);
+  width: var(--12);
 }
 
 .col::-webkit-scrollbar-thumb:hover {
   background: var(--neutral-400);
+}
+
+.hintContainer {
+  margin-top: var(--16);
 }

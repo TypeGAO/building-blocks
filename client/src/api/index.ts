@@ -13,7 +13,7 @@ export async function startGame(id: string) {
 export async function fetchHint(code: string, question: string) {
   const res = await axiosClient.post(`/hints/getHint`, {
     code: code,
-    question: question
+    question: question,
   })
   return res
 }
@@ -24,7 +24,8 @@ export async function fetchQuestion(questionId: number) {
 }
 
 export async function fetchQuestionSetLength(questionSetId: number) {
-  const res = await axiosClient.get(`/questionSets/getQuestionsInSet/${questionSetId}`)
-  console.log(res)
+  const res = await axiosClient.get(
+    `/questionSets/getQuestionsInSet/${questionSetId}`
+  )
   return res.data.length
 }

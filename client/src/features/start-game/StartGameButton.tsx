@@ -2,32 +2,41 @@ import { Button } from "../../components"
 import { socket } from "../../socket"
 import { startGame } from "../../api"
 import toast from "react-hot-toast"
-import { Player } from "../../types"
+import useGameActivity from "../../hooks/useGameActivity"
+import { useQuery } from "react-query"
 
-interface StartGameButtonProps {
-  roomId: string | null
-  players: Player[]
-}
+function StartGameButton() {
+  const { gameActivity } = useGameActivity()
 
-function StartGameButton({ roomId, players }: StartGameButtonProps) {
+  const { isLoading, refetch } = useQuery({
+    queryKey: ["startGame", gameActivity.roomId],
+    queryFn: () => {
+      if (gameActivity.roomId) {
+        startGame(gameActivity.roomId)
+      }
+    },
+    enabled: false,
+    onSuccess: () => {
+      socket.emit("startGame", gameActivity.roomId)
+    },
+    onError: () => {
+      toast.error(
+        "Oh no, there was a problem starting the game. Please try again!"
+      )
+    },
+  })
+
   const handleClick = async () => {
-    if (players.length === 0) {
-      toast.error("The Lobby Is Empty!")
+    if (gameActivity.players.length === 0) {
+      toast.error("Lobby is empty!")
       return
     }
-    if (roomId) {
-      const res = await startGame(roomId)
-      if (res.status === 200) {
-        socket.emit("startGame", roomId)
-      } else {
-        toast.error("Error Starting Game")
-      }
-    }
+    refetch()
   }
 
   return (
-    <Button size="lg" onClick={handleClick}>
-      Start
+    <Button size="lg" onClick={handleClick} disabled={isLoading}>
+      {isLoading ? "Starting" : "Start"}
     </Button>
   )
 }
