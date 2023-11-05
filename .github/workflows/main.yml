@@ -25,5 +25,5 @@ jobs:
       run: yarn test
       working-directory: ./server
     - name: Client build error check
-      run: yarn build
+      run: yarn install && yarn build
       working-directory: ./client
