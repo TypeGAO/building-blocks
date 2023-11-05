@@ -1,7 +1,10 @@
 on:
   push:
-    branches:
-    - unit_test
+    branches: [ main, unit_test ]
+  pull_request:
+    branches: [ main, unit_test ]
+  workflow_dispatch:
+  
 jobs:
   test:
     runs-on: ubuntu-latest
