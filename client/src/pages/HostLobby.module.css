@@ -33,10 +33,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: var(--20);
   background-color: var(--neutral-50);
   padding: var(--4) var(--20);
-  max-width: 800px;
+  max-width: 859px;
   margin: var(--36) auto;
   border-radius: var(--4);
   border-bottom: var(--6) solid var(--neutral-100);
@@ -49,7 +48,7 @@
 
 .banner .bannerRight {
   flex: 1;
-  text-align: left;
+  text-align: center;
 }
 
 .banner .bannerLabel {
