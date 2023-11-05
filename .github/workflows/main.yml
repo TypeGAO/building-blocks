@@ -22,6 +22,7 @@ jobs:
         cache: 'yarn'
         cache-dependency-path: 'server/yarn.lock'
     - run: yarn install && yarn test
+      working-directory: ./server
     - name: Client build error check
       run: yarn build
       working-directory: ./client
