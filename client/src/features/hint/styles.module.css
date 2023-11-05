@@ -29,6 +29,6 @@
 }
 
 .hintText span {
-  font-weight: 800;
+  font-weight: 700;
   border-bottom: var(--4) solid var(--blue-300);
 }
