@@ -1,6 +1,6 @@
 button .currency {
-  margin-right: var(--6);
-  margin-left: var(--4);
+  margin-right: var(--0);
+  margin-left: var(--0);
 }
 
 .currency {
@@ -42,5 +42,4 @@ button .currency {
   display: flex;
   align-items: center;
   height: 20px;
-  padding: 8px 12px;
 }
