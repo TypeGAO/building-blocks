@@ -1,0 +1,29 @@
+on:
+  push:
+    branches: [ main, unit_test ]
+  pull_request:
+    branches: [ main, unit_test ]
+  workflow_dispatch:
+  
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup for tests and builds
+      uses: actions/setup-node@v3     # <-- I think the error occurs here
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'yarn'
+    - run: yarn install
+    - name: Test Server functions and services
+      run: yarn test
+      working-directory: ./server
+    - name: Client build error check
+      run: yarn install && yarn build
+      working-directory: ./client
