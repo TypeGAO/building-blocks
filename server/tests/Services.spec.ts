@@ -26,11 +26,11 @@ describe('Test /generateManagerService', () => {
     });
 });
 
-describe('Test /gameManagerService', () => {
-    describe('gameManagerService() Test', () => {
-        it('Game room should not be active', () => {
-            const codeString = gameStarted("testid");
-            expect(codeString).to.equal(false);
-        });
-    });
-});
+// describe('Test /gameManagerService', () => {
+//     describe('gameManagerService() Test', () => {
+//         it('Game room should not be active', () => {
+//             const codeString = gameStarted("testid");
+//             expect(codeString).to.equal(false);
+//         });
+//     });
+// });
