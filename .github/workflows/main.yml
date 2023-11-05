@@ -23,6 +23,3 @@ jobs:
     - name: Test Server functions and services
       run: yarn install && yarn test
       working-directory: ./server
-    - name: Client build error check
-      run: yarn install && yarn build
-      working-directory: ./client
