@@ -11,7 +11,7 @@ jobs:
     steps:
     - name: Test Server functions and services
       run: yarn test
-      working-directory: server
+      working-directory: ./server
     - name: Client build error check
       run: yarn build
-      working-directory: client
+      working-directory: ./client
