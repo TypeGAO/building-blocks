@@ -23,4 +23,3 @@ jobs:
     - name: Test Server functions and services
       run: yarn install && yarn test
       working-directory: ./server
-
