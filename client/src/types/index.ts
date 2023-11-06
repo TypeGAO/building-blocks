@@ -15,3 +15,15 @@ export type GameActivity = {
   time: number
   players: [Player] | []
 }
+
+export type QuestionSet = {
+  title: string
+  desc: string
+  grade: number
+  category: string
+}
+
+export type Categories = {
+  id: number
+  category: string
+}

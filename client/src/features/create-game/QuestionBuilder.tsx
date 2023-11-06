@@ -31,8 +31,10 @@ function QuestionBuilder() {
 
   return (
     <div>
+      
       {questions.map((question, index) => (
-        <div key={index}>
+        <div key={`question-${index + 1}`} className="questionContainer">
+          Question #{index + 1}
           <Input
             type="text"
             name="ques"
