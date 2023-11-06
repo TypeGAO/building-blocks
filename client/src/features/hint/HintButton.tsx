@@ -35,8 +35,7 @@ function HintButton({ setHint }: HintButtonProps) {
         socket.emit(
           "createHint",
           gameActivity.roomId,
-          gameActivity.nickname,
-          gameActivity
+          gameActivity.nickname
         )
       }
       setIsSubmitted(false)

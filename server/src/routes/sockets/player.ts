@@ -80,8 +80,8 @@ const playerSocketConnection = (io: Server) => {
       }
     });
 
-    socket.on("createHint", async (roomId: string, nickname: string, game_activity: any) => {
-        //const game_activity = await getGameActivity(roomId);
+    socket.on("createHint", async (roomId: string, nickname: string) => {
+        const game_activity = await getGameActivity(roomId);
         game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).score -= 150;
             
         // Save and send game activity
@@ -133,7 +133,7 @@ const playerSocketConnection = (io: Server) => {
             game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).submissions = 0;
 
             // Add building block id
-            const block_id = Math.floor(Math.random() * 30) + 1;
+            const block_id = Math.floor(Math.random() * 23) + 1;
             game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).buildingBlocksId.push(block_id);
 
             // Clear hint, output, currentCode
@@ -143,6 +143,8 @@ const playerSocketConnection = (io: Server) => {
             const ids = await getQuestionIds(game_activity.questionSetId);
             if (game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestion == ids.length) {
                 done = true;
+
+                game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).doneTime = new Date(Date.now()).toLocaleString();
             } else {
                 // Update question id to next one in the question set
                 game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestionId = ids[game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestion];
@@ -198,22 +200,6 @@ const playerSocketConnection = (io: Server) => {
 
         // Delete it from the Map of all players
         connectedPlayers.delete(socket.id);
-
-        if (roomId) {
-          // Get socket.io room based on roomId
-          const room = io.sockets.adapter.rooms.get(roomId);
-          if (room) {
-            // Get game activity, remove player that left, update game activity
-            const game_activity = await getGameActivity(roomId);
-            game_activity.players  = game_activity.players.filter((p: Player) => p.nickname !== nickname);
-            await setGameActivity(game_activity, roomId);
-
-            // Send new game activity to host
-            game_activity.role = "host";
-            game_activity.nickname = "";
-            socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
-          }
-        }
       }
     });
   });
