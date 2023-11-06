@@ -22,8 +22,4 @@ jobs:
         cache: 'yarn'
     - name: Test Server functions and services
       run: yarn install && yarn test
-<<<<<<< HEAD
       working-directory: ./server
-=======
-      working-directory: ./server
->>>>>>> 053371e4a18d5ce0f0f707318ef39f6ca5a68770
