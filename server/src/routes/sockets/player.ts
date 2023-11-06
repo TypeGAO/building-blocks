@@ -1,7 +1,10 @@
 import { Server, Socket } from "socket.io";
 import { Player, GameActivity } from '../../types';
 import { addPlayer } from "../../../services/generateGameService";
-import { getGameActivity, setGameActivity, getExpectedOutput, runCode, getQuestionIds, getStarterCode } from "../../../services/gameManagerService";
+import { getGameActivity, setGameActivity, getExpectedOutput, getQuestionIds, getStarterCode } from "../../../services/gameManagerService";
+import { createContainer } from "../../../services/runCode/createContainerService";
+import { runCode } from "../../../services/runCode/runCodeService";
+import { killContainer } from "../../../services/runCode/killContainerService";
 
 
 /**
@@ -62,6 +65,9 @@ const playerSocketConnection = (io: Server) => {
             game_activity.players.push(new_player);
             await setGameActivity(game_activity, roomId);
 
+            //Start Docker container for running player code
+            createContainer(nickname);
+
             // Send the new game activity to the host and all clients
             game_activity.role = "host";
             game_activity.nickname = "";
@@ -115,7 +121,7 @@ const playerSocketConnection = (io: Server) => {
 
         // TODO: multiple test cases?
         // Run code, get test case expected output, compare it to output
-        const output = await runCode(code);
+        const output = await runCode(code, nickname);
         const expected_output = await getExpectedOutput(questionId);
         const code_correct = output === expected_output;
 
@@ -186,6 +192,9 @@ const playerSocketConnection = (io: Server) => {
       if (connectedPlayers.has(socket.id)) {
         const { roomId, nickname } = connectedPlayers.get(socket.id);
 
+        //Delete Docker container
+        killContainer(nickname);
+
         // Delete it from the Map of all players
         connectedPlayers.delete(socket.id);
       }
@@ -195,6 +204,9 @@ const playerSocketConnection = (io: Server) => {
       // Find the player based on socket id
       if (connectedPlayers.has(socket.id)) {
         const { roomId, nickname } = connectedPlayers.get(socket.id);
+
+        //Delete Docker container
+        killContainer(nickname);
 
         // Delete it from the Map of all players
         connectedPlayers.delete(socket.id);
