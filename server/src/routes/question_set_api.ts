@@ -9,7 +9,7 @@ const router = new Router();
 
 router.post('/addQuestionSet', async (req: Request, res: Response) => {
     try {
-        const { grade_level, description, categories, created_on } = req.body;
+        const { grade_level, description, categories, created_on, title } = req.body;
         let strSQL = `INSERT INTO question_sets (grade_level, description, categories, created_on, title)
                       VALUES ($1, $2, $3, $4, $5) RETURNING *`;
         const { rows } = await query(strSQL, [grade_level, description, categories, created_on, title]);
@@ -46,7 +46,7 @@ router.get('/getQuestionSet/:id', async (req: Request, res: Response) => {
 router.put('/updateQuestionSet/:id', async (req: Request, res: Response) => {
     try {
         const id = req.params.id;
-        const { grade_level, description, categories, created_on } = req.body;
+        const { grade_level, description, categories, created_on, title } = req.body;
         let strSQL = `UPDATE question_sets 
                       SET grade_level = $1, description = $2, categories = $3, created_on = $4, title = $5
                       WHERE id = $6 RETURNING *`;
