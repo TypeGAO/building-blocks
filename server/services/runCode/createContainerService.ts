@@ -7,8 +7,11 @@ export function createContainer(dockerName: string) {
     execSync(buildImage);
 
     //Create file
-    execSync('echo > test.py');
+    execSync('echo >> test.py');
+
+    const runContainer = 'docker run --name ' + dockerName + ' -v "$(pwd)/playerCode/' + dockerName + '.py:/sandbox/' + dockerName + '.py" --rm -d -t -i python';
+    console.log(runContainer);
 
     //Run container
-    execSync('docker run --name ' + dockerName + ' --rm -d -t -i python');
+    execSync(runContainer);
 }
