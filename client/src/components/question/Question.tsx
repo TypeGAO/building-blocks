@@ -4,11 +4,17 @@ import "react-loading-skeleton/dist/skeleton.css"
 import styles from "./Question.module.css"
 import useDelayedLoadingState from "../../hooks/useDelayedLoadingState"
 
+interface PublicTest {
+    input: [any]
+    output: [any]
+}
+
 interface QuestionProps {
   currentQuestion: number
   title: string
   description: string
   isLoading: boolean
+  publicTests: PublicTest
 }
 
 function Question({
@@ -16,6 +22,7 @@ function Question({
   title,
   description,
   isLoading,
+  publicTests
 }: QuestionProps) {
   const [key, setKey] = useState(0)
 
@@ -41,6 +48,16 @@ function Question({
       </div>
       <h1 className={styles.title}>{title}</h1>
       <p className={styles.description}>{description}</p>
+      <h2>Examples</h2>
+      <th>
+        <td>Input</td>
+        <td>Output</td>
+      </th>
+      {
+          publicTests?.input.map((i, index) => {
+            return (<tr><b><td>{i}</td></b><td>{publicTests?.output[index]}</td></tr>) 
+          })
+      }
     </div>
   )
 }
