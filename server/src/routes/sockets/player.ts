@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { Player, GameActivity } from '../../types';
 import { addPlayer } from "../../../services/generateGameService";
-import { getGameActivity, setGameActivity, getExpectedOutput, runCode, getQuestionIds, getStarterCode } from "../../../services/gameManagerService";
+import { getGameActivity, setGameActivity, getExpectedOutput, runCode, getQuestionIds, getStarterCode, getInput } from "../../../services/gameManagerService";
 
 
 /**
@@ -113,9 +113,10 @@ const playerSocketConnection = (io: Server) => {
         // Save current code (for pause)
         game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentCode = code.replace(/\\"/g, '"');
 
-        // TODO: multiple test cases?
+        // Input for test cases
+        const input = await getInput(questionId);
         // Run code, get test case expected output, compare it to output
-        const output = await runCode(code);
+        const output = await runCode(code+input.replace(/"/g, '\\"'));
         const expected_output = await getExpectedOutput(questionId);
         const code_correct = output === expected_output;
 

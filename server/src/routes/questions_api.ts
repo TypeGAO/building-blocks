@@ -9,10 +9,10 @@ const router = new Router();
 
 router.post('/addQuestion', async (req: Request, res: Response) => {
     try {
-        const { question, starter_code, question_set_id, test_cases } = req.body;
-        let strSQL = `INSERT INTO questions (question, starter_code, question_set_id, test_cases)
-                      VALUES ($1, $2, $3, $4) RETURNING *`;
-        const { rows } = await query(strSQL, [question, starter_code, question_set_id, test_cases]);
+        const { question, starter_code, question_set_id, test_cases, public_tests } = req.body;
+        let strSQL = `INSERT INTO questions (question, starter_code, question_set_id, test_cases, public_tests)
+                      VALUES ($1, $2, $3, $4, $5) RETURNING *`;
+        const { rows } = await query(strSQL, [question, starter_code, question_set_id, test_cases, public_tests]);
         res.send(rows[0]);
     } catch (error) {
         res.status(500).json({ message: 'Error Adding Question' });
@@ -22,7 +22,7 @@ router.post('/addQuestion', async (req: Request, res: Response) => {
 router.get('/getQuestion/:id', async (req: Request, res: Response) => {
     try { 
         const id = req.params.id;
-        let strSQL = `SELECT id, question, starter_code, question_set_id, title
+        let strSQL = `SELECT id, question, starter_code, question_set_id, title, public_tests
                       FROM questions
                       WHERE id = $1`;
         const { rows }  = await query(strSQL, [id]);
@@ -35,11 +35,11 @@ router.get('/getQuestion/:id', async (req: Request, res: Response) => {
 router.put('/updateQuestion/:id', async (req: Request, res: Response) => {
     try {
         const id = req.params.id;
-        const { question, starter_code, question_set_id, test_cases } = req.body;
+        const { question, starter_code, question_set_id, test_cases, public_tests } = req.body;
         let strSQL = `UPDATE questions 
-                      SET question = $1, starter_code = $2, question_set_id = $3, test_cases = $4
-                      WHERE id = $5 RETURNING *`;
-        const { rows } = await query(strSQL, [question, starter_code, question_set_id, test_cases, id]);
+                      SET question = $1, starter_code = $2, question_set_id = $3, test_cases = $4, public_tests = $5
+                      WHERE id = $6 RETURNING *`;
+        const { rows } = await query(strSQL, [question, starter_code, question_set_id, test_cases, public_tests, id]);
         res.send(rows[0]);
     } catch (error) {
         res.status(500).json({ message: 'Error Updating Question' });
