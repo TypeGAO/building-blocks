@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { Player, GameActivity } from '../../types';
 import { addPlayer } from "../../../services/generateGameService";
-import { getGameActivity, setGameActivity, getExpectedOutput, runCode, getQuestionIds, getStarterCode, getInput } from "../../../services/gameManagerService";
+import { getGameActivity, setGameActivity, getExpectedOutput, runCode, getQuestionIds, getStarterCode, getInput, getPublicInput } from "../../../services/gameManagerService";
 
 
 /**
@@ -115,9 +115,14 @@ const playerSocketConnection = (io: Server) => {
 
         // Input for test cases
         const input = await getInput(questionId);
+        const public_input = await getPublicInput(questionId);
+
         // Run code, get test case expected output, compare it to output
         const output = await runCode(code+input.replace(/"/g, '\\"'));
+        // Public output to not reveal hidden tests
+        const public_output = await runCode(code+public_input.replace(/"/g, '\\"'));
         const expected_output = await getExpectedOutput(questionId);
+
         const code_correct = output === expected_output;
 
         // Get submissions
@@ -154,17 +159,17 @@ const playerSocketConnection = (io: Server) => {
                 game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentCode = await getStarterCode(game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestionId);
             }
 
-            socket.emit("correct", output);
+            socket.emit("correct", public_output);
         } else {
             // Increase submissions (max 5 for score penalty)
             if (submissions <= 5) {
                 game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).submissions += 1;
             }
-            socket.emit("wrong", output);
+            socket.emit("wrong", public_output);
         }
 
         // Record last output
-        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).lastOutput = output;
+        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).lastOutput = public_output;
 
         // Save and send game activity
         await setGameActivity(game_activity, roomId);
