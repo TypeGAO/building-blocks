@@ -111,7 +111,7 @@
 }
 
 .leaderboard {
-  width: 80%;
+  width: 100%;
   margin: auto;
   max-height: 78vh;
   overflow: auto;

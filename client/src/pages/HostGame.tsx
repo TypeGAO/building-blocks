@@ -38,6 +38,11 @@ function HostGame({ isPaused }: HostGameProps) {
         <HostControls
           controls={[
             {
+              icon: isGamePaused ? <Play size={24} /> : <Pause size={24} />,
+              label: isGamePaused ? "Resume Game" : "Pause Game",
+              onClick: isGamePaused ? unpauseGame : pauseGame,
+            },
+            {
               icon: isFullScreen ? (
                 <ArrowsInSimple size={24} />
               ) : (
@@ -45,11 +50,6 @@ function HostGame({ isPaused }: HostGameProps) {
               ),
               label: isFullScreen ? "Exit full screen" : "Enter full screen",
               onClick: toggle,
-            },
-            {
-              icon: isGamePaused ? <Play size={24} /> : <Pause size={24} />,
-              label: isGamePaused ? "Resume Game" : "Pause Game",
-              onClick: isGamePaused ? unpauseGame : pauseGame,
             },
           ]}
         />
