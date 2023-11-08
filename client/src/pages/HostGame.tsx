@@ -48,7 +48,7 @@ function HostGame({ isPaused }: HostGameProps) {
             },
             {
               icon: isGamePaused ? <Play size={24} /> : <Pause size={24} />,
-              label: isGamePaused ? "Start Game" : "Resume Game",
+              label: isGamePaused ? "Resume Game" : "Pause Game",
               onClick: isGamePaused ? unpauseGame : pauseGame,
             },
           ]}
