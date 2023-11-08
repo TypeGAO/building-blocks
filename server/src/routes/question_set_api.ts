@@ -9,10 +9,10 @@ const router = new Router();
 
 router.post('/addQuestionSet', async (req: Request, res: Response) => {
     try {
-        const { grade_level, description, categories, created_on, title } = req.body;
+        const { grade_level, description, categories, title } = req.body;
         let strSQL = `INSERT INTO question_sets (grade_level, description, categories, created_on, title)
-                      VALUES ($1, $2, $3, $4, $5) RETURNING *`;
-        const { rows } = await query(strSQL, [grade_level, description, categories, created_on, title]);
+                      VALUES ($1, $2, $3, NOW(), $4) RETURNING *`;
+        const { rows } = await query(strSQL, [grade_level, description, categories, title]);
         res.send(rows[0]);
     } catch (error) {
         res.status(500).json({ message: 'Error Adding Question Set' });
