@@ -43,7 +43,7 @@ const hostSocketConnection = (io: Server) => {
       socket.emit("roomCreated", game_activity);
     });
 
-    socket.on("startGame", async (roomId: string) => {
+    socket.on("startGame", async (roomId: string, gameTime: number) => {
 
         // Get game activity from database, set it as started
         const game_activity = await getGameActivity(roomId);
@@ -65,6 +65,7 @@ const hostSocketConnection = (io: Server) => {
         } else {
             // Update all game activity and save
             game_activity.stage = "started";
+            game_activity.time = gameTime;
 
             // Update game activity
             await setGameActivity(game_activity, roomId);
