@@ -34,7 +34,7 @@ function LeaderboardPlayer({
 
       return () => clearTimeout(timer)
     }
-  }, [rank, currentQuestion, score])
+  }, [rank, currentQuestion])
 
   const percentage: number =
     currentQuestion && questionSetLength
