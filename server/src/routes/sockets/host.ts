@@ -114,6 +114,18 @@ const hostSocketConnection = (io: Server) => {
             socket.broadcast.to(roomId).emit('updateGameActivity', game_activity);
     });
 
+    socket.on("endGame", async (roomId: string) => {
+        const game_activity = await getGameActivity(roomId);
+        game_activity.stage = "ended";
+        await setGameActivity(game_activity, roomId);
+        await endGame(roomId);
+
+        socket.emit('updateGameActivity', game_activity);
+
+        game_activity.role = "player";
+        socket.broadcast.to(roomId).emit('updateGameActivity', game_activity);
+    });
+
     socket.on("disconnect", async () => {
         if (connectedHosts.has(socket.id)) {
             const roomId = connectedHosts.get(socket.id);

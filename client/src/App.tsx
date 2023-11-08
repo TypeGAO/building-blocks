@@ -143,6 +143,8 @@ function App() {
         return <PlayerPaused />
       case "done":
         return <h1>DONE!</h1>
+      case "ended":
+        return <h1>Game Ended!</h1>
     }
   }
 
