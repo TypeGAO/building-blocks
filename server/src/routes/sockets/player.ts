@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { Player, GameActivity } from '../../types';
 import { addPlayer } from "../../../services/generateGameService";
-import { getGameActivity, setGameActivity, getExpectedOutput, runCode, getQuestionIds, getStarterCode } from "../../../services/gameManagerService";
+import { getGameActivity, setGameActivity, getExpectedOutput, runCode, getQuestionIds, getStarterCode, getInput, getPublicInput } from "../../../services/gameManagerService";
 
 
 /**
@@ -80,8 +80,8 @@ const playerSocketConnection = (io: Server) => {
       }
     });
 
-    socket.on("createHint", async (roomId: string, nickname: string, game_activity: any) => {
-        //const game_activity = await getGameActivity(roomId);
+    socket.on("createHint", async (roomId: string, nickname: string) => {
+        const game_activity = await getGameActivity(roomId);
         game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).score -= 150;
             
         // Save and send game activity
@@ -106,17 +106,27 @@ const playerSocketConnection = (io: Server) => {
         const regexTest = /\b(exec|eval|open|input|os\.system|os\.popen|os\.remove|os\.unlink|os\.rmdir|os\.makedirs|os\.chmod|os\.chown|os\.symlink|os\.link|os\.rename|os\.startfile|os\.kill|os\.killpg|os\.fork|os\.pipe|os\.dup|os\.dup2|os\.wait|os\.waitpid|shutil\.rmtree|__import__|imp\.load_source|os\.spawn.|os\.execl.|callable|compile|del|execfile|reload|load_module|import\s+os|import\s+sys|import\s+shutil|import\s+fileinput|from\s+os\s+import|from\s+sys\s+import|from\s+shutil\s+import|from\s+fileinput\s+import)\b/g;
         const matches = code.match(regexTest);
         if (matches && matches.length > 0) {
-              socket.emit("message", "Potentially malicious patterns detected");
+              socket.emit("wrong", "Potentially malicious patterns detected");
               return;
         } 
 
         // Save current code (for pause)
         game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentCode = code.replace(/\\"/g, '"');
 
+        // Input for test cases
+        const input = await getInput(questionId);
+        const public_input = await getPublicInput(questionId);
+
+        // Save current code (for pause)
+        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentCode = code.replace(/\\"/g, '"');
+
         // TODO: multiple test cases?
         // Run code, get test case expected output, compare it to output
-        const output = await runCode(code);
+        const output = await runCode(code+input.replace(/"/g, '\\"'));
+        // Public output to not reveal hidden tests
+        const public_output = await runCode(code+public_input.replace(/"/g, '\\"'));
         const expected_output = await getExpectedOutput(questionId);
+
         const code_correct = output === expected_output;
 
         // Get submissions
@@ -133,7 +143,7 @@ const playerSocketConnection = (io: Server) => {
             game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).submissions = 0;
 
             // Add building block id
-            const block_id = Math.floor(Math.random() * 30) + 1;
+            const block_id = Math.floor(Math.random() * 23) + 1;
             game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).buildingBlocksId.push(block_id);
 
             // Clear hint, output, currentCode
@@ -143,6 +153,8 @@ const playerSocketConnection = (io: Server) => {
             const ids = await getQuestionIds(game_activity.questionSetId);
             if (game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestion == ids.length) {
                 done = true;
+
+                game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).doneTime = new Date(Date.now()).toLocaleString();
             } else {
                 // Update question id to next one in the question set
                 game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestionId = ids[game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestion];
@@ -151,17 +163,17 @@ const playerSocketConnection = (io: Server) => {
                 game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentCode = await getStarterCode(game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestionId);
             }
 
-            socket.emit("correct", output);
+            socket.emit("correct", public_output);
         } else {
             // Increase submissions (max 5 for score penalty)
             if (submissions <= 5) {
                 game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).submissions += 1;
             }
-            socket.emit("wrong", output);
+            socket.emit("wrong", public_output);
         }
 
         // Record last output
-        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).lastOutput = output;
+        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).lastOutput = public_output;
 
         // Save and send game activity
         await setGameActivity(game_activity, roomId);
@@ -198,22 +210,6 @@ const playerSocketConnection = (io: Server) => {
 
         // Delete it from the Map of all players
         connectedPlayers.delete(socket.id);
-
-        if (roomId) {
-          // Get socket.io room based on roomId
-          const room = io.sockets.adapter.rooms.get(roomId);
-          if (room) {
-            // Get game activity, remove player that left, update game activity
-            const game_activity = await getGameActivity(roomId);
-            game_activity.players  = game_activity.players.filter((p: Player) => p.nickname !== nickname);
-            await setGameActivity(game_activity, roomId);
-
-            // Send new game activity to host
-            game_activity.role = "host";
-            game_activity.nickname = "";
-            socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
-          }
-        }
       }
     });
   });

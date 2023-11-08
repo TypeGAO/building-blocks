@@ -3,11 +3,11 @@ import coin from "../../assets/coin.svg"
 
 interface CoinAmountProps {
   amount: number
-  size?: "sm" | "md"
+  size?: "md" | "lg"
 }
 
 function CoinAmount({ amount, size = "md" }: CoinAmountProps) {
-  const coinAmountClasses = size === "sm" ? styles.small : styles.medium
+  const coinAmountClasses = size === "lg" ? styles.lg : styles.md
 
   return (
     <div className={`${styles.currency} ${coinAmountClasses}`}>

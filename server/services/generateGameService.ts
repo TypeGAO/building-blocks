@@ -17,12 +17,17 @@ export function addPlayer(roomId: string, nickname: string): Player {
         roomId: roomId,
         nickname: nickname,
         currentQuestion: 0,
-        score: 0,
+        score: 150,
         buildingBlocksId: [],
         submissions: 0,
         currentCode: "",
         lastOutput: "",
         currentQuestionId: 1
+        submissions: 0,
+        currentCode: "",
+        lastOutput: "",
+        currentQuestionId: 1,
+        doneTime: ""
     }
 }
 

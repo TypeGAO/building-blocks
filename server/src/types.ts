@@ -8,6 +8,10 @@ export type Player = {
   currentCode: string
   lastOutput: string
   currentQuestionId: number
+  currentCode: string
+  lastOutput: string
+  currentQuestionId: number
+  doneTime: string
 }
 
 export type GameActivity = {

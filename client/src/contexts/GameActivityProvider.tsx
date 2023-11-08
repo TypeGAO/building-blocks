@@ -39,6 +39,7 @@ export const GameActivityProvider = ({
     submissions: 0,
     currentCode: "",
     lastOutput: "",
+    doneTime: ""
   })
 
   useEffect(() => {
