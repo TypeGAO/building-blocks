@@ -3,10 +3,11 @@ import Skeleton from "react-loading-skeleton"
 import "react-loading-skeleton/dist/skeleton.css"
 import styles from "./Question.module.css"
 import useDelayedLoadingState from "../../hooks/useDelayedLoadingState"
+import { Tabs, Tab } from ".."
 
 interface PublicTest {
-    input: [any]
-    output: [any]
+  input: [any]
+  output: [any]
 }
 
 interface QuestionProps {
@@ -22,7 +23,7 @@ function Question({
   title,
   description,
   isLoading,
-  publicTests
+  publicTests,
 }: QuestionProps) {
   const [key, setKey] = useState(0)
 
@@ -48,16 +49,26 @@ function Question({
       </div>
       <h1 className={styles.title}>{title}</h1>
       <p className={styles.description}>{description}</p>
-      <h2>Examples</h2>
-      <th>
-        <td>Input</td>
-        <td>Output</td>
-      </th>
-      {
-          publicTests?.input.map((i, index) => {
-            return (<tr><b><td>{i}</td></b><td>{publicTests?.output[index]}</td></tr>) 
-          })
-      }
+      <div className={styles.testcasesContainer}>
+        {publicTests && (
+          <Tabs>
+            {publicTests?.input.map((item, index) => {
+              return (
+                <Tab label={`Example ${index + 1}`}>
+                  <div className={styles.testcases}>
+                    <span className={styles.ioLabel}>Input</span>
+                    <div className={styles.io}>{item}</div>
+                    <span className={styles.ioLabel}>Output</span>
+                    <div className={styles.io}>
+                      {publicTests?.output[index]}
+                    </div>
+                  </div>
+                </Tab>
+              )
+            })}
+          </Tabs>
+        )}
+      </div>
     </div>
   )
 }

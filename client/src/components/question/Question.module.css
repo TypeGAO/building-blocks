@@ -79,3 +79,31 @@
   top: -86px;
   right: 10px;
 }
+
+.testcasesContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: var(--12) 0;
+}
+
+.testcases {
+  display: flex;
+  flex-direction: column;
+  gap: var(--6);
+}
+
+.io {
+  background-color: var(--neutral-100);
+  border-left: var(--6) solid var(--neutral-200);
+  padding: var(--6);
+  border-radius: var(--4);
+  color: var(--neutral-800);
+  font-family: "Roboto Mono", monospace;
+}
+
+.ioLabel {
+  font-size: var(--16);
+  color: var(--neutral-800);
+  font-weight: 600;
+}
