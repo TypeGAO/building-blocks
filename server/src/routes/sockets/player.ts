@@ -122,7 +122,7 @@ const playerSocketConnection = (io: Server) => {
         // TODO: multiple test cases?
         // Run code, get test case expected output, compare it to output
         //console.log(code);
-        const output = await runCode(code, nickname);
+        const output = runCode(code, nickname);
         //console.log(output);
         const expected_output = await getExpectedOutput(questionId);
         const code_correct = output === expected_output;

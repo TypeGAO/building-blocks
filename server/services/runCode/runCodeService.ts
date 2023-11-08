@@ -4,10 +4,11 @@ const { spawn, spawnSync, execSync, exec } = require('child_process');
 export function runCode(userCode: string, dockerName: string): string {
 //Run code on container
     //Add code to file
-    execSync('echo' + userCode + '>> playerCode/' + dockerName + '.py');
+    console.log('echo "' + userCode + '" > playerCode/' + dockerName + '/test.py');
+    execSync('echo "' + userCode + '" > playerCode/' + dockerName + '/test.py');
 
     //Run code
-    const fileName = 'playerCode/' + dockerName + '.py';
+    const fileName = 'test/test.py';
     let dExec = [
         'exec',
         dockerName,
@@ -16,7 +17,7 @@ export function runCode(userCode: string, dockerName: string): string {
         fileName
     ];
 
-    const dockerRun = spawnSync('docker', test, {
+    const dockerRun = spawnSync('docker', dExec, {
         shell: true,
         stdio: ['inherit', 'pipe', 'pipe'],
         encoding: 'utf-8'

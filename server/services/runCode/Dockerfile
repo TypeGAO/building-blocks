@@ -1,4 +1,6 @@
-FROM python:3.9-slim
+FROM python:latest
 
 WORKDIR /sandbox
+
+RUN mkdir test
 

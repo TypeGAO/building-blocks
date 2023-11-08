@@ -7,9 +7,11 @@ export function createContainer(dockerName: string) {
     execSync(buildImage);
 
     //Create file
-    execSync('echo >> test.py');
+    execSync("mkdir playerCode\\" + dockerName);
 
-    const runContainer = 'docker run --name ' + dockerName + ' -v "$(pwd)/playerCode/' + dockerName + '.py:/sandbox/' + dockerName + '.py" --rm -d -t -i python';
+    execSync('echo print("hello") > playerCode/' + dockerName + '/test.py');
+
+    const runContainer = 'docker run --name ' + dockerName + ' --mount type=bind,source=%cd%/playerCode/' + dockerName + ',target=/sandbox/test,readonly --rm -d -t -i python';
     console.log(runContainer);
 
     //Run container
