@@ -1,17 +1,20 @@
-import { ReactNode, createContext, useState } from "react"
-import { GameActivity } from "../types"
+import { ReactNode, createContext, useState, useEffect } from "react"
+import { GameActivity, Player } from "../types"
 
 interface GameActivityContextProps {
   children: ReactNode
 }
 
-const GameActivityContext = createContext<
-  | {
-      gameActivity: GameActivity
-      setGameActivity: React.Dispatch<React.SetStateAction<GameActivity>>
-    }
-  | undefined
->(undefined)
+interface GameActivityContextValue {
+  gameActivity: GameActivity
+  setGameActivity: React.Dispatch<React.SetStateAction<GameActivity>>
+  currentPlayer: Player
+  setCurrentPlayer: React.Dispatch<React.SetStateAction<Player>>
+}
+
+const GameActivityContext = createContext<GameActivityContextValue | undefined>(
+  undefined
+)
 
 export const GameActivityProvider = ({
   children,
@@ -23,10 +26,42 @@ export const GameActivityProvider = ({
     stage: "landing",
     time: -1,
     players: [],
+    questionSetId: 3,
   })
 
+  const [currentPlayer, setCurrentPlayer] = useState<Player>({
+    roomId: null,
+    nickname: "",
+    score: 0,
+    currentQuestion: 1,
+    buildingBlocksId: [],
+    currentQuestionId: 0,
+    submissions: 0,
+    currentCode: "",
+    lastOutput: "",
+  })
+
+  useEffect(() => {
+    // Get player
+    const foundPlayer = gameActivity.players.find(
+      (player: Player) =>
+        player.nickname === gameActivity.nickname &&
+        player.roomId === gameActivity.roomId
+    )
+    if (foundPlayer) {
+      setCurrentPlayer(foundPlayer)
+    }
+  }, [gameActivity.nickname, gameActivity.players, gameActivity.roomId])
+
+  const contextValue: GameActivityContextValue = {
+    gameActivity,
+    setGameActivity,
+    currentPlayer,
+    setCurrentPlayer,
+  }
+
   return (
-    <GameActivityContext.Provider value={{ gameActivity, setGameActivity }}>
+    <GameActivityContext.Provider value={contextValue}>
       {children}
     </GameActivityContext.Provider>
   )

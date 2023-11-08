@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { Player, GameActivity } from '../../types';
 import { addPlayer } from "../../../services/generateGameService";
-import { getGameActivity, setGameActivity, getExpectedOutput, runCode } from "../../../services/gameManagerService";
+import { getGameActivity, setGameActivity, getExpectedOutput, runCode, getQuestionIds, getStarterCode } from "../../../services/gameManagerService";
 
 
 /**
@@ -53,12 +53,18 @@ const playerSocketConnection = (io: Server) => {
             const new_player = addPlayer(roomId, nickname);
             connectedPlayers.set(socket.id, new_player);
 
-            // Add a player, and save it
+            // Get question id and starter code
+            const questionIds = await getQuestionIds(game_activity.questionSetId)
+            new_player.currentQuestionId = questionIds[0];
+            new_player.currentCode = await getStarterCode(questionIds[0]);
+
+            // Add a player, and save game activity
             game_activity.players.push(new_player);
             await setGameActivity(game_activity, roomId);
 
             // Send the new game activity to the host and all clients
             game_activity.role = "host";
+            game_activity.nickname = "";
             socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
 
             game_activity.role = "player";
@@ -74,18 +80,40 @@ const playerSocketConnection = (io: Server) => {
       }
     });
 
-    socket.on("runCode",  async (roomId: string, code: string, nickname: string, questionId: number) => {
-        const game_activity = await getGameActivity(roomId);
+    socket.on("createHint", async (roomId: string, nickname: string, game_activity: any) => {
+        //const game_activity = await getGameActivity(roomId);
+        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).score -= 150;
+            
+        // Save and send game activity
+        await setGameActivity(game_activity, roomId);
 
+        game_activity.role = "host";
+        game_activity.nickname = "";
+        socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
+
+        game_activity.role = "player";
+        game_activity.nickname = nickname;
+        socket.emit("updateGameActivity", game_activity);
+            
+    });
+
+    socket.on("runCode",  async (roomId: string, code: string, nickname: string, questionId: number) => {
+        let done = false;
+        
+        const game_activity = await getGameActivity(roomId);
 
         // Test for malicious code (not ideal)
         const regexTest = /\b(exec|eval|open|input|os\.system|os\.popen|os\.remove|os\.unlink|os\.rmdir|os\.makedirs|os\.chmod|os\.chown|os\.symlink|os\.link|os\.rename|os\.startfile|os\.kill|os\.killpg|os\.fork|os\.pipe|os\.dup|os\.dup2|os\.wait|os\.waitpid|shutil\.rmtree|__import__|imp\.load_source|os\.spawn.|os\.execl.|callable|compile|del|execfile|reload|load_module|import\s+os|import\s+sys|import\s+shutil|import\s+fileinput|from\s+os\s+import|from\s+sys\s+import|from\s+shutil\s+import|from\s+fileinput\s+import)\b/g;
         const matches = code.match(regexTest);
         if (matches && matches.length > 0) {
-              socket.emit("wrong", "Potentially malicious patterns detected");
+              socket.emit("message", "Potentially malicious patterns detected");
               return;
         } 
 
+        // Save current code (for pause)
+        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentCode = code.replace(/\\"/g, '"');
+
+        // TODO: multiple test cases?
         // Run code, get test case expected output, compare it to output
         const output = await runCode(code);
         const expected_output = await getExpectedOutput(questionId);
@@ -108,6 +136,21 @@ const playerSocketConnection = (io: Server) => {
             const block_id = Math.floor(Math.random() * 30) + 1;
             game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).buildingBlocksId.push(block_id);
 
+            // Clear hint, output, currentCode
+            game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentHint = "";
+            game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).lastOutput = "";
+            // Check if player is done
+            const ids = await getQuestionIds(game_activity.questionSetId);
+            if (game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestion == ids.length) {
+                done = true;
+            } else {
+                // Update question id to next one in the question set
+                game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestionId = ids[game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestion];
+
+                // Set starter code for next question
+                game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentCode = await getStarterCode(game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestionId);
+            }
+
             socket.emit("correct", output);
         } else {
             // Increase submissions (max 5 for score penalty)
@@ -117,15 +160,25 @@ const playerSocketConnection = (io: Server) => {
             socket.emit("wrong", output);
         }
 
+        // Record last output
+        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).lastOutput = output;
+
         // Save and send game activity
         await setGameActivity(game_activity, roomId);
 
         game_activity.role = "host";
+        game_activity.nickname = "";
         socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
 
+        if (done) {
+            game_activity.stage = "done";
+        }
         game_activity.role = "player";
         game_activity.nickname = nickname;
         socket.emit("updateGameActivity", game_activity);
+        if (done) {
+            socket.disconnect();
+        }
     });
 
     socket.on("hostLeft",  async (roomId: string) => {
@@ -157,6 +210,7 @@ const playerSocketConnection = (io: Server) => {
 
             // Send new game activity to host
             game_activity.role = "host";
+            game_activity.nickname = "";
             socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
           }
         }

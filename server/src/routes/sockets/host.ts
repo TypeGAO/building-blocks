@@ -22,7 +22,7 @@ const hostSocketConnection = (io: Server) => {
   const connectedHosts = new Map();
 
   io.on("connection", (socket: Socket) => {
-    socket.on("createRoom", async () => {
+    socket.on("createRoom", async (questionSetId: number) => {
       // Generate unique code
       const roomId = generateUniqueCode();
       socket.join(roomId);
@@ -31,6 +31,9 @@ const hostSocketConnection = (io: Server) => {
       connectedHosts.set(socket.id, roomId);
 
       const game_activity = newGameActivity(socket.id, roomId);
+
+      // Set question set id
+      game_activity.questionSetId = questionSetId;
 
       // Add room in database
       await insertGameActivity(game_activity, roomId);
@@ -44,21 +47,34 @@ const hostSocketConnection = (io: Server) => {
 
         // Get game activity from database, set it as started
         const game_activity = await getGameActivity(roomId);
-        game_activity.stage = "started";
 
-        // Update game activity
-        await setGameActivity(game_activity, roomId);
+        // If paused only update stage
+        if (game_activity.stage == "paused") {
+            // Update stage and save
+            game_activity.stage = "started";
 
-        // Send game activity to host and all players
-        game_activity.role = "host";
-        socket.emit("updateGameActivity", game_activity);
+            // Update game activity
+            await setGameActivity(game_activity, roomId);
 
-        game_activity.role = "player";
-        socket.broadcast.to(roomId).emit("updateGameActivity", game_activity);
+            // Send stage change to all
+            game_activity.role = "host";
+            socket.emit("stageChange", "started");
 
-        // If game already started (unpause), restore code
-        if (await gameStarted(roomId)) {
-            socket.broadcast.to(roomId).emit("restoreCode");
+            game_activity.role = "player";
+            socket.broadcast.to(roomId).emit("stageChange", "started");
+        } else {
+            // Update all game activity and save
+            game_activity.stage = "started";
+
+            // Update game activity
+            await setGameActivity(game_activity, roomId);
+
+            // Send game activity to host and all players
+            game_activity.role = "host";
+            socket.emit("updateGameActivity", game_activity);
+
+            game_activity.role = "player";
+            socket.broadcast.to(roomId).emit("updateGameActivity", game_activity);
         }
     });
 
@@ -72,13 +88,9 @@ const hostSocketConnection = (io: Server) => {
         await setGameActivity(game_activity, roomId);
 
         // Send game activity to host and all players
-        game_activity.role = "host";
-        socket.emit("updateGameActivity", game_activity);
+        socket.emit("stageChange","paused");
 
-        // Save current code, restore after pause
-        socket.broadcast.to(roomId).emit("saveCode");
-        game_activity.role = "player";
-        socket.broadcast.to(roomId).emit("updateGameActivity", game_activity);
+        socket.broadcast.to(roomId).emit("stageChange","paused");
     });
 
     socket.on("kickPlayer", async (nickname: string) => {

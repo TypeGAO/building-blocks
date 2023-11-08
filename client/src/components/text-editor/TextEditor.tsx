@@ -1,11 +1,7 @@
 import Editor from "@monaco-editor/react"
 import styles from "./TextEditor.module.css"
 import { Spinner } from ".."
-
-interface TextEditorProps {
-  code: string
-  setCode: React.Dispatch<React.SetStateAction<string>>
-}
+import useGameActivity from "../../hooks/useGameActivity"
 
 const options = {
   selectOnLineNumbers: true,
@@ -20,17 +16,20 @@ const options = {
   },
 }
 
-function TextEditor({ code, setCode }: TextEditorProps) {
+function TextEditor() {
+  const { currentPlayer, setCurrentPlayer } = useGameActivity()
+
   const handleChange = (value: string | undefined) => {
     if (value) {
-      setCode(value)
+      currentPlayer.currentCode = value
+      setCurrentPlayer(currentPlayer)
     }
   }
 
   return (
     <div className={styles.editor}>
       <Editor
-        value={code}
+        value={currentPlayer.currentCode}
         height="100%"
         defaultValue="# Start writing code here!"
         defaultLanguage="python"

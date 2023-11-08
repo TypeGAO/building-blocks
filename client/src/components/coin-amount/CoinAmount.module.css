@@ -1,0 +1,45 @@
+button .currency {
+  margin-right: var(--0);
+  margin-left: var(--0);
+}
+
+.currency {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  background-color: transparent;
+}
+
+.coin {
+  height: auto;
+  margin-right: var(--2);
+  padding-right: var(--2);
+
+  &.small {
+    width: 16px;
+    height: auto;
+  }
+
+  &.medium {
+    width: 15px;
+    height: auto;
+  }
+}
+
+.quantity {
+  font-weight: 700;
+  color: var(--neutral-900);
+}
+
+.small {
+  display: flex;
+  align-items: center;
+  height: 15px;
+}
+
+.medium {
+  display: flex;
+  align-items: center;
+  height: 20px;
+}

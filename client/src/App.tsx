@@ -1,7 +1,7 @@
 import { useEffect } from "react"
-import { socket } from "./socket"
 import toast from "react-hot-toast"
 
+import { socket } from "./socket"
 import useGameActivity from "./hooks/useGameActivity"
 import { GameActivity } from "./types"
 
@@ -22,7 +22,7 @@ function App() {
   const { gameActivity, setGameActivity } = useGameActivity()
 
   useEffect(() => {
-    function onRoomCreated(data: GameActivity) {
+    const onRoomCreated = (data: GameActivity) => {
       setGameActivity({
         ...gameActivity,
         roomId: data.roomId,
@@ -33,7 +33,7 @@ function App() {
       })
     }
 
-    function onUpdateGameActivity(data: GameActivity) {
+    const onUpdateGameActivity = (data: GameActivity) => {
       setGameActivity({
         ...gameActivity,
         roomId: data.roomId,
@@ -44,7 +44,7 @@ function App() {
       })
     }
 
-    function onRoomJoined(data: GameActivity) {
+    const onRoomJoined = (data: GameActivity) => {
       setGameActivity({
         ...gameActivity,
         roomId: data.roomId,
@@ -55,43 +55,44 @@ function App() {
       })
     }
 
-    function onDuplicateName() {
+    const onDuplicateName = () => {
       toast.error("Name is Taken!")
     }
 
-    function onHostLeft(data: GameActivity) {
+    const onHostLeft = (data: GameActivity) => {
       window.location.reload()
       localStorage.clear()
       socket.emit("hostLeft", data.roomId)
     }
 
-    function onKickPlayer(nickname: string) {
+    const onKickPlayer = (nickname: string) => {
       if (gameActivity.nickname === nickname) {
         window.location.reload()
         localStorage.clear()
       }
     }
 
-    function onCannotJoinGame() {
+    const onCannotJoinGame = () => {
       toast.error("Can't Join Game!")
     }
 
-    function onWrong(output: string) {
-      toast.error(`Wrong! Output: ${output}`)
+    const onWrong = () => {
+      toast.error(`Incorrect!`)
     }
 
-    function onCorrect(output: string) {
-      toast.error(`Correct! Output: ${output}`)
+    const onCorrect = () => {
+      toast.success(`Correct!`)
     }
 
-    function onSaveCode() {
-      let text = document.getElementById("IDE").value
-      localStorage.setItem("savedCode", text)
+    const onMessage = (msg: string) => {
+      toast.error(`${msg}`)
     }
 
-    function onRestoreCode() {
-      document.getElementById("IDE").value = localStorage.getItem("savedCode")
-      localStorage.clear()
+    const onStageChange = (stage: string) => {
+      setGameActivity({
+        ...gameActivity,
+        stage: stage,
+      })
     }
 
     socket.on("roomCreated", onRoomCreated)
@@ -103,8 +104,8 @@ function App() {
     socket.on("cannotJoinGame", onCannotJoinGame)
     socket.on("correct", onCorrect)
     socket.on("wrong", onWrong)
-    socket.on("saveCode", onSaveCode)
-    socket.on("restoreCode", onRestoreCode)
+    socket.on("message", onMessage)
+    socket.on("stageChange", onStageChange)
 
     return () => {
       socket.off("roomCreated", onRoomCreated)
@@ -116,8 +117,8 @@ function App() {
       socket.off("cannotJoinGame", onCannotJoinGame)
       socket.off("correct", onCorrect)
       socket.off("wrong", onWrong)
-      socket.off("saveCode", onSaveCode)
-      socket.off("restoreCode", onRestoreCode)
+      socket.off("message", onMessage)
+      socket.off("stageChange", onStageChange)
     }
   }, [gameActivity, setGameActivity])
 
@@ -128,7 +129,7 @@ function App() {
       case "started":
         return <HostGame />
       case "paused":
-        return <HostGame />
+        return <HostGame isPaused />
     }
   }
 
@@ -140,6 +141,8 @@ function App() {
         return <PlayerGame />
       case "paused":
         return <PlayerPaused />
+      case "done":
+        return <h1>DONE!</h1>
     }
   }
 

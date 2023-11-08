@@ -55,7 +55,7 @@ export async function getExpectedOutput(questionId: number) {
 
 export async function runCode(code: string) {
     // Timeout for 5 seconds, python -I is for isolated environment
-    const command = `python -I -c "${code}"`;
+    const command = `python3 -I -c "${code}"`;
     try {
         const { stdout, stderr } = await exec(command, { timeout: 5000 });
         if (stderr) {
@@ -63,6 +63,22 @@ export async function runCode(code: string) {
         }
         return stdout.trim();
     } catch (error: any) {
-        return error.message;
+        return error.message.substr(error.message.indexOf('Traceback'));;
     }
+}
+
+export async function getQuestionIds(questionSetId: number) {
+    let strSQL = `SELECT id
+                  FROM questions
+                  WHERE (question_set_id = $1)`;
+    const { rows }  = await query(strSQL, [questionSetId]);
+    return rows.map((o: any) => o.id);
+}
+
+export async function getStarterCode(questionId: number) {
+    let strSQL = `SELECT starter_code
+                  FROM questions
+                  WHERE (id = $1)`;
+    const { rows }  = await query(strSQL, [questionId]);
+    return rows[0].starter_code;
 }

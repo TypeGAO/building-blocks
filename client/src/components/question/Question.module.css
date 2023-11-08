@@ -1,0 +1,81 @@
+.question {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: left;
+  width: 100%;
+  background-color: transparent;
+  align-items: flex-start;
+  gap: var(--4);
+  margin-top: var(--8);
+}
+
+.title {
+  font-weight: 700;
+  font-size: var(--20);
+  color: var(--neutral-900);
+  line-height: 2;
+  margin: 0;
+}
+
+.description {
+  font-size: var(--20);
+  color: var(--neutral-800);
+  line-height: var(--28);
+  font-weight: 400;
+  margin: 0;
+}
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(-120px) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-120px) rotate(-2deg);
+  }
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+}
+
+.sign {
+  position: relative;
+  background: #704214;
+  border-radius: 2px;
+  display: inline-block;
+  padding: 7px 8px;
+  font-weight: 700;
+  color: #f6e5d3;
+  transform: rotate(-2deg);
+  margin-bottom: 8px;
+  margin-top: -20px;
+  box-shadow:
+    inset 0 -15px #7a4613,
+    0 4px rgb(98 57 17 / 20%);
+}
+
+.slideDown {
+  animation: slideDown 0.8s forwards;
+  -webkit-animation: slideDown 0.8s forwards;
+}
+
+.sign::before,
+.sign::after {
+  content: "";
+  position: fixed;
+  width: 10px;
+  height: 87px;
+  background-color: #704214;
+  z-index: 4;
+  box-shadow: inset 0 -4px rgb(0 0 0 / 28%);
+}
+
+.sign::before {
+  top: -86px;
+  left: 9px;
+}
+
+.sign::after {
+  top: -86px;
+  right: 10px;
+}

@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useMutation, useQuery } from "react-query"
 import toast from "react-hot-toast"
 import { Button, Input } from "../../components"
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import { fetchCategories, addQuestionSet } from "../../api"
 
 import { QuestionSet } from "../../types";
@@ -12,12 +12,12 @@ function QuestionSetBuilder() {
 
     const [question_set, setQuestionSet] = useState<QuestionSet>({
         title: '',
-        desc: '',
-        grade: 0,
-        category: ''
+        grade_level: 0,
+        description: '',
+        categories: [],
     })
 
-    const { data: categories, isFetching: categoriesIsFetching, isLoading: categoriesIsLoading } = useQuery({
+    const { data: inputCategories, isFetching: categoriesIsFetching, isLoading: categoriesIsLoading } = useQuery({
         queryKey: ["categories"],
         queryFn: () => fetchCategories(),
         onError: () => {
@@ -25,39 +25,58 @@ function QuestionSetBuilder() {
         }
     })
 
-
-
-
-    //make a new object like the one above
-    //instead of useQuery were using useMutatation
-    //have a is error for errors, on success, naviagate page
-    //append the id to the URL 
-    const { isLoading, mutate } = useMutation({
+    const { /*isLoading,*/ mutate } = useMutation({
         mutationFn: (question_set: QuestionSet) => addQuestionSet(question_set),
-        onSuccess: () => {
-            // navigate(`/set/${id}`)
+
+        onSuccess: (res) => {
+            console.log("Andrew Test:")
+            console.log(res)
+            //navigate(`/set/${id}`)
          },
         onError: () => {
             toast.error("")
         }
     })
 
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
+        const { name, value, type, checked } = e.target;
+    
+        if (type === 'radio') {
+            // Handle radio inputs
+            const newValue = name === 'grade_level' ? parseInt(value, 10) : value;
 
-        // If you want to ensure that the "grade" value is always a number, you can use parseInt to convert it.
-        // This handles the case where the input may be a string.
-        const newValue = name === 'grade' ? parseInt(value, 10) : value;
+            setQuestionSet({ ...question_set, [name]: newValue });
+        } 
+        else if (type === 'checkbox' && name === 'categories') {
+            if (checked) {
+                setQuestionSet({ ...question_set, [name]: [...question_set.categories, value] });
+            } 
+            else {
+                setQuestionSet({
+                    ...question_set,
+                    [name]: question_set.categories.filter((category) => category !== value),
+                });
+            }
 
-        setQuestionSet({ ...question_set, [name]: newValue });
+            console.log("Handle Change:");
+            console.log(...question_set.categories);
+        } 
+        else {
+            setQuestionSet({ ...question_set, [name]: value });
+        }
     };
+    
 
-    const navigate = useNavigate();
+    
+
+    //const navigate = useNavigate();
     const handleClick = () => {
         //Ping the database
-
         mutate(question_set);
-        navigate('/host/create_questions');
+
+        //navigate(`/set/${id}`)
+        //navigate('/host/create_questions');
     }
 
     return (
@@ -74,9 +93,9 @@ function QuestionSetBuilder() {
 
             <Input
                 type="text"
-                name="desc"
+                name="description"
                 placeholder="Description"
-                value={question_set.desc}
+                value={question_set.description}
                 onChange={handleChange}
             />
 
@@ -86,9 +105,9 @@ function QuestionSetBuilder() {
                 <label>
                     <input
                         type="radio"
-                        name="grade"
-                        value="8th"
-                        checked={question_set.grade === 8}
+                        name="grade_level"
+                        value="8"
+                        checked={question_set.grade_level === 8}
                         onChange={handleChange}
                     />
                     8th
@@ -96,9 +115,9 @@ function QuestionSetBuilder() {
                 <label>
                     <input
                         type="radio"
-                        name="grade"
-                        value="9th"
-                        checked={question_set.grade === 9}
+                        name="grade_level"
+                        value="9"
+                        checked={question_set.grade_level === 9}
                         onChange={handleChange}
                     />
                     9th
@@ -106,9 +125,9 @@ function QuestionSetBuilder() {
                 <label>
                     <input
                         type="radio"
-                        name="grade"
-                        value="10th"
-                        checked={question_set.grade === 10}
+                        name="grade_level"
+                        value="10"
+                        checked={question_set.grade_level === 10}
                         onChange={handleChange}
                     />
                     10th
@@ -116,9 +135,9 @@ function QuestionSetBuilder() {
                 <label>
                     <input
                         type="radio"
-                        name="grade"
-                        value="11th"
-                        checked={question_set.grade === 11}
+                        name="grade_level"
+                        value="11"
+                        checked={question_set.grade_level === 11}
                         onChange={handleChange}
                     />
                     11th
@@ -126,9 +145,9 @@ function QuestionSetBuilder() {
                 <label>
                     <input
                         type="radio"
-                        name="grade"
-                        value="12th"
-                        checked={question_set.grade === 12}
+                        name="grade_level"
+                        value="12"
+                        checked={question_set.grade_level === 12}
                         onChange={handleChange}
                     />
                     12th
@@ -136,9 +155,9 @@ function QuestionSetBuilder() {
                 <label>
                     <input
                         type="radio"
-                        name="grade"
-                        value="Uni"
-                        checked={question_set.grade === 13}
+                        name="grade_level"
+                        value="13"
+                        checked={question_set.grade_level === 13}
                         onChange={handleChange}
                     />
                     Uni
@@ -149,15 +168,15 @@ function QuestionSetBuilder() {
                 Categories:
 
                 {!categoriesIsLoading || !categoriesIsFetching ? (
-                    categories?.data.map((item: Categories) => (
+                    inputCategories?.data.map((item: Categories) => (
                         <div key={item.id} className="questionContainer">
                             {item.category}
                             <label>
                                 <input
-                                    type="radio"
-                                    name="category"
+                                    type="checkbox"
+                                    name="categories"
                                     value={item.category}
-                                    checked={question_set.category === item.category}
+                                    checked={question_set.categories.includes(item.category)}
                                     onChange={handleChange}
                                 />
                             </label>

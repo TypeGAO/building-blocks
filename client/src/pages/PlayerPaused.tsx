@@ -1,5 +1,5 @@
 import styles from "./PlayerPaused.module.css"
-import { GameHeader } from "../components"
+import { GameHeader } from "../features/game-header"
 import { Pause } from "@phosphor-icons/react"
 
 function PlayerPaused() {

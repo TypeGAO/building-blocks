@@ -1,10 +1,13 @@
 export type Player = {
-  roomId: string
+  roomId: string | null
   nickname: string
   score: number
   currentQuestion: number
   buildingBlocksId: [number] | []
   submissions: number
+  currentCode: string
+  lastOutput: string
+  currentQuestionId: number
 }
 
 export type GameActivity = {
@@ -15,13 +18,14 @@ export type GameActivity = {
   stage: string
   time: number
   players: [Player] | []
+  questionSetId: number
 }
 
 export type QuestionSet = {
   title: string
-  desc: string
-  grade: number
-  category: string
+  grade_level: number
+  description: string
+  categories: string[]
 }
 
 export type Categories = {

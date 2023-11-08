@@ -2,4 +2,7 @@
 *.swo
 .env
 .DS_Store
-node_modules
+node_modules/
+server/node_modules/
+server/yarn.lock
+client/yarn.lock

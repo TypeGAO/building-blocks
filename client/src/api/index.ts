@@ -19,6 +19,25 @@ export async function fetchCategories() {
 
 
 export async function addQuestionSet(questionSetData: QuestionSet) {
-  const res = await axiosClient.post('/addQuestionSet', questionSetData);
+  const res = await axiosClient.post('/questionSets/addQuestionSet', questionSetData);
   return res;
+}
+export async function fetchHint(code: string, question: string) {
+  const res = await axiosClient.post(`/hints/getHint`, {
+    code: code,
+    question: question,
+  })
+  return res
+}
+
+export async function fetchQuestion(questionId: number) {
+  const res = await axiosClient.get(`/questions/getQuestion/${questionId}`)
+  return res
+}
+
+export async function fetchQuestionSetLength(questionSetId: number) {
+  const res = await axiosClient.get(
+    `/questionSets/getQuestionsInSet/${questionSetId}`
+  )
+  return res.data.length
 }

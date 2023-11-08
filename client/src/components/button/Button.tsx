@@ -1,3 +1,4 @@
+import { ReactNode } from "react"
 import styles from "./Button.module.css"
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -5,7 +6,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: "md" | "lg"
   disabled?: boolean
   onClick?: (e: React.MouseEvent<HTMLElement>) => void
-  children: string
+  children: string | ReactNode
 }
 
 function Button({

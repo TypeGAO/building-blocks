@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "codemirror": "^6.0.1",
     "cors": "^2.8.5",
     "socket.io": "^4.7.2",
     "yarn": "^1.22.19"
@@ -13,7 +14,7 @@
     "build": "cd client && yarn run build && cd ../server && yarn run build",
     "start": "cd server && yarn start",
     "prod": "npx concurrently 'cd client && yarn dev --host' 'cd server && yarn start'",
-    "dev": "npx concurrently 'cd client && yarn dev --host' 'cd client && yarn storybook' 'cd server && yarn dev'"
+    "dev": "npx concurrently 'cd client && yarn dev --host' 'cd server && yarn dev'"
   },
   "author": "",
   "license": "ISC",

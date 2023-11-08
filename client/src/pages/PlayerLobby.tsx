@@ -1,5 +1,6 @@
 import styles from "./PlayerLobby.module.css"
-import { GameHeader, Spinner } from "../components"
+import { Spinner } from "../components"
+import { GameHeader } from "../features/game-header"
 import funFacts from "../assets/fun-facts.json"
 
 function getRandomFact() {

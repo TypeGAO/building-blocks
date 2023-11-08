@@ -29,7 +29,7 @@ router.post("/addRoom", async (req: Request, res: Response) => {
 router.get("/getRoom/:id", async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    let strSQL = `SELECT * 
+    let strSQL = `SELECT id, pin, is_active, question_set_id, time_started
                       FROM rooms
                       WHERE pin = $1`;
     const { rows } = await query(strSQL, [id]);

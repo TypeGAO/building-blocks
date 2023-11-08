@@ -1,0 +1,46 @@
+.console {
+  display: block;
+  text-align: left;
+  height: 30vh;
+  border: var(--6) solid var(--neutral-950);
+  border-bottom-width: var(--12);
+  border-radius: var(--8);
+  background-color: var(--neutral-900);
+  font-family: "Roboto Mono";
+  padding: var(--10) var(--16) var(--28) var(--16);
+}
+
+.title {
+  font-weight: 700;
+  font-family: var(--font);
+  font-size: var(--16);
+  color: var(--neutral-300);
+  padding: var(--6) var(--0);
+  margin-bottom: var(--8);
+}
+
+.content {
+  font-weight: 700;
+  font-size: var(--16);
+  color: var(--neutral-200);
+  font-weight: 400;
+  height: 90%;
+  overflow-y: scroll;
+}
+
+.content::-webkit-scrollbar {
+  max-width: var(--12);
+}
+
+.content::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: var(--neutral-400);
+  width: var(--12);
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: var(--neutral-300);
+}
