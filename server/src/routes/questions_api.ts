@@ -22,7 +22,6 @@ router.post('/addQuestion', async (req: Request, res: Response) => {
 router.get('/getQuestion/:id', async (req: Request, res: Response) => {
     try { 
         const id = req.params.id;
-        let strSQL = `SELECT id, question, starter_code, question_set_id, title
         let strSQL = `SELECT id, question, starter_code, question_set_id, title, public_tests
                       FROM questions
                       WHERE id = $1`;
