@@ -32,11 +32,7 @@ function HintButton({ setHint }: HintButtonProps) {
     enabled: !!isSubmitted,
     onSuccess: () => {
       if (currentPlayer.score >= 150) {
-        socket.emit(
-          "createHint",
-          gameActivity.roomId,
-          gameActivity.nickname
-        )
+        socket.emit("createHint", gameActivity.roomId, gameActivity.nickname)
       }
       setIsSubmitted(false)
     },
@@ -60,7 +56,7 @@ function HintButton({ setHint }: HintButtonProps) {
         onClick={handleClick}
         disabled={isSubmitted}
       >
-        Hint <CoinAmount amount={150} size="sm" />
+        Hint <CoinAmount amount={150} size="md" />
       </Button>
     </div>
   )

@@ -1,1 +1,1 @@
-export { default as PauseGameButton } from "./PauseGameButton"
+export { default as usePauseGame } from "./usePauseGame"

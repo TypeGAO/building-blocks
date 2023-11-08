@@ -40,7 +40,7 @@ function GameHeader() {
       <div className={styles.right}>
         <div className={styles.nickname}>{currentPlayer.nickname}</div>
         <div>
-          <CoinAmount amount={currentPlayer.score} size="sm" />
+          <CoinAmount amount={currentPlayer.score} size="md" />
         </div>
       </div>
     </div>
