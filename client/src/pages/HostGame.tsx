@@ -1,55 +1,69 @@
-import { PauseGameButton } from "../features/pause-game"
-import { StartGameButton } from "../features/start-game"
-import useGameActivity from "../hooks/useGameActivity"
-import { Player } from "../types"
+import { Leaderboard } from "../features/leaderboard"
+import { usePauseGame } from "../features/pause-game"
+import styles from "./HostGame.module.css"
+import {
+  ArrowsOutSimple,
+  ArrowsInSimple,
+  Timer as TimerIcon,
+  Pause,
+  Play,
+} from "@phosphor-icons/react"
+import { HostControls } from "../components"
+import useFullscreen from "../hooks/useFullScreen"
+import { Timer } from "../features/timer"
 
 interface HostGameProps {
   isPaused?: boolean
 }
 
 function HostGame({ isPaused }: HostGameProps) {
-  const { gameActivity } = useGameActivity()
+  const [isFullScreen, toggle] = useFullscreen()
+  const { isGamePaused, pauseGame, unpauseGame } = usePauseGame()
 
   return (
-    <div>
-      {isPaused && "GAME PAUSED"}
-      {!isPaused && <PauseGameButton />}
-      {isPaused && <StartGameButton />}
-      <h1>Leaderboard</h1>
-      <h2>Done</h2>
-      <ul>
-        {gameActivity.players.filter((p: Player) => {
-            return p.doneTime != "";
-        }).sort((a, b) => {
-          let doneTimeA = new Date(a.doneTime).getTime();
-          let doneTimeB = new Date(b.doneTime).getTime();
-          return doneTimeA - doneTimeB;
-        }).map((player: Player, index) => (
-              <li key={index}>
-                <b>{index+1}. </b>{player.nickname}: {player.doneTime}, {player.score} coins
-              </li>
-            ))}
-      </ul>
-      <h2>In Progress</h2>
-      <ul>
-        {gameActivity.players.sort((a,b) => {
-            return a.currentQuestion - b.currentQuestion
-        }).reverse().filter((p: Player) => {
-            return p.doneTime == "";
-        }).map((player: Player, index) => (
-              <li key={index}>
-                {player.nickname}: {player.currentQuestion}
-              </li>
-          ))
-        }
-      </ul>
-      <h2>Richest: </h2>
-      <b>{gameActivity.players.sort((a, b) => {
-              return a.score - b.score
-          }).reverse().map((p: Player) => {
-              return <p>{p.nickname}: {p.score} coins</p>
-          })[0]}
-      </b>
+    <div className={styles.game}>
+      <div className={styles.top}>
+        <div className={styles.topContent}>
+          {isPaused ? (
+            "Game Paused"
+          ) : (
+            <>
+              <TimerIcon size={32} weight="fill" />
+              <Timer />
+            </>
+          )}
+        </div>
+      </div>
+      <div className={styles.controls}>
+        <HostControls
+          controls={[
+            {
+              icon: isFullScreen ? (
+                <ArrowsInSimple size={24} />
+              ) : (
+                <ArrowsOutSimple size={24} />
+              ),
+              label: isFullScreen ? "Exit full screen" : "Enter full screen",
+              onClick: toggle,
+            },
+            {
+              icon: isGamePaused ? <Play size={24} /> : <Pause size={24} />,
+              label: isGamePaused ? "Resume Game" : "Pause Game",
+              onClick: isGamePaused ? unpauseGame : pauseGame,
+            },
+          ]}
+        />
+      </div>
+      <div className={styles.container}>
+        <div className={styles.signContainer}>
+          <div className={styles.sign}>Scoreboard</div>
+        </div>
+        <div className={styles.leaderboardContainer}>
+          <div className={styles.leaderboard}>
+            <Leaderboard />
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
