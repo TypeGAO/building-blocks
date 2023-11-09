@@ -29,8 +29,12 @@ function HostGame({ isPaused, isEnded }: HostGameProps) {
     <div className={styles.game}>
       <div className={styles.top}>
         <div className={styles.topContent}>
-          {(isPaused || isEnded) ? (
-            isPaused ? "Game Paused" : "Game Ended"
+          {isPaused || isEnded ? (
+            isPaused ? (
+              "Game Paused"
+            ) : (
+              "Game Ended"
+            )
           ) : (
             <>
               <TimerIcon size={32} weight="fill" />
@@ -48,6 +52,13 @@ function HostGame({ isPaused, isEnded }: HostGameProps) {
               onClick: isGamePaused ? unpauseGame : pauseGame,
             },
             {
+              icon: <X size={24} />,
+              label: "End Game",
+              onClick: () => {
+                socket.emit("endGame", gameActivity.roomId)
+              },
+            },
+            {
               icon: isFullScreen ? (
                 <ArrowsInSimple size={24} />
               ) : (
@@ -55,11 +66,6 @@ function HostGame({ isPaused, isEnded }: HostGameProps) {
               ),
               label: isFullScreen ? "Exit full screen" : "Enter full screen",
               onClick: toggle,
-            },
-            {
-              icon: <X size={24} />,
-              label: "End Game",
-              onClick: () => { socket.emit("endGame", gameActivity.roomId) }
             },
           ]}
         />

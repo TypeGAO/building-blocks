@@ -1,4 +1,4 @@
-import { TextEditor } from "../../components"
+import TextEditor from "./TextEditor"
 import RunCodeButton from "./RunCodeButton"
 import Output from "./Output"
 import styles from "./styles.module.css"

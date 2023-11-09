@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
 import Skeleton from "react-loading-skeleton"
 import "react-loading-skeleton/dist/skeleton.css"
-import styles from "./Question.module.css"
+import styles from "./styles.module.css"
 import useDelayedLoadingState from "../../hooks/useDelayedLoadingState"
-import { Tabs, Tab } from ".."
+import { Tabs, Tab } from "../../components"
 
 interface PublicTest {
   input: [any]
@@ -18,7 +18,7 @@ interface QuestionProps {
   publicTests: PublicTest
 }
 
-function Question({
+function QuestionItem({
   currentQuestion,
   title,
   description,
@@ -73,4 +73,4 @@ function Question({
   )
 }
 
-export default Question
+export default QuestionItem

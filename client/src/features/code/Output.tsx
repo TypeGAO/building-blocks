@@ -1,4 +1,4 @@
-import { Console } from "../../components"
+import Console from "./Console"
 import useGameActivity from "../../hooks/useGameActivity"
 
 function Output() {

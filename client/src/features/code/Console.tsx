@@ -1,4 +1,4 @@
-import styles from "./Console.module.css"
+import styles from "./styles.module.css"
 
 interface ConsoleProps {
   title: string

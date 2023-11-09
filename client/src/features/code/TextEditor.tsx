@@ -1,6 +1,6 @@
 import Editor from "@monaco-editor/react"
-import styles from "./TextEditor.module.css"
-import { Spinner } from ".."
+import styles from "./styles.module.css"
+import { Spinner } from "../../components"
 import useGameActivity from "../../hooks/useGameActivity"
 
 const options = {
