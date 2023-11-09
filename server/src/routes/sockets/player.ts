@@ -118,15 +118,22 @@ const playerSocketConnection = (io: Server) => {
 
         // Extract function only, no extra print statements
         const regex = /^def\s+\w+\s*\([^)]*\)\s*:.+\n(?:\s{4}.+\n)+/m; 
-        const match = code.match(regex);
+        // Add input because regex needs at least one unindented line after function body ¯\_(ツ)_/¯
+        const match = (code+input).match(regex);
 
         // Run code, get test case expected output, compare it to output
         // Public output to not reveal hidden tests
-        const public_output = await runCode(code);
+        let public_output = await runCode(code);
         const output = await runCode((match ? match[0] : "") + input.replace(/"/g, '\\"'));
         const expected_output = await getExpectedOutput(questionId);
 
-        const code_correct = output === expected_output;
+        // Test for correct test case output, and make sure no errors in user code
+        // outside the fuction body
+        const code_correct = output === expected_output && (!public_output.includes('Traceback'));
+        // Test for errors (syntax is not checked for uncalled funtions)
+        if (output.includes('Traceback')) {
+            public_output = output;
+        }
 
         // Get submissions
         const submissions = game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).submissions;
