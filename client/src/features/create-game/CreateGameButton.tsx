@@ -3,7 +3,7 @@ import { socket } from "../../socket"
 import useGameActivity from "../../hooks/useGameActivity"
 
 function CreateGameButton() {
-  const { gameActivity } = useGameActivity()
+  const { gameActivity, setGameActivity } = useGameActivity()
 
   const handleClick = () => {
     socket.emit("createRoom", gameActivity.questionSetId)

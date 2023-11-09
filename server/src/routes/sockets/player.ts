@@ -115,12 +115,15 @@ const playerSocketConnection = (io: Server) => {
 
         // Input for test cases
         const input = await getInput(questionId);
-        const public_input = await getPublicInput(questionId);
+
+        // Extract function only, no extra print statements
+        const regex = /^def\s+\w+\s*\([^)]*\)\s*:.+\n(?:\s{4}.+\n)+/m; 
+        const match = code.match(regex);
 
         // Run code, get test case expected output, compare it to output
-        const output = await runCode(code+input.replace(/"/g, '\\"'));
         // Public output to not reveal hidden tests
-        const public_output = await runCode(code+public_input.replace(/"/g, '\\"'));
+        const public_output = await runCode(code);
+        const output = await runCode((match ? match[0] : "") + input.replace(/"/g, '\\"'));
         const expected_output = await getExpectedOutput(questionId);
 
         const code_correct = output === expected_output;

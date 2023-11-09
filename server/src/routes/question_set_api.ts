@@ -15,6 +15,7 @@ router.post('/addQuestionSet', async (req: Request, res: Response) => {
         const { rows } = await query(strSQL, [grade_level, description, categories, title]);
         res.send(rows[0]);
     } catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Error Adding Question Set' });
     }
 });

@@ -9,6 +9,7 @@ import Landing from "./pages/Landing"
 import PlayerLobby from "./pages/PlayerLobby"
 import PlayerGame from "./pages/PlayerGame"
 import HostLobby from "./pages/HostLobby"
+import HostCreating from "./pages/HostCreating"
 import HostGame from "./pages/HostGame"
 import PlayerPaused from "./pages/PlayerPaused"
 
@@ -126,10 +127,14 @@ function App() {
     switch (gameActivity.stage) {
       case "lobby":
         return <HostLobby />
+      case "creating":
+        return <HostCreating />
       case "started":
         return <HostGame />
       case "paused":
         return <HostGame isPaused />
+      case "ended":
+        return <HostGame isEnded />
     }
   }
 
