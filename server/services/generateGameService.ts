@@ -32,9 +32,9 @@ export function newGameActivity(masterSocket: string, roomId: string): GameActiv
         masterSocket: masterSocket,
         roomId: roomId,
         nickname: "",
-        time: -1,
+        time: 600,
         players: [],
-        stage: "lobby",
+        stage: "creating",
         questionSetId: 2
     };
 }

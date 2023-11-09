@@ -44,7 +44,6 @@ const hostSocketConnection = (io: Server) => {
     });
 
     socket.on("startGame", async (roomId: string, gameTime: number) => {
-
         // Get game activity from database, set it as started
         const game_activity = await getGameActivity(roomId);
 
@@ -77,6 +76,41 @@ const hostSocketConnection = (io: Server) => {
             game_activity.role = "player";
             socket.broadcast.to(roomId).emit("updateGameActivity", game_activity);
         }
+    });
+
+    socket.on("setQuestionSet", async (roomId: string, id: number) => {
+
+        // Get game activity from database, set it as paused
+        const game_activity = await getGameActivity(roomId);
+        game_activity.questionSetId = id;
+        game_activity.stage = "lobby";
+
+        // Update game activity
+        await setGameActivity(game_activity, roomId);
+
+        // Send game activity to host and all players
+        game_activity.role = "host";
+        socket.emit("updateGameActivity", game_activity);
+
+        game_activity.role = "player";
+        socket.broadcast.to(roomId).emit("updateGameActivity", game_activity);
+    });
+
+    socket.on("setTime", async (roomId: string, time: number) => {
+
+        // Get game activity from database, set it as paused
+        const game_activity = await getGameActivity(roomId);
+        game_activity.time = time;
+
+        // Update game activity
+        await setGameActivity(game_activity, roomId);
+
+        // Send game activity to host and all players
+        game_activity.role = "host";
+        socket.emit("updateGameActivity", game_activity);
+
+        game_activity.role = "player";
+        socket.broadcast.to(roomId).emit("updateGameActivity", game_activity);
     });
 
     socket.on("pauseGame", async (roomId: string) => {
@@ -116,11 +150,13 @@ const hostSocketConnection = (io: Server) => {
     });
 
     socket.on("endGame", async (roomId: string) => {
+        console.log('tes');
         const game_activity = await getGameActivity(roomId);
         game_activity.stage = "ended";
         await setGameActivity(game_activity, roomId);
         await endGame(roomId);
 
+        game_activity.role = "host";
         socket.emit('updateGameActivity', game_activity);
 
         game_activity.role = "player";

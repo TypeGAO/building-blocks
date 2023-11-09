@@ -23,6 +23,11 @@ export async function fetchQuestion(questionId: number) {
   return res
 }
 
+export async function fetchQuestionSets() {
+  const res = await axiosClient.get(`/questionSets/getQuestionSets`)
+  return res
+}
+
 export async function fetchQuestionSetLength(questionSetId: number) {
   const res = await axiosClient.get(
     `/questionSets/getQuestionsInSet/${questionSetId}`

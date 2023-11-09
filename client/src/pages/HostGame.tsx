@@ -1,31 +1,36 @@
 import { Leaderboard } from "../features/leaderboard"
 import { usePauseGame } from "../features/pause-game"
+import { socket } from "../socket"
 import styles from "./HostGame.module.css"
 import {
   ArrowsOutSimple,
   ArrowsInSimple,
   Timer as TimerIcon,
+  X,
   Pause,
   Play,
 } from "@phosphor-icons/react"
 import { HostControls } from "../components"
 import useFullscreen from "../hooks/useFullScreen"
 import { Timer } from "../features/timer"
+import useGameActivity from "../hooks/useGameActivity"
 
 interface HostGameProps {
   isPaused?: boolean
+  isEnded?: boolean
 }
 
-function HostGame({ isPaused }: HostGameProps) {
+function HostGame({ isPaused, isEnded }: HostGameProps) {
   const [isFullScreen, toggle] = useFullscreen()
   const { isGamePaused, pauseGame, unpauseGame } = usePauseGame()
+  const { gameActivity } = useGameActivity()
 
   return (
     <div className={styles.game}>
       <div className={styles.top}>
         <div className={styles.topContent}>
-          {isPaused ? (
-            "Game Paused"
+          {(isPaused || isEnded) ? (
+            isPaused ? "Game Paused" : "Game Ended"
           ) : (
             <>
               <TimerIcon size={32} weight="fill" />
@@ -50,6 +55,11 @@ function HostGame({ isPaused }: HostGameProps) {
               ),
               label: isFullScreen ? "Exit full screen" : "Enter full screen",
               onClick: toggle,
+            },
+            {
+              icon: <X size={24} />,
+              label: "End Game",
+              onClick: () => { socket.emit("endGame", gameActivity.roomId) }
             },
           ]}
         />
