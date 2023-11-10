@@ -80,7 +80,7 @@ const hostSocketConnection = (io: Server) => {
 
     socket.on("setQuestionSet", async (roomId: string, id: number) => {
 
-        // Get game activity from database, set it as paused
+        // Get game activity from database
         const game_activity = await getGameActivity(roomId);
         game_activity.questionSetId = id;
         game_activity.stage = "lobby";
@@ -98,7 +98,7 @@ const hostSocketConnection = (io: Server) => {
 
     socket.on("setTime", async (roomId: string, time: number) => {
 
-        // Get game activity from database, set it as paused
+        // Get game activity from database
         const game_activity = await getGameActivity(roomId);
         game_activity.time = time;
 
@@ -113,11 +113,13 @@ const hostSocketConnection = (io: Server) => {
         socket.broadcast.to(roomId).emit("updateGameActivity", game_activity);
     });
 
-    socket.on("pauseGame", async (roomId: string) => {
+    socket.on("pauseGame", async (roomId: string, time: number) => {
 
         // Get game activity from database, set it as paused
         const game_activity = await getGameActivity(roomId);
         game_activity.stage = "paused";
+        // Save current time
+        game_activity.time = time;
 
         // Update game activity
         await setGameActivity(game_activity, roomId);
@@ -129,28 +131,27 @@ const hostSocketConnection = (io: Server) => {
     });
 
     socket.on("kickPlayer", async (nickname: string) => {
-            const roomId = connectedHosts.get(socket.id);
-            const game_activity = await getGameActivity(roomId);
+        const roomId = connectedHosts.get(socket.id);
+        const game_activity = await getGameActivity(roomId);
 
-            // Remove player from list
-            game_activity.players  = game_activity.players.filter((p: Player) => p.nickname !== nickname);
+        // Remove player from list
+        game_activity.players  = game_activity.players.filter((p: Player) => p.nickname !== nickname);
 
-            await setGameActivity(game_activity, roomId);
+        await setGameActivity(game_activity, roomId);
 
-            game_activity.role = "host";
-            game_activity.stage = "lobby";
-            socket.emit('updateGameActivity', game_activity);
+        game_activity.role = "host";
+        game_activity.stage = "lobby";
+        socket.emit('updateGameActivity', game_activity);
 
-            // Send to all players
-            socket.broadcast.to(roomId).emit('kickPlayer', nickname);
-            
-            game_activity.role = "player";
-            game_activity.stage = "lobby";
-            socket.broadcast.to(roomId).emit('updateGameActivity', game_activity);
+        // Send to all players
+        socket.broadcast.to(roomId).emit('kickPlayer', nickname);
+        
+        game_activity.role = "player";
+        game_activity.stage = "lobby";
+        socket.broadcast.to(roomId).emit('updateGameActivity', game_activity);
     });
 
     socket.on("endGame", async (roomId: string) => {
-        console.log('tes');
         const game_activity = await getGameActivity(roomId);
         game_activity.stage = "ended";
         await setGameActivity(game_activity, roomId);
@@ -161,6 +162,7 @@ const hostSocketConnection = (io: Server) => {
 
         game_activity.role = "player";
         socket.broadcast.to(roomId).emit('updateGameActivity', game_activity);
+        socket.broadcast.to(roomId).emit('ended');
     });
 
     socket.on("disconnect", async () => {

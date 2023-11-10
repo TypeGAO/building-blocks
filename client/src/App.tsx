@@ -12,6 +12,7 @@ import HostLobby from "./pages/HostLobby"
 import HostCreating from "./pages/HostCreating"
 import HostGame from "./pages/HostGame"
 import PlayerPaused from "./pages/PlayerPaused"
+import DoneEnded from "./pages/DoneEnded"
 
 /**
  * App Component
@@ -89,6 +90,11 @@ function App() {
       toast.error(`${msg}`)
     }
 
+    const onEnded = () => {
+      socket.disconnect()
+    }
+
+
     const onStageChange = (stage: string) => {
       setGameActivity({
         ...gameActivity,
@@ -107,6 +113,7 @@ function App() {
     socket.on("wrong", onWrong)
     socket.on("message", onMessage)
     socket.on("stageChange", onStageChange)
+    socket.on("ended", onEnded)
 
     return () => {
       socket.off("roomCreated", onRoomCreated)
@@ -120,6 +127,7 @@ function App() {
       socket.off("wrong", onWrong)
       socket.off("message", onMessage)
       socket.off("stageChange", onStageChange)
+      socket.off("ended", onEnded)
     }
   }, [gameActivity, setGameActivity])
 
@@ -147,9 +155,9 @@ function App() {
       case "paused":
         return <PlayerPaused />
       case "done":
-        return <h1>DONE!</h1>
+        return <DoneEnded title="Done!" />
       case "ended":
-        return <h1>Game Ended!</h1>
+        return <DoneEnded title="Game Ended!" />
     }
   }
 
