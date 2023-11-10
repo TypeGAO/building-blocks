@@ -40,12 +40,10 @@ const timeOptions = [
 ]
 
 function SelectGameTime({ setStep }: SelectGameTimeProps) {
-  const [time, setTime] = useState(600)
   const { gameActivity } = useGameActivity()
 
   const handleClick = (seconds: number) => {
-    setTime(seconds)
-    socket.emit("setTime", gameActivity.roomId, time)
+    socket.emit("setTime", gameActivity.roomId, seconds)
     setStep(1)
   }
 

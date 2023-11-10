@@ -7,7 +7,7 @@ function usePauseGame() {
   const [isGamePaused, setIsGamePaused] = useState(false)
 
   const pauseGame = () => {
-    socket.emit("pauseGame", gameActivity.roomId)
+    socket.emit("pauseGame", gameActivity.roomId, gameActivity.time)
     setIsGamePaused(true)
   }
 
