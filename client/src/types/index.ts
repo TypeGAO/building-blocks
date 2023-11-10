@@ -21,3 +21,11 @@ export type GameActivity = {
   players: [Player] | []
   questionSetId: number
 }
+
+export type QuestionSetItem = {
+  title: string
+  description: string
+  grade_level: number
+  categories: [string]
+  id: number
+}
