@@ -23,7 +23,7 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: "/host/create_questions",
+    path: "/host/questions/:setId",
     element: <QuizCreation />,
   },
   {

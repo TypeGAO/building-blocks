@@ -1,5 +1,5 @@
 import axiosClient from "../axios"
-import { QuestionSet } from "../types";
+import { QuestionSet, Questions } from "../types";
 
 export async function fetchRoomByPin(id: string) {
   const res = await axiosClient.get(`/rooms/getRoom/${id}`)
@@ -22,6 +22,15 @@ export async function addQuestionSet(questionSetData: QuestionSet) {
   const res = await axiosClient.post('/questionSets/addQuestionSet', questionSetData);
   return res;
 }
+
+
+export async function addQuestions(questionSetData: Questions[]) {
+  const res = await axiosClient.post('/questions/addQuestions', questionSetData);
+  return res;
+}
+
+
+
 export async function fetchHint(code: string, question: string) {
   const res = await axiosClient.post(`/hints/getHint`, {
     code: code,

@@ -22,10 +22,6 @@ export function addPlayer(roomId: string, nickname: string): Player {
         submissions: 0,
         currentCode: "",
         lastOutput: "",
-        currentQuestionId: 1
-        submissions: 0,
-        currentCode: "",
-        lastOutput: "",
         currentQuestionId: 1,
         doneTime: ""
     }

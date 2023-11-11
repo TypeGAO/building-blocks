@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useMutation, useQuery } from "react-query"
 import toast from "react-hot-toast"
 import { Button, Input } from "../../components"
-//import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { fetchCategories, addQuestionSet } from "../../api"
 
 import { QuestionSet } from "../../types";
@@ -12,8 +12,8 @@ function QuestionSetBuilder() {
 
     const [question_set, setQuestionSet] = useState<QuestionSet>({
         title: '',
-        grade_level: 0,
         description: '',
+        grade_level: 0,
         categories: [],
     })
 
@@ -25,16 +25,15 @@ function QuestionSetBuilder() {
         }
     })
 
+    const navigate = useNavigate();
     const { /*isLoading,*/ mutate } = useMutation({
         mutationFn: (question_set: QuestionSet) => addQuestionSet(question_set),
 
         onSuccess: (res) => {
-            console.log("Andrew Test:")
-            console.log(res)
-            //navigate(`/set/${id}`)
+            navigate(`/host/questions/${res.data.id}`)
          },
         onError: () => {
-            toast.error("")
+            toast.error("Unable to send question data")
         }
     })
 
@@ -70,13 +69,10 @@ function QuestionSetBuilder() {
 
     
 
-    //const navigate = useNavigate();
+    
     const handleClick = () => {
         //Ping the database
         mutate(question_set);
-
-        //navigate(`/set/${id}`)
-        //navigate('/host/create_questions');
     }
 
     return (

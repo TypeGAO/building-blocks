@@ -30,7 +30,6 @@ function Question({ questionId }: QuestionProps) {
       title={question?.data.title}
       description={question?.data.question}
       isLoading={questionIsLoading || questionIsFetching}
-      publicTests={question?.data.public_tests}
     />
   )
 }
