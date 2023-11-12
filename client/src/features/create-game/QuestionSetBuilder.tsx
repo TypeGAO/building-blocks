@@ -26,12 +26,12 @@ function QuestionSetBuilder() {
     })
 
     const navigate = useNavigate();
-    const { /*isLoading,*/ mutate } = useMutation({
+    const { mutate } = useMutation({
         mutationFn: (question_set: QuestionSet) => addQuestionSet(question_set),
 
         onSuccess: (res) => {
             navigate(`/host/questions/${res.data.id}`)
-         },
+        },
         onError: () => {
             toast.error("Unable to send question data")
         }
@@ -40,38 +40,28 @@ function QuestionSetBuilder() {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
-    
-        if (type === 'radio') {
-            // Handle radio inputs
-            const newValue = name === 'grade_level' ? parseInt(value, 10) : value;
 
+        if (type === 'radio') {
+            const newValue = name === 'grade_level' ? parseInt(value, 10) : value;
             setQuestionSet({ ...question_set, [name]: newValue });
-        } 
+        }
         else if (type === 'checkbox' && name === 'categories') {
             if (checked) {
                 setQuestionSet({ ...question_set, [name]: [...question_set.categories, value] });
-            } 
+            }
             else {
                 setQuestionSet({
                     ...question_set,
                     [name]: question_set.categories.filter((category) => category !== value),
                 });
             }
-
-            console.log("Handle Change:");
-            console.log(...question_set.categories);
-        } 
+        }
         else {
             setQuestionSet({ ...question_set, [name]: value });
         }
     };
-    
 
-    
-
-    
     const handleClick = () => {
-        //Ping the database
         mutate(question_set);
     }
 
@@ -98,66 +88,18 @@ function QuestionSetBuilder() {
 
             <div>
                 Select Grade Level:
-                <label>
-                    <input
-                        type="radio"
-                        name="grade_level"
-                        value="8"
-                        checked={question_set.grade_level === 8}
-                        onChange={handleChange}
-                    />
-                    8th
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        name="grade_level"
-                        value="9"
-                        checked={question_set.grade_level === 9}
-                        onChange={handleChange}
-                    />
-                    9th
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        name="grade_level"
-                        value="10"
-                        checked={question_set.grade_level === 10}
-                        onChange={handleChange}
-                    />
-                    10th
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        name="grade_level"
-                        value="11"
-                        checked={question_set.grade_level === 11}
-                        onChange={handleChange}
-                    />
-                    11th
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        name="grade_level"
-                        value="12"
-                        checked={question_set.grade_level === 12}
-                        onChange={handleChange}
-                    />
-                    12th
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        name="grade_level"
-                        value="13"
-                        checked={question_set.grade_level === 13}
-                        onChange={handleChange}
-                    />
-                    Uni
-                </label>
+                {[8, 9, 10, 11, 12, 13].map((grade) => (
+                    <label key={grade}>
+                        <input
+                            type="radio"
+                            name="grade_level"
+                            value={grade.toString()}
+                            checked={question_set.grade_level === grade}
+                            onChange={handleChange}
+                        />
+                        {grade === 13 ? 'University' : `${grade}th`}
+                    </label>
+                ))}
             </div>
 
             <div>

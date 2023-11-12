@@ -25,10 +25,9 @@ export async function addQuestionSet(questionSetData: QuestionSet) {
 
 
 export async function addQuestions(questionSetData: Questions[]) {
-  const res = await axiosClient.post('/questions/addQuestions', questionSetData);
+  const res = await axiosClient.post('/questions/addQuestion', questionSetData);
   return res;
 }
-
 
 
 export async function fetchHint(code: string, question: string) {

@@ -36,11 +36,12 @@ export type Categories = {
 }
 
 export type Questions = {
-  id: number
   title: string
   question: string
   starter_code: string
-  test_cases: [[string,string]]
-  public_tests: string[]
+  test_cases_storage: [[string,string]]
+  public_tests_storage: [[string,string]]
+  test_cases: { input: string; expected_output: string; }
+  public_tests: { input: string[]; output: string[]; }
   question_set_id: number
 }

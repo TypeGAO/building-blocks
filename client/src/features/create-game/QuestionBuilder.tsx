@@ -10,21 +10,21 @@ import { Questions } from "../../types";
 
 
 interface QuestionSetIDProps {
-  setId: string | undefined
+  setId: string
 }
 
-
 function QuestionBuilder({ setId }: QuestionSetIDProps) {
-
-  //console.log(setId)
   const [theQuestions, setTheQuestions] = useState<Questions[]>([{
-    id: 0,
     title: "",
     question: "",
     starter_code: "",
-    test_cases: [["", ""]],
-    public_tests: [""],
-    question_set_id: 0,
+    //Stores the cases for the output's mapping function
+    test_cases_storage: [["", ""]],
+    public_tests_storage: [["", ""]],
+    //Stores the JSONB format that will be send to the database
+    test_cases: { input: "", expected_output: "" },
+    public_tests: { input: [], output: [] },
+    question_set_id: parseInt(setId, 10),
   }])
 
   const navigate = useNavigate();
@@ -35,35 +35,72 @@ function QuestionBuilder({ setId }: QuestionSetIDProps) {
       navigate(`/TODO`)
     },
     onError: () => {
-      toast.error("")
+      toast.error("Can't send the data")
     }
   })
 
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number, array_index: number = -1) => {
     const { name, value } = e.target;
+    const newQuestions = [...theQuestions];
+    const updatedQuestion = { ...newQuestions[index] };
 
-    setTheQuestions((prevQuestions) => {
-      const updatedQuestions = [...prevQuestions];
-      updatedQuestions[index] = {
-        ...updatedQuestions[index],
-        [name]: value,
-      };
-      return updatedQuestions;
-    });
+    //'index' keeps track of which question inside 'theQuestions' we are editing
+    //'array_index' keeps track of which test case inside either 'public_tests' or 'test_cases' 
+    if (array_index != -1) {
+      if (name === "public_tests_input") {
+        updatedQuestion.public_tests_storage[array_index][0] = value;
+      }
+      if (name === "public_tests_output") {
+        updatedQuestion.public_tests_storage[array_index][1] = value;
+      }
+
+      if (name === "test_case_input") {
+        updatedQuestion.test_cases_storage[array_index][0] = value;
+      }
+      if (name === "test_case_output") {
+        updatedQuestion.test_cases_storage[array_index][1] = value;
+      }
+
+      updatedQuestion.public_tests.input[array_index] = updatedQuestion.public_tests_storage[array_index][0];
+      updatedQuestion.public_tests.output[array_index] = updatedQuestion.public_tests_storage[array_index][1];
+
+      //I know this is incredibly inefficient but I don't know a better way to handle it
+      updatedQuestion.test_cases = { input: "", expected_output: "" };
+      for (let i = 0; i < updatedQuestion.test_cases_storage.length; i++) {
+        if (i != 0) {
+          updatedQuestion.test_cases.input += "\n";
+          updatedQuestion.test_cases.expected_output += "\n";
+        }
+        updatedQuestion.test_cases.input += updatedQuestion.test_cases_storage[i][0];
+        updatedQuestion.test_cases.expected_output += updatedQuestion.test_cases_storage[i][1];
+      }
+
+    }
+    else {
+      // Handle the rest of the cases dynamically
+      if (Object.prototype.hasOwnProperty.call(updatedQuestion, name)) {
+        (updatedQuestion as any)[name] = value
+      }
+    }
+
+
+    newQuestions[index] = updatedQuestion;
+    setTheQuestions(newQuestions);
   };
+
 
   const anotherQuestion = () => {
     setTheQuestions((prevQuestions) => [
       ...prevQuestions,
       {
-        id: prevQuestions.length,
         title: "",
         question: "",
         starter_code: "",
-        test_cases: [["", ""]],
-        public_tests: [],
-        question_set_id: 0,
+        test_cases_storage: [["", ""]],
+        public_tests_storage: [["", ""]],
+        test_cases: { input: "", expected_output: "" },
+        public_tests: { input: [], output: [] },
+        question_set_id: parseInt(setId, 10),
       },
     ]);
   };
@@ -72,17 +109,16 @@ function QuestionBuilder({ setId }: QuestionSetIDProps) {
     setTheQuestions((prevQuestions) => {
       const updatedQuestions = [...prevQuestions];
       const currentQuestion = updatedQuestions[index];
-      currentQuestion.public_tests.push("");
+      currentQuestion.public_tests_storage.push(["", ""]);
       return updatedQuestions;
     });
   };
-
 
   const anotherPrivateTestCase = (index: number) => {
     setTheQuestions((prevQuestions) => {
       const updatedQuestions = [...prevQuestions];
       const currentQuestion = updatedQuestions[index];
-      currentQuestion.test_cases.push(["", ""]);
+      currentQuestion.test_cases_storage.push(["", ""]);
       return updatedQuestions;
     });
   };
@@ -105,14 +141,14 @@ function QuestionBuilder({ setId }: QuestionSetIDProps) {
             onChange={(e) => handleChange(e, index)}
           />
           <Input
-            type="textarea"
+            type="text"
             name="question"
             placeholder={"Question #" + (index + 1) + "s Description"}
             value={item.question}
             onChange={(e) => handleChange(e, index)}
           />
           <Input
-            type="textarea"
+            type="text"
             name="starter_code"
             placeholder={"Question #" + (index + 1) + "s Starter Code"}
             value={item.starter_code}
@@ -120,61 +156,60 @@ function QuestionBuilder({ setId }: QuestionSetIDProps) {
           />
 
 
-          {item.public_tests?.map((public_tests_item: string, public_index) => (
+          {item.public_tests_storage?.map((public_tests_item: [string, string], public_index) => (
             <div key={"public_" + public_index} className="publicContainer">
               Public Test Case #{public_index + 1}
               <Input
-                type="textarea"
+                type="text"
                 name="public_tests_input"
                 placeholder={"Test Case Input #" + (index + 1)}
-                value={item.public_tests[public_index]}
-                onChange={(e) => handleChange(e, index)}
+                value={item.public_tests_storage[public_index][0]}
+                onChange={(e) => handleChange(e, index, public_index)}
               />
               <Input
-                type="textarea"
+                type="text"
                 name="public_tests_output"
                 placeholder={"Test Case Output #" + (index + 1)}
-                value={item.public_tests[public_index]}
-                onChange={(e) => handleChange(e, index)}
+                value={item.public_tests_storage[public_index][1]}
+                onChange={(e) => handleChange(e, index, public_index)}
               />
             </div>
           ))}
-          <Button color="green" size="lg" onClick={() => { anotherPublicTestCase(index) }}>
+          <Button color="green" size="md" onClick={() => { anotherPublicTestCase(index) }}>
             Add Another Public Test Case
           </Button>
 
 
-          {item.test_cases?.map((test_case_item: [string, string], test_index) => (
+          {item.test_cases_storage?.map((test_case_item: [string, string], test_index) => (
             <div key={"private_" + test_index} className="testContainer">
               Private Test Case #{index + 1}
               <Input
-                type="textarea"
+                type="text"
                 name="test_case_input"
                 placeholder={"Test Case Input #" + (test_index + 1)}
-                value={item.test_cases[test_index][0]}
-                onChange={(e) => handleChange(e, index)}
+                value={item.test_cases_storage[test_index][0]}
+                onChange={(e) => handleChange(e, index, test_index)}
               />
               <Input
-                type="textarea"
+                type="text"
                 name="test_case_output"
                 placeholder={"Test Case Output #" + (test_index + 1)}
-                value={item.test_cases[test_index][1]}
-                onChange={(e) => handleChange(e, index)}
+                value={item.test_cases_storage[test_index][1]}
+                onChange={(e) => handleChange(e, index, test_index)}
               />
             </div>
           ))}
-          <Button color="green" size="lg" onClick={() => { anotherPrivateTestCase(index) }}>
+          <Button color="green" size="md" onClick={() => { anotherPrivateTestCase(index) }}>
             Add Another Private Test Case
           </Button>
-
-
-
-
-
         </div>
       ))}
       <Button color="green" size="lg" onClick={anotherQuestion}>
         Add Another Question
+      </Button>
+
+      <Button color="green" size="lg" onClick={nextPage}>
+        Submit your questions
       </Button>
 
 

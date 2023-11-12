@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 
+import { Questions } from "../../../client/src/types";
+
 const Router = require('express-promise-router');
 const query = require('../db/index.ts');
  
@@ -9,17 +11,24 @@ const router = new Router();
 
 router.post('/addQuestion', async (req: Request, res: Response) => {
     try {
-        const { question, starter_code, question_set_id, test_cases, public_tests } = req.body;
+        const questions: Questions[] = req.body;
+        const responses: any[] = []; // Store responses
 
+        for (const q of questions) {
+            const {question, starter_code, question_set_id, test_cases, title, public_tests} = q;
 
-        let strSQL = `INSERT INTO questions (id, question, starter_code, question_set_id, test_cases, title, public_tests)
-                      VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
-        const { rows } = await query(strSQL, [question, starter_code, question_set_id, test_cases, public_tests]);
-        res.send(rows[0]);
+            let strSQL = `INSERT INTO questions (question, starter_code, question_set_id, test_cases, title, public_tests)
+                          VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
+
+            const { rows } = await query(strSQL, [question, starter_code, question_set_id, test_cases, title, public_tests]);
+            responses.push(rows[0]); // Collect responses
+        }
+        res.send(responses);
     } catch (error) {
         res.status(500).json({ message: 'Error Adding Question' });
     }
 });
+
 
 router.get('/getQuestion/:id', async (req: Request, res: Response) => {
     try { 
