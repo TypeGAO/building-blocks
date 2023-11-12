@@ -8,6 +8,7 @@ export type Player = {
   currentCode: string
   lastOutput: string
   currentQuestionId: number
+  doneTime: string
 }
 
 export type GameActivity = {
@@ -19,4 +20,12 @@ export type GameActivity = {
   time: number
   players: [Player] | []
   questionSetId: number
+}
+
+export type QuestionSetItem = {
+  title: string
+  description: string
+  grade_level: number
+  categories: [string]
+  id: number
 }

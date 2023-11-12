@@ -1,0 +1,31 @@
+.tabContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.tabButtons {
+  display: flex;
+  border-bottom: var(--4) solid var(--neutral-200);
+}
+
+.tabButton {
+  background-color: var(--neutral-50);
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 0;
+  box-shadow: none;
+  color: var(--neutral-800);
+  cursor: var(--cursor-pointer);
+}
+
+.active {
+  box-shadow: 0 var(--4) var(--purple-300);
+}
+
+.tabContent {
+  width: 100%;
+  margin-top: var(--12);
+}

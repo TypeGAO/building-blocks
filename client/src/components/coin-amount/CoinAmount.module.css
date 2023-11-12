@@ -16,13 +16,13 @@ button .currency {
   margin-right: var(--2);
   padding-right: var(--2);
 
-  &.small {
-    width: 16px;
+  &.lg {
+    width: var(--24);
     height: auto;
   }
 
-  &.medium {
-    width: 15px;
+  &.md {
+    width: var(--16);
     height: auto;
   }
 }
@@ -30,6 +30,14 @@ button .currency {
 .quantity {
   font-weight: 700;
   color: var(--neutral-900);
+}
+
+.lg .quantity {
+  font-size: var(--20);
+}
+
+.md .quantity {
+  font-size: var(--16);
 }
 
 .small {

@@ -24,7 +24,7 @@ export const GameActivityProvider = ({
     nickname: "",
     role: "player",
     stage: "landing",
-    time: -1,
+    time: 600,
     players: [],
     questionSetId: 3,
   })
@@ -39,6 +39,7 @@ export const GameActivityProvider = ({
     submissions: 0,
     currentCode: "",
     lastOutput: "",
+    doneTime: ""
   })
 
   useEffect(() => {

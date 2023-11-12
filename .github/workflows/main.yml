@@ -1,17 +1,36 @@
 on:
   push:
     branches: [ main, unit_test ]
+<<<<<<< HEAD
   pull_request:
     branches: [ main, unit_test ]
+=======
+>>>>>>> main
   workflow_dispatch:
   
 jobs:
-  test:
+  unit_tests:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
     steps:
+    - uses: actions/checkout@v3
+    - name: Setup for tests and builds
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'yarn'
     - name: Test Server functions and services
+<<<<<<< HEAD
       run: yarn test
       working-directory: server
     - name: Client build error check
       run: yarn build
       working-directory: client
+=======
+      run: yarn install && yarn test
+      working-directory: ./server
+>>>>>>> main
