@@ -94,7 +94,6 @@ function App() {
       socket.disconnect()
     }
 
-
     const onStageChange = (stage: string) => {
       setGameActivity({
         ...gameActivity,
@@ -155,7 +154,7 @@ function App() {
       case "paused":
         return <PlayerPaused />
       case "done":
-        return <DoneEnded title="Done!" />
+        return <PlayerGame isDone />
       case "ended":
         return <DoneEnded title="Game Ended!" />
     }

@@ -6,15 +6,47 @@
   align-items: flex-end;
 }
 
-.crane {
+.craneContainer {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   top: 0;
   position: absolute;
+  z-index: 30;
+  transition: transform 0.9s ease;
+}
+
+.slideIn {
+  transform: translateX(0);
+}
+
+.slideOut {
+  transform: translateX(300px);
 }
 
 .tower {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  margin-bottom: -60px;
+  margin-bottom: -129px;
+  overflow-y: scroll;
+}
+
+.block {
+  transition: opacity 0.5s ease;
+}
+
+.newBlock {
+  transition: transform 0.9s ease;
+  opacity: 0;
+}
+
+.crane {
+  z-index: 30;
+}
+
+.craneBlock {
+  margin-top: -80px;
+  z-index: 29;
 }
