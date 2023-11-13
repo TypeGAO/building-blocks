@@ -21,7 +21,7 @@ function Timer() {
     }
 
     return () => clearInterval(interval);
-  }, [timeLeft])
+  }, [gameActivity, setGameActivity, timeLeft])
 
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
