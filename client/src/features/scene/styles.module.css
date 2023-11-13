@@ -6,6 +6,12 @@
   align-items: flex-end;
 }
 
+@media (max-width: 992px) {
+  .scene {
+    display: none;
+  }
+}
+
 .craneContainer {
   display: flex;
   flex-direction: column;

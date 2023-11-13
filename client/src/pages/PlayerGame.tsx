@@ -39,7 +39,7 @@ function PlayerGame({ isDone }: PlayerGameProps) {
             </div>
           </>
         )}
-        <div className={styles.col}>
+        <div className={styles.col} id={styles.scene}>
           <Scene showCrane={isDone ? false : true} />
         </div>
       </div>

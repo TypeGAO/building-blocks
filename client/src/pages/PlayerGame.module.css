@@ -44,6 +44,15 @@
   .col:last-child {
     flex-basis: 100%;
   }
+
+  .col#scenes {
+    display: none;
+    visibility: hidden;
+  }
+
+  .container {
+    overflow-y: scroll;
+  }
 }
 
 .col::-webkit-scrollbar {

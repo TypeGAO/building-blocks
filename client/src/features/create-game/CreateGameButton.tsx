@@ -11,7 +11,7 @@ function CreateGameButton() {
 
   return (
     <Button size="lg" color="blue" onClick={handleClick}>
-      Host your own game
+      Host a game
     </Button>
   )
 }
