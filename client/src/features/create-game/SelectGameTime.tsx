@@ -1,4 +1,3 @@
-import { useState } from "react"
 import useGameActivity from "../../hooks/useGameActivity"
 import { socket } from "../../socket"
 import { Button } from "../../components"
