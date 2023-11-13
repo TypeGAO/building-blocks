@@ -107,3 +107,56 @@
 #grade_13 {
   color: var(--purple-500);
 }
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--14);
+  margin-bottom: var(--20);
+}
+
+.card {
+  background-color: var(--neutral-50);
+  padding: var(--16);
+  border-radius: var(--6);
+  border: var(--4) solid var(--neutral-100);
+}
+
+.formHeading {
+  font-size: var(--20);
+  margin: var(--6) 0 var(--10) var(--0);
+  color: var(--neutral-900);
+}
+
+.selection {
+  display: inline-flex;
+  align-items: center;
+  margin-right: var(--12);
+  font-size: var(--16);
+  background: var(--blue-100);
+  padding: var(--6);
+  gap: var(--4);
+  border-radius: var(--4);
+  color: var(--neutral-900);
+  font-weight: 600;
+  margin: var(--6);
+}
+
+.selection input {
+  width: var(--20);
+}
+
+.fieldLabel {
+  font-size: var(--16);
+  font-weight: 600;
+  color: var(--neutral-800);
+  margin-bottom: var(--6);
+  display: block;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--6);
+  margin-bottom: var(--10);
+}
