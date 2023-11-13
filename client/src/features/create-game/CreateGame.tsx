@@ -2,7 +2,6 @@ import { useState } from "react"
 import SelectQuestionSet from "./SelectQuestionSet"
 import SelectGameTime from "./SelectGameTime"
 import styles from "./styles.module.css"
-import { Button } from "../../components"
 import { Link } from "react-router-dom"
 
 function CreateGame() {
