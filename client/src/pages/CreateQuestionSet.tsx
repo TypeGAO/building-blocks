@@ -1,10 +1,8 @@
-import { useNavigate, useParams } from "react-router-dom"
-import { QuestionBuilder } from "../features/create-game"
-import styles from "./CreateQuestions.module.css"
+import { useNavigate } from "react-router-dom"
 import { Button, Header } from "../components"
+import { QuestionSetBuilder } from "../features/create-game"
 
-function QuizCreation() {
-  const { setId } = useParams()
+function QuestionSetCreation() {
   const navigate = useNavigate()
 
   return (
@@ -24,12 +22,15 @@ function QuizCreation() {
           marginTop: "50px",
         }}
       >
-        <div className={styles.questionContainer}>
-          <QuestionBuilder setId={setId ? setId : "0"} />
+        <div
+          className="QuestionSetCreation"
+          style={{ display: "grid", width: "100%", gap: "var(--8)" }}
+        >
+          <QuestionSetBuilder />
         </div>
       </div>
     </>
   )
 }
 
-export default QuizCreation
+export default QuestionSetCreation

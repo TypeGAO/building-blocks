@@ -13,6 +13,8 @@ function GameHeader() {
     queryFn: () => fetchQuestionSetLength(gameActivity.questionSetId),
   })
 
+  console.log(gameActivity)
+
   const percentage: number =
     (currentPlayer.currentQuestion / questionSetLength) * 100
 
