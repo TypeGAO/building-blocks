@@ -1,0 +1,32 @@
+{
+    "SyntaxError": {
+      "definition": "Occurs when there is a mistake in the structure or grammar of your code, so the computer cannot figure out what you are trying to say."
+    },
+    "TypeError": {
+      "definition": "Occurs when a value is not the type that the computer expected, such as when you are trying to add a word to a number."
+    },
+    "ReferenceError": {
+      "definition": "Occurs when a variable is referenced but has not been declared beforehand in your code - the computer does not know what you are referring to."
+    },
+    "LogicError": {
+        "definition": "Occurs when the logic of your code is off - there is a mistake in the sequence of steps of your code that lead to unexpected results."
+    },
+    "RuntimeError": {
+        "definition": "Occurs while the program is running. This can be due to unexpected input or conditions."
+    },
+    "OverflowError": {
+        "definition": "Occurs when you are trying to store a number in a memory space that is too small to hold that number, causing your code to crash."
+    },
+    "DivisionByZeroError": {
+        "definition": "Occurs when somewhere in your code, you are attempting to divide a number by zero, which is impossible."
+    },
+    "InfiniteLoopError": {
+        "definition": "Occurs when there is a loop in your code that never ends, so the program will run forever if not stopped."
+    },
+    "NullPointerExceptionError": {
+        "definition": "Occurs when you are trying to use a variable that does not point to any data (so it is \"null\")."
+    },
+    "FileNotFoundError": {
+        "definition": "Occurs when your code is trying to access or use a file that does not exist, so the program fails."
+    }
+}
