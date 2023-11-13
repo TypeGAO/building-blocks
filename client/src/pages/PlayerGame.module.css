@@ -3,7 +3,7 @@
   height: calc(100vh - var(--48));
   width: 100%;
   position: fixed;
-  overflow-y: auto;
+  overflow: inherit;
   top: var(--52);
 }
 
@@ -65,4 +65,12 @@
 
 .hintContainer {
   margin-top: var(--16);
+}
+
+.confetti {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
 }

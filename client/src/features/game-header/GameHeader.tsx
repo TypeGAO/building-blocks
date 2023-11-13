@@ -21,7 +21,8 @@ function GameHeader() {
       <div className={styles.left}>
         <div className={styles.leftContainer}>
           {(gameActivity.stage === "started" ||
-            gameActivity.stage === "paused") && (
+            gameActivity.stage === "paused" ||
+            gameActivity.stage === "done") && (
             <>
               <div className={styles.leftItem}>
                 <ProgressBar percentage={percentage} />
