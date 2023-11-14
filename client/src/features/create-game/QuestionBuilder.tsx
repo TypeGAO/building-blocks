@@ -32,7 +32,7 @@ function QuestionBuilder({ setId }: QuestionSetIDProps) {
     {
       title: "",
       question: "",
-      starter_code: "",
+      starter_code: "def <function_name>(n): # Don't change this line!\n    return 0",
       //Stores the cases for the output's mapping function
       test_cases_storage: [["", ""]],
       public_tests_storage: [["", ""]],
@@ -51,9 +51,22 @@ function QuestionBuilder({ setId }: QuestionSetIDProps) {
       navigate(`/`)
     },
     onError: () => {
-      toast.error("Can't send the data")
+      toast.error("Error Creating Set")
     },
   })
+
+  const handleStarterCodeChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+  ) => {
+    const newQuestions = [...theQuestions]
+    const updatedQuestion = { ...newQuestions[index] }
+
+    updatedQuestion.starter_code = e
+
+    newQuestions[index] = updatedQuestion
+    setTheQuestions(newQuestions)
+  }
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -93,8 +106,7 @@ function QuestionBuilder({ setId }: QuestionSetIDProps) {
           updatedQuestion.test_cases.input += "\n"
           updatedQuestion.test_cases.expected_output += "\n"
         }
-        updatedQuestion.test_cases.input +=
-          updatedQuestion.test_cases_storage[i][0]
+        updatedQuestion.test_cases.input += ( "print(" + updatedQuestion.test_cases_storage[i][0] + ")" )
         updatedQuestion.test_cases.expected_output +=
           updatedQuestion.test_cases_storage[i][1]
       }
@@ -181,11 +193,11 @@ function QuestionBuilder({ setId }: QuestionSetIDProps) {
               <Editor
                 value={item.starter_code}
                 height="300px"
-                defaultValue={`def challenge(n): \n  return 0`}
+                defaultValue={`def <function_name>(n): # Don't change this line!\n    return 0`}
                 defaultLanguage="python"
                 options={options}
                 loading={<Spinner color="neutral" />}
-                onChange={(e) => handleChange(e, index)}
+                onChange={(e) => handleStarterCodeChange(e, index)}
               />
             </div>
           </div>

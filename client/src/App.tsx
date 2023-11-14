@@ -43,6 +43,7 @@ function App() {
         role: data.role,
         time: data.time,
         players: data.players,
+        questionSetId: data.questionSetId,
       })
     }
 
@@ -54,6 +55,7 @@ function App() {
         role: data.role,
         time: data.time,
         players: data.players,
+        questionSetId: data.questionSetId,
       })
     }
 

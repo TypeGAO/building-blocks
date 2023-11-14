@@ -25,7 +25,10 @@ export async function addQuestionSet(questionSetData: QuestionSet) {
 }
 
 export async function addQuestions(questionSetData: Questions[]) {
-  const res = await axiosClient.post("/questions/addQuestion", questionSetData)
+  let res;
+  for (let i = 0; i < questionSetData.length; i++) {
+    res = await axiosClient.post("/questions/addQuestion", questionSetData[i])
+  }
   return res
 }
 
