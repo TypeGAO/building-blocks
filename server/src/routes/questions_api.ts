@@ -9,10 +9,10 @@ const router = new Router();
 
 router.post('/addQuestion', async (req: Request, res: Response) => {
     try {
-        const { question, starter_code, question_set_id, test_cases, public_tests } = req.body;
-        let strSQL = `INSERT INTO questions (question, starter_code, question_set_id, test_cases, public_tests)
-                      VALUES ($1, $2, $3, $4, $5) RETURNING *`;
-        const { rows } = await query(strSQL, [question, starter_code, question_set_id, test_cases, public_tests]);
+        const { question, starter_code, question_set_id, test_cases, public_tests, title } = req.body;
+        let strSQL = `INSERT INTO questions (question, starter_code, question_set_id, test_cases, public_tests, title)
+                      VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
+        const { rows } = await query(strSQL, [question, starter_code, question_set_id, test_cases, public_tests, title]);
         res.send(rows[0]);
     } catch (error) {
         res.status(500).json({ message: 'Error Adding Question' });

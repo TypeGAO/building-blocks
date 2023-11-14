@@ -1,4 +1,5 @@
 import { useQuery } from "react-query"
+import { useEffect } from "react"
 
 import { CoinAmount, ProgressBar } from "../../components"
 import useGameActivity from "../../hooks/useGameActivity"
@@ -8,12 +9,10 @@ import { fetchQuestionSetLength } from "../../api"
 function GameHeader() {
   const { gameActivity, currentPlayer } = useGameActivity()
 
-  const { data: questionSetLength } = useQuery({
+  const { data: questionSetLength, refetch } = useQuery({
     queryKey: ["fetchQuestionSetLength"],
     queryFn: () => fetchQuestionSetLength(gameActivity.questionSetId),
   })
-
-  console.log(gameActivity)
 
   const percentage: number =
     (currentPlayer.currentQuestion / questionSetLength) * 100
