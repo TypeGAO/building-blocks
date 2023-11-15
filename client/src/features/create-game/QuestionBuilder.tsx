@@ -3,7 +3,7 @@ import { useState } from "react"
 import { useMutation } from "react-query"
 import toast from "react-hot-toast"
 
-import { Button, Input, Spinner } from "../../components"
+import { Button, Input, Spinner, TextArea } from "../../components"
 import { useNavigate } from "react-router-dom"
 import { addQuestions } from "../../api"
 import styles from "./styles.module.css"
@@ -139,7 +139,7 @@ function QuestionBuilder({ setId }: QuestionSetIDProps) {
 
   const anotherPublicTestCase = (index: number) => {
     setTheQuestions((prevQuestions) => {
-      const updatedQuestions = [...prevQuestions]
+      const updatedQuestions = JSON.parse(JSON.stringify(prevQuestions))
       const currentQuestion = updatedQuestions[index]
       currentQuestion.public_tests_storage.push(["", ""])
       return updatedQuestions
@@ -148,7 +148,7 @@ function QuestionBuilder({ setId }: QuestionSetIDProps) {
 
   const anotherPrivateTestCase = (index: number) => {
     setTheQuestions((prevQuestions) => {
-      const updatedQuestions = [...prevQuestions]
+      const updatedQuestions = JSON.parse(JSON.stringify(prevQuestions))
       const currentQuestion = updatedQuestions[index]
       currentQuestion.test_cases_storage.push(["", ""])
       return updatedQuestions
@@ -215,7 +215,8 @@ function QuestionBuilder({ setId }: QuestionSetIDProps) {
                     value={item.public_tests_storage[public_index][0]}
                     onChange={(e) => handleChange(e, index, public_index)}
                   />
-                  <Input
+                  <TextArea
+                    rows="4"
                     type="text"
                     name="public_tests_output"
                     placeholder={"Test Case Output #" + (index + 1)}
@@ -251,7 +252,8 @@ function QuestionBuilder({ setId }: QuestionSetIDProps) {
                     value={item.test_cases_storage[test_index][0]}
                     onChange={(e) => handleChange(e, index, test_index)}
                   />
-                  <Input
+                  <TextArea
+                    rows="4"
                     type="text"
                     name="test_case_output"
                     placeholder={"Test Case Output #" + (test_index + 1)}

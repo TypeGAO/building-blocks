@@ -130,7 +130,7 @@ function QuestionSetBuilder() {
 
       <div>
         <Button color="green" size="lg" onClick={handleClick}>
-          Save
+          Next
         </Button>
       </div>
     </div>

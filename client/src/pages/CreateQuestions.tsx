@@ -11,7 +11,7 @@ function QuizCreation() {
     <>
       <Header
         leftElement={
-          <Button size="lg" onClick={() => navigate("/")}>
+          <Button size="lg" onClick={() => navigate("/host/questions/create")}>
             Back
           </Button>
         }

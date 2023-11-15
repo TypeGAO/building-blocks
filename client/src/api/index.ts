@@ -24,6 +24,11 @@ export async function addQuestionSet(questionSetData: QuestionSet) {
   return res
 }
 
+export async function deleteQuestionSet(id: number) {
+  const res = await axiosClient.delete(`/questionSets/deleteQuestionSet/${id}`)
+  return res
+}
+
 export async function addQuestions(questionSetData: Questions[]) {
   let res;
   for (let i = 0; i < questionSetData.length; i++) {
