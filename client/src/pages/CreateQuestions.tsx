@@ -11,7 +11,7 @@ function QuizCreation() {
     <>
       <Header
         leftElement={
-          <Button size="lg" onClick={() => navigate("/")}>
+          <Button size="lg" onClick={() => navigate("/host/questions/create")}>
             Back
           </Button>
         }
@@ -25,7 +25,7 @@ function QuizCreation() {
         }}
       >
         <div className={styles.questionContainer}>
-          <QuestionBuilder setId={setId ? setId : "0"} />
+          <QuestionBuilder />
         </div>
       </div>
     </>

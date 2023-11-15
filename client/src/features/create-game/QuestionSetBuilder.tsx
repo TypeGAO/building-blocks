@@ -3,7 +3,7 @@ import { useMutation, useQuery } from "react-query"
 import toast from "react-hot-toast"
 import { Button, Input, Spinner } from "../../components"
 import { useNavigate } from "react-router-dom"
-import { fetchCategories, addQuestionSet } from "../../api"
+import { fetchCategories } from "../../api"
 import styles from "./styles.module.css"
 import { QuestionSet } from "../../types"
 import { Categories } from "../../types"
@@ -29,16 +29,6 @@ function QuestionSetBuilder() {
   })
 
   const navigate = useNavigate()
-  const { mutate } = useMutation({
-    mutationFn: (question_set: QuestionSet) => addQuestionSet(question_set),
-
-    onSuccess: (res) => {
-      navigate(`/host/questions/${res.data.id}`)
-    },
-    onError: () => {
-      toast.error("Unable to send question data")
-    },
-  })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
@@ -66,7 +56,10 @@ function QuestionSetBuilder() {
   }
 
   const handleClick = () => {
-    mutate(question_set)
+    // Bad code
+    let questionSetString = JSON.stringify(question_set)
+    localStorage.setItem("questionSet", questionSetString)
+    navigate(`/host/questions/add`)
   }
 
   return (
@@ -130,7 +123,7 @@ function QuestionSetBuilder() {
 
       <div>
         <Button color="green" size="lg" onClick={handleClick}>
-          Save
+          Next
         </Button>
       </div>
     </div>
