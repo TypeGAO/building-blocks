@@ -1,10 +1,9 @@
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { QuestionBuilder } from "../features/create-game"
 import styles from "./CreateQuestions.module.css"
 import { Button, Header } from "../components"
 
 function QuizCreation() {
-  const { setId } = useParams()
   const navigate = useNavigate()
 
   return (

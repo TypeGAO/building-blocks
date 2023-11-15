@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useMutation, useQuery } from "react-query"
+import { useQuery } from "react-query"
 import toast from "react-hot-toast"
 import { Button, Input, Spinner } from "../../components"
 import { useNavigate } from "react-router-dom"
@@ -57,6 +57,7 @@ function QuestionSetBuilder() {
 
   const handleClick = () => {
     // Bad code
+    localStorage.clear()
     let questionSetString = JSON.stringify(question_set)
     localStorage.setItem("questionSet", questionSetString)
     navigate(`/host/questions/add`)
