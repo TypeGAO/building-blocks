@@ -18,7 +18,7 @@ function TextArea({
   error,
   rows,
   ...props
-}: InputProps) {
+}: TextAreaProps) {
   return (
     <textarea
       rows={rows}
