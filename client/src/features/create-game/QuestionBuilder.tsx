@@ -5,14 +5,10 @@ import toast from "react-hot-toast"
 
 import { Button, Input, Spinner, TextArea } from "../../components"
 import { useNavigate } from "react-router-dom"
-import { addQuestions } from "../../api"
+import { addQuestions, addQuestionSet } from "../../api"
 import styles from "./styles.module.css"
 import { Questions } from "../../types"
 import { Editor } from "@monaco-editor/react"
-
-interface QuestionSetIDProps {
-  setId: string
-}
 
 const options = {
   selectOnLineNumbers: true,
@@ -27,7 +23,7 @@ const options = {
   },
 }
 
-function QuestionBuilder({ setId }: QuestionSetIDProps) {
+function QuestionBuilder() {
   const [theQuestions, setTheQuestions] = useState<Questions[]>([
     {
       title: "",
@@ -39,21 +35,10 @@ function QuestionBuilder({ setId }: QuestionSetIDProps) {
       //Stores the JSONB format that will be send to the database
       test_cases: { input: "", expected_output: "" },
       public_tests: { input: [], output: [] },
-      question_set_id: parseInt(setId, 10),
     },
   ])
 
   const navigate = useNavigate()
-  const { mutate } = useMutation({
-    mutationFn: (theQuestions: Questions[]) => addQuestions(theQuestions),
-
-    onSuccess: (res) => {
-      navigate(`/`)
-    },
-    onError: () => {
-      toast.error("Error Creating Set")
-    },
-  })
 
   const handleStarterCodeChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -132,7 +117,6 @@ function QuestionBuilder({ setId }: QuestionSetIDProps) {
         public_tests_storage: [["", ""]],
         test_cases: { input: "", expected_output: "" },
         public_tests: { input: [], output: [] },
-        question_set_id: parseInt(setId, 10),
       },
     ])
   }
@@ -155,8 +139,17 @@ function QuestionBuilder({ setId }: QuestionSetIDProps) {
     })
   }
 
-  const nextPage = () => {
-    mutate(theQuestions)
+  const nextPage = async () => {
+    // Bad code
+    const question_set = JSON.parse(localStorage.getItem("questionSet"))
+    const res = await addQuestionSet(question_set)
+    await addQuestions(theQuestions.map((q: Questions) => {
+      return {...q, 
+               question_set_id: res.data.id
+             }
+    }))
+    localStorage.clear()
+    navigate(`/`)
   }
 
   return (
