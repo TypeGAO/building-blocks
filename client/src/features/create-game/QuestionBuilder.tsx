@@ -209,7 +209,7 @@ function QuestionBuilder() {
                     onChange={(e) => handleChange(e, index, public_index)}
                   />
                   <TextArea
-                    rows="4"
+                    rows={4}
                     type="text"
                     name="public_tests_output"
                     placeholder={"Test Case Output #" + (index + 1)}
@@ -246,7 +246,7 @@ function QuestionBuilder() {
                     onChange={(e) => handleChange(e, index, test_index)}
                   />
                   <TextArea
-                    rows="4"
+                    rows={4}
                     type="text"
                     name="test_case_output"
                     placeholder={"Test Case Output #" + (test_index + 1)}

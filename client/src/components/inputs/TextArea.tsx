@@ -7,7 +7,7 @@ interface TextAreaProps
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
   placeholder?: string
   error?: boolean
-  rows: string
+  rows: number
 }
 
 function TextArea({
