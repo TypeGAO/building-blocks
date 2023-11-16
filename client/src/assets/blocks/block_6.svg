@@ -1,5 +1,26 @@
 <svg width="244" height="266" viewBox="0 0 244 266" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M121.611 132.517L0.000976562 66.0261L0.000973469 199.009L121.611 265.5L121.611 132.517Z" fill="#FCB193"/>
-<path d="M243.22 66.0262L121.61 132.517L121.61 265.5L243.22 199.009L243.22 66.0262Z" fill="#E18865"/>
-<path d="M243.22 66.4913L121.61 0L0.000359538 66.4913L121.61 132.983L243.22 66.4913Z" fill="#FDCFBD"/>
+<path d="M121.611 133.017L0.000976562 66.526L0.000973469 199.509L121.611 266L121.611 133.017Z" fill="#FCE593"/>
+<path d="M243.221 66.5262L121.611 133.017L121.611 266L243.221 199.509L243.221 66.5262Z" fill="#E1C665"/>
+<path d="M243.221 67.0347L121.611 0.543457L0.0013361 67.0347L121.611 133.526L243.221 67.0347Z" fill="#FDEFBD"/>
+<mask id="mask0_668_260" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="143" y="106" width="70" height="120">
+<rect width="80" height="80" transform="matrix(0.866025 -0.5 0 1 143 146)" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_668_260)">
+<rect width="80" height="80" transform="matrix(0.866025 0.5 0 1 143 66)" fill="#D9D9D9"/>
+<rect width="80" height="80" transform="matrix(0.866025 -0.5 0.866025 0.5 73.7178 186)" fill="white"/>
+</g>
+<mask id="mask1_668_260" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="22" y="106" width="70" height="120">
+<rect width="80" height="80" transform="matrix(-0.866025 -0.5 0 1 91.2822 146)" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask1_668_260)">
+<rect width="80" height="80" transform="matrix(-0.866025 0.5 0 1 91.2822 66)" fill="#D9D9D9"/>
+<rect width="80" height="80" transform="matrix(-0.866025 -0.5 -0.866025 0.5 160.564 186)" fill="white"/>
+</g>
+<mask id="mask2_668_260" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="47" y="30" width="139" height="80">
+<rect width="80" height="80" transform="matrix(0.866025 0.5 -0.866025 0.5 116.282 30)" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask2_668_260)">
+<rect width="80" height="80" transform="matrix(0.866025 0.5 0 1 116.282 30)" fill="white"/>
+<rect width="80" height="80" transform="matrix(0.866025 -0.5 0 1 47 70)" fill="#D9D9D9"/>
+</g>
 </svg>

@@ -1,5 +1,12 @@
 <svg width="244" height="266" viewBox="0 0 244 266" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M121.611 132.517L0.000976562 66.0261L0.000973469 199.009L121.611 265.5L121.611 132.517Z" fill="#AAFC93"/>
-<path d="M243.22 66.0263L121.61 132.518L121.61 265.5L243.22 199.009L243.22 66.0263Z" fill="#80E165"/>
-<path d="M243.22 66.4913L121.61 0L0.000359538 66.4913L121.61 132.983L243.22 66.4913Z" fill="#CBFDBD"/>
+<path d="M121.717 132.517L0.107422 66.0262L0.107419 199.009L121.717 265.5L121.717 132.517Z" fill="#93FCB1"/>
+<path d="M243.327 66.0262L121.717 132.517L121.717 265.5L243.327 199.009L243.327 66.0262Z" fill="#65E188"/>
+<path d="M243.327 66.4913L121.717 0L0.106805 66.4913L121.717 132.983L243.327 66.4913Z" fill="#BDFDCF"/>
+<mask id="mask0_668_262" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="27" y="106" width="70" height="120">
+<rect width="80" height="80" transform="matrix(-0.866025 -0.5 0 1 96.2822 146)" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_668_262)">
+<rect width="80" height="80" transform="matrix(-0.866025 0.5 0 1 96.2822 66)" fill="#D9D9D9"/>
+<rect width="80" height="80" transform="matrix(-0.866025 -0.5 -0.866025 0.5 165.564 186)" fill="white"/>
+</g>
 </svg>
