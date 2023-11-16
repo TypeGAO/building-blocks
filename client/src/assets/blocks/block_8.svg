@@ -2,4 +2,11 @@
 <path d="M121.611 133.017L0.000976562 66.5261L0.000973469 199.509L121.611 266L121.611 133.017Z" fill="#FC93AA"/>
 <path d="M243.22 66.5263L121.61 133.018L121.61 266L243.22 199.509L243.22 66.5263Z" fill="#E16580"/>
 <path d="M243.22 66.9913L121.61 0.5L0.000359538 66.9913L121.61 133.483L243.22 66.9913Z" fill="#FDBDCB"/>
+<mask id="mask0_668_263" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="53" y="27" width="139" height="80">
+<rect width="80" height="80" transform="matrix(-0.866025 0.5 0.866025 0.5 122.282 27)" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_668_263)">
+<rect width="80" height="80" transform="matrix(-0.866025 -0.5 0 1 122.282 27)" fill="white"/>
+<rect width="80" height="80" transform="matrix(-0.866025 0.5 0 1 191.564 -13)" fill="#D9D9D9"/>
+</g>
 </svg>

@@ -36,7 +36,7 @@
   flex-direction: column;
   justify-content: center;
   margin-bottom: -129px;
-  overflow-y: scroll;
+  overflow: hidden;
 }
 
 .block {
@@ -44,7 +44,7 @@
 }
 
 .newBlock {
-  transition: transform 0.9s ease;
+  transition: transform 0.9s ease-out;
   opacity: 0;
 }
 

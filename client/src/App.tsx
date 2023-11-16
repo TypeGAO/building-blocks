@@ -12,7 +12,6 @@ import HostLobby from "./pages/HostLobby"
 import HostCreating from "./pages/HostCreating"
 import HostGame from "./pages/HostGame"
 import PlayerPaused from "./pages/PlayerPaused"
-import DoneEnded from "./pages/DoneEnded"
 
 /**
  * App Component
@@ -158,7 +157,7 @@ function App() {
       case "done":
         return <PlayerGame isDone />
       case "ended":
-        return <DoneEnded title="Game Ended!" />
+        return <PlayerGame isDone />
     }
   }
 
