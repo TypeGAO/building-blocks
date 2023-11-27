@@ -1,11 +1,8 @@
 on:
   push:
     branches: [ main, unit_test ]
-<<<<<<< HEAD
   pull_request:
     branches: [ main, unit_test ]
-=======
->>>>>>> main
   workflow_dispatch:
   
 jobs:
