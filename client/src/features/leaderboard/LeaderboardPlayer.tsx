@@ -17,7 +17,6 @@ function LeaderboardPlayer({
   score,
   questionSetLength,
   currentQuestion,
-  doneTime,
 }: LeaderboardPlayerProps) {
   const [key, setKey] = useState(0)
   const [animationClass, setAnimationClass] = useState("")
@@ -59,7 +58,7 @@ function LeaderboardPlayer({
           {currentQuestion ? (
             <ProgressBar percentage={percentage} />
           ) : (
-            <span className={styles.playerTime}>{doneTime}</span>
+            <span className={styles.playerTime}></span>
           )}
         </div>
         <div>
