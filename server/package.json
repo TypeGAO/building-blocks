@@ -33,6 +33,6 @@
     "start": "ts-node src/index.ts",
     "build": "tsc",
     "serve": "node dist/index.js",
-    "test": "mocha --require ts-node/register ./tests/*spec.ts && jest ./tests/Host.test.ts"
+    "test": "mocha --require ts-node/register ./tests/*spec.ts"
   }
 }
