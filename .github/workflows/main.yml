@@ -21,5 +21,5 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
     - name: Test Server functions and services
-      run: yarn install && yarn test
-      working-directory: ./server
+      run: yarn install && cd server && yarn test
+      working-directory: .

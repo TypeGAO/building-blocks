@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { Player, GameActivity } from '../../types';
-import { addPlayer } from "../../../services/generateGameService";
 import { getGameActivity, setGameActivity, getExpectedOutput, runCode, getQuestionIds, getStarterCode, getInput, getPublicInput } from "../../../services/gameManagerService";
+
 
 
 /**
@@ -61,6 +61,9 @@ const playerSocketConnection = (io: Server) => {
             // Add a player, and save game activity
             game_activity.players.push(new_player);
             await setGameActivity(game_activity, roomId);
+
+            //Start Docker container for running player code
+            createContainer(nickname);
 
             // Send the new game activity to the host and all clients
             game_activity.role = "host";
@@ -204,6 +207,9 @@ const playerSocketConnection = (io: Server) => {
       if (connectedPlayers.has(socket.id)) {
         const { roomId, nickname } = connectedPlayers.get(socket.id);
 
+        //Delete Docker container
+        killContainer(nickname);
+
         // Delete it from the Map of all players
         connectedPlayers.delete(socket.id);
       }
@@ -213,6 +219,9 @@ const playerSocketConnection = (io: Server) => {
       // Find the player based on socket id
       if (connectedPlayers.has(socket.id)) {
         const { roomId, nickname } = connectedPlayers.get(socket.id);
+
+        //Delete Docker container
+        killContainer(nickname);
 
         // Delete it from the Map of all players
         connectedPlayers.delete(socket.id);
