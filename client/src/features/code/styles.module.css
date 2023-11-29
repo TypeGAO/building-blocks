@@ -16,3 +16,59 @@
   right: var(--24);
   z-index: 15;
 }
+
+.editor {
+  background-color: var(--neutral-50);
+  border-radius: var(--6);
+  border: var(--6) solid var(--neutral-300);
+  height: 50vh;
+  box-shadow: inset 0 -10px var(--neutral-100);
+  padding-bottom: var(--10);
+}
+
+.console {
+  display: block;
+  text-align: left;
+  height: 30vh;
+  border: var(--6) solid var(--neutral-950);
+  border-bottom-width: var(--12);
+  border-radius: var(--8);
+  background-color: var(--neutral-900);
+  font-family: "Roboto Mono";
+  padding: var(--10) var(--16) var(--28) var(--16);
+}
+
+.console .title {
+  font-weight: 700;
+  font-family: var(--font);
+  font-size: var(--16);
+  color: var(--neutral-300);
+  padding: var(--6) var(--0);
+  margin-bottom: var(--8);
+}
+
+.console .content {
+  font-weight: 700;
+  font-size: var(--16);
+  color: var(--neutral-200);
+  font-weight: 400;
+  height: 90%;
+  overflow-y: scroll;
+}
+
+.console .content::-webkit-scrollbar {
+  max-width: var(--12);
+}
+
+.console .content::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+.console .content::-webkit-scrollbar-thumb {
+  background: var(--neutral-400);
+  width: var(--12);
+}
+
+.console .content::-webkit-scrollbar-thumb:hover {
+  background: var(--neutral-300);
+}

@@ -30,6 +30,12 @@
   max-width: 300px;
 }
 
+@media (max-width: 992px) {
+  .left .leftItem {
+    max-width: 100px;
+  }
+}
+
 .left .leftItem span {
   color: var(--neutral-900);
 }

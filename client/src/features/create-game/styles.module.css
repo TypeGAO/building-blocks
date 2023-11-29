@@ -1,0 +1,162 @@
+.stepContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--12);
+  padding-left: var(--16);
+  padding-right: var(--16);
+}
+
+.stepContainer#timeStep {
+  margin-top: var(--128);
+}
+
+.timeContainer {
+  display: flex;
+  flex-direction: row;
+  gap: var(--10);
+}
+
+.title {
+  font-size: var(--28);
+}
+
+.questionSetGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .questionSetGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.noResults {
+  line-height: var(--24);
+  color: var(--neutral-700);
+}
+
+.questionSet {
+  border: var(--2) solid var(--neutral-200);
+  border-bottom-width: var(--6);
+  border-radius: var(--8);
+  padding: var(--24) var(--20);
+  display: flex;
+  flex-direction: column;
+  gap: var(--10);
+}
+
+.questionSet:hover {
+  cursor: var(--cursor-pointer);
+  transform: rotate(1deg);
+}
+
+.questionSetGrade {
+  font-size: var(--14);
+  font-weight: 600;
+}
+
+.questionSetTitle {
+  margin: 0;
+  color: var(--neutral-900);
+  font-weight: 700;
+  font-size: var(--20);
+  line-height: var(--28);
+}
+
+.questionSetDesc {
+  margin: 0;
+  font-size: var(--16);
+  font-weight: 400;
+  color: var(--neutral-700);
+  line-height: var(--24);
+}
+
+.questionSetTagContainer {
+  display: inline-flex;
+  flex-direction: row;
+  gap: var(--6);
+}
+
+.questionSetTag {
+  background: var(--neutral-900);
+  padding: var(--4) var(--8);
+  color: var(--neutral-100);
+  font-weight: 600;
+  border-radius: var(--2);
+  font-size: var(--14);
+}
+
+#grade_6,
+#grade_7,
+#grade_8 {
+  color: #ecb800;
+}
+
+#grade_9,
+#grade_10 {
+  color: var(--green-500);
+}
+
+#grade_11,
+#grade_12 {
+  color: var(--blue-500);
+}
+
+#grade_13 {
+  color: var(--purple-500);
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--14);
+  margin-bottom: var(--20);
+}
+
+.card {
+  background-color: var(--neutral-50);
+  padding: var(--16);
+  border-radius: var(--6);
+  border: var(--4) solid var(--neutral-100);
+}
+
+.formHeading {
+  font-size: var(--20);
+  margin: var(--6) 0 var(--10) var(--0);
+  color: var(--neutral-900);
+}
+
+.selection {
+  display: inline-flex;
+  align-items: center;
+  margin-right: var(--12);
+  font-size: var(--16);
+  background: var(--blue-100);
+  padding: var(--6);
+  gap: var(--4);
+  border-radius: var(--4);
+  color: var(--neutral-900);
+  font-weight: 600;
+  margin: var(--6);
+}
+
+.selection input {
+  width: var(--20);
+}
+
+.fieldLabel {
+  font-size: var(--16);
+  font-weight: 600;
+  color: var(--neutral-800);
+  margin-bottom: var(--6);
+  display: block;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--6);
+  margin-bottom: var(--10);
+}

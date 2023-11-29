@@ -9,6 +9,7 @@ import Landing from "./pages/Landing"
 import PlayerLobby from "./pages/PlayerLobby"
 import PlayerGame from "./pages/PlayerGame"
 import HostLobby from "./pages/HostLobby"
+import HostCreating from "./pages/HostCreating"
 import HostGame from "./pages/HostGame"
 import PlayerPaused from "./pages/PlayerPaused"
 
@@ -41,6 +42,7 @@ function App() {
         role: data.role,
         time: data.time,
         players: data.players,
+        questionSetId: data.questionSetId,
       })
     }
 
@@ -52,6 +54,7 @@ function App() {
         role: data.role,
         time: data.time,
         players: data.players,
+        questionSetId: data.questionSetId,
       })
     }
 
@@ -88,6 +91,10 @@ function App() {
       toast.error(`${msg}`)
     }
 
+    const onEnded = () => {
+      socket.disconnect()
+    }
+
     const onStageChange = (stage: string) => {
       setGameActivity({
         ...gameActivity,
@@ -106,6 +113,7 @@ function App() {
     socket.on("wrong", onWrong)
     socket.on("message", onMessage)
     socket.on("stageChange", onStageChange)
+    socket.on("ended", onEnded)
 
     return () => {
       socket.off("roomCreated", onRoomCreated)
@@ -119,6 +127,7 @@ function App() {
       socket.off("wrong", onWrong)
       socket.off("message", onMessage)
       socket.off("stageChange", onStageChange)
+      socket.off("ended", onEnded)
     }
   }, [gameActivity, setGameActivity])
 
@@ -126,10 +135,14 @@ function App() {
     switch (gameActivity.stage) {
       case "lobby":
         return <HostLobby />
+      case "creating":
+        return <HostCreating />
       case "started":
         return <HostGame />
       case "paused":
         return <HostGame isPaused />
+      case "ended":
+        return <HostGame isEnded />
     }
   }
 
@@ -142,7 +155,9 @@ function App() {
       case "paused":
         return <PlayerPaused />
       case "done":
-        return <h1>DONE!</h1>
+        return <PlayerGame isDone />
+      case "ended":
+        return <PlayerGame isDone />
     }
   }
 

@@ -1,11 +1,32 @@
+import { useEffect, useState } from "react"
+
 import { Header } from "../components"
 import { EnterGame } from "../features/enter-game"
 import { CreateGameButton } from "../features/create-game"
 
 function Landing() {
+  const [isScreenSmall, setIsScreenSmall] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsScreenSmall(window.innerWidth < 600)
+    }
+
+    handleResize()
+    window.addEventListener("resize", handleResize)
+
+    return () => {
+      window.removeEventListener("resize", handleResize)
+    }
+  }, [])
+
   return (
     <>
-      <Header rightElement={<CreateGameButton />} />
+      {isScreenSmall ? (
+        <Header />
+      ) : (
+        <Header rightElement={<CreateGameButton />} />
+      )}
       <div
         style={{
           display: "flex",

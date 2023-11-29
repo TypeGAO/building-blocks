@@ -7,6 +7,7 @@ import { GameActivityProvider } from "./contexts/GameActivityProvider"
 
 import App from "./App"
 import QuizCreation from "./pages/CreateQuestions"
+import QuestionSetCreation from "./pages/CreateQuestionSet"
 
 import "./index.css"
 import "./styles/colors.css"
@@ -22,8 +23,12 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: "/host/create",
+    path: "/host/questions/:setId",
     element: <QuizCreation />,
+  },
+  {
+    path: "/host/questions/create",
+    element: <QuestionSetCreation />,
   },
 ])
 

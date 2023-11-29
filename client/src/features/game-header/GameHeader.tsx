@@ -21,7 +21,8 @@ function GameHeader() {
       <div className={styles.left}>
         <div className={styles.leftContainer}>
           {(gameActivity.stage === "started" ||
-            gameActivity.stage === "paused") && (
+            gameActivity.stage === "paused" ||
+            gameActivity.stage === "done") && (
             <>
               <div className={styles.leftItem}>
                 <ProgressBar percentage={percentage} />
@@ -40,7 +41,7 @@ function GameHeader() {
       <div className={styles.right}>
         <div className={styles.nickname}>{currentPlayer.nickname}</div>
         <div>
-          <CoinAmount amount={currentPlayer.score} size="sm" />
+          <CoinAmount amount={currentPlayer.score} size="md" />
         </div>
       </div>
     </div>

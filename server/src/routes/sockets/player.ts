@@ -1,10 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { Player, GameActivity } from '../../types';
-import { addPlayer } from "../../../services/generateGameService";
-import { getGameActivity, setGameActivity, getExpectedOutput, getQuestionIds, getStarterCode } from "../../../services/gameManagerService";
-import { createContainer } from "../../../services/runCode/createContainerService";
-import { runCode } from "../../../services/runCode/runCodeService";
-import { killContainer } from "../../../services/runCode/killContainerService";
+import { getGameActivity, setGameActivity, getExpectedOutput, runCode, getQuestionIds, getStarterCode, getInput, getPublicInput } from "../../../services/gameManagerService";
+
 
 
 /**
@@ -86,8 +83,8 @@ const playerSocketConnection = (io: Server) => {
       }
     });
 
-    socket.on("createHint", async (roomId: string, nickname: string, game_activity: any) => {
-        //const game_activity = await getGameActivity(roomId);
+    socket.on("createHint", async (roomId: string, nickname: string) => {
+        const game_activity = await getGameActivity(roomId);
         game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).score -= 150;
             
         // Save and send game activity
@@ -119,13 +116,27 @@ const playerSocketConnection = (io: Server) => {
         // Save current code (for pause)
         game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentCode = code.replace(/\\"/g, '"');
 
-        // TODO: multiple test cases?
+        // Input for test cases
+        const input = await getInput(questionId);
+
+        // Extract function only, no extra print statements
+        const regex = /^def\s+\w+\s*\([^)]*\)\s*:.+\n(?:\s{4}.+\n)+/m; 
+        // Add input because regex needs at least one unindented line after function body ¯\_(ツ)_/¯
+        const match = (code+input).match(regex);
+
         // Run code, get test case expected output, compare it to output
-        //console.log(code);
-        const output = await runCode(code, nickname);
-        //console.log(output);
+        // Public output to not reveal hidden tests
+        let public_output = await runCode(code);
+        const output = await runCode((match ? match[0] : "") + input.replace(/"/g, '\\"'));
         const expected_output = await getExpectedOutput(questionId);
-        const code_correct = output === expected_output;
+
+        // Test for correct test case output, and make sure no errors in user code
+        // outside the fuction body
+        const code_correct = output === expected_output && (!public_output.includes('Traceback'));
+        // Test for errors (syntax is not checked for uncalled funtions)
+        if (output.includes('Traceback')) {
+            public_output = output;
+        }
 
         // Get submissions
         const submissions = game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).submissions;
@@ -141,7 +152,7 @@ const playerSocketConnection = (io: Server) => {
             game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).submissions = 0;
 
             // Add building block id
-            const block_id = Math.floor(Math.random() * 30) + 1;
+            const block_id = Math.floor(Math.random() * 23) + 1;
             game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).buildingBlocksId.push(block_id);
 
             // Clear hint, output, currentCode
@@ -151,6 +162,8 @@ const playerSocketConnection = (io: Server) => {
             const ids = await getQuestionIds(game_activity.questionSetId);
             if (game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestion == ids.length) {
                 done = true;
+
+                game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).doneTime = new Date(Date.now()).toLocaleString();
             } else {
                 // Update question id to next one in the question set
                 game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestionId = ids[game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestion];
@@ -159,17 +172,17 @@ const playerSocketConnection = (io: Server) => {
                 game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentCode = await getStarterCode(game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).currentQuestionId);
             }
 
-            socket.emit("correct", output);
+            socket.emit("correct", public_output);
         } else {
             // Increase submissions (max 5 for score penalty)
             if (submissions <= 5) {
                 game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).submissions += 1;
             }
-            socket.emit("wrong", output);
+            socket.emit("wrong", public_output);
         }
 
         // Record last output
-        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).lastOutput = output;
+        game_activity.players.find((player: Player) => player.roomId === roomId && player.nickname === nickname).lastOutput = public_output;
 
         // Save and send game activity
         await setGameActivity(game_activity, roomId);
@@ -212,22 +225,6 @@ const playerSocketConnection = (io: Server) => {
 
         // Delete it from the Map of all players
         connectedPlayers.delete(socket.id);
-
-        if (roomId) {
-          // Get socket.io room based on roomId
-          const room = io.sockets.adapter.rooms.get(roomId);
-          if (room) {
-            // Get game activity, remove player that left, update game activity
-            const game_activity = await getGameActivity(roomId);
-            game_activity.players  = game_activity.players.filter((p: Player) => p.nickname !== nickname);
-            await setGameActivity(game_activity, roomId);
-
-            // Send new game activity to host
-            game_activity.role = "host";
-            game_activity.nickname = "";
-            socket.broadcast.to(game_activity.masterSocket).emit("updateGameActivity", game_activity);
-          }
-        }
       }
     });
   });

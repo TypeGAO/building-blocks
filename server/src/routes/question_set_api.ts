@@ -9,12 +9,13 @@ const router = new Router();
 
 router.post('/addQuestionSet', async (req: Request, res: Response) => {
     try {
-        const { grade_level, description, categories, created_on } = req.body;
-        let strSQL = `INSERT INTO question_sets (grade_level, description, categories, created_on)
-                      VALUES ($1, $2, $3, $4) RETURNING *`;
-        const { rows } = await query(strSQL, [grade_level, description, categories, created_on]);
+        const { grade_level, description, categories, title } = req.body;
+        let strSQL = `INSERT INTO question_sets (grade_level, description, categories, created_on, title)
+                      VALUES ($1, $2, $3, NOW(), $4) RETURNING *`;
+        const { rows } = await query(strSQL, [grade_level, description, categories, title]);
         res.send(rows[0]);
     } catch (error) {
+        console.log(error);
         res.status(500).json({ message: 'Error Adding Question Set' });
     }
 });
@@ -46,11 +47,11 @@ router.get('/getQuestionSet/:id', async (req: Request, res: Response) => {
 router.put('/updateQuestionSet/:id', async (req: Request, res: Response) => {
     try {
         const id = req.params.id;
-        const { grade_level, description, categories, created_on } = req.body;
+        const { grade_level, description, categories, created_on, title } = req.body;
         let strSQL = `UPDATE question_sets 
-                      SET grade_level = $1, description = $2, categories = $3, created_on = $4
-                      WHERE id = $5 RETURNING *`;
-        const { rows } = await query(strSQL, [grade_level, description, categories, created_on, id]);
+                      SET grade_level = $1, description = $2, categories = $3, created_on = $4, title = $5
+                      WHERE id = $6 RETURNING *`;
+        const { rows } = await query(strSQL, [grade_level, description, categories, created_on, title, id]);
         res.send(rows[0]);
     } catch (error) {
         res.status(500).json({ message: 'Error Updating Question Set' });

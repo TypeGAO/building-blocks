@@ -1,4 +1,8 @@
-import { ArrowsOutSimple, ArrowsInSimple } from "@phosphor-icons/react"
+import {
+  ArrowsOutSimple,
+  ArrowsInSimple,
+  SpeakerSimpleHigh,
+} from "@phosphor-icons/react"
 import { HostControls } from "../components"
 import useGameActivity from "../hooks/useGameActivity"
 import styles from "./HostLobby.module.css"
@@ -6,6 +10,11 @@ import { StartGameButton } from "../features/start-game"
 import useFullscreen from "../hooks/useFullScreen"
 import { DEV_URL, PROD_URL } from "../constants"
 import { socket } from "../socket"
+//@ts-expect-error use-sound library does not have type-saftey
+import useSound from "use-sound"
+import LobbyBBlocks from "../assets/Lobby2BBlocks.mp3"
+import { useEffect, useState } from "react"
+import { SpeakerSimpleSlash } from "@phosphor-icons/react/dist/ssr"
 
 function getJoinUrl() {
   let url = import.meta.env.DEV ? DEV_URL : PROD_URL
@@ -20,6 +29,21 @@ function kickPlayer(nickname: string) {
 function HostLobby() {
   const { gameActivity } = useGameActivity()
   const [isFullScreen, toggle] = useFullscreen()
+  const [isPlaying, setIsPlaying] = useState(true)
+  const [play, { stop }] = useSound(LobbyBBlocks, { loop: true })
+
+  useEffect(() => {
+    play()
+  }, [play])
+
+  const toggleSound = () => {
+    if (isPlaying) {
+      stop()
+    } else {
+      play()
+    }
+    setIsPlaying(!isPlaying)
+  }
 
   const playerCount: number = gameActivity.players.length
 
@@ -28,6 +52,15 @@ function HostLobby() {
       <div className={styles.controls}>
         <HostControls
           controls={[
+            {
+              icon: isPlaying ? (
+                <SpeakerSimpleSlash size={24} />
+              ) : (
+                <SpeakerSimpleHigh size={24} />
+              ),
+              label: isPlaying ? "Music Off" : "Music On",
+              onClick: toggleSound,
+            },
             {
               icon: isFullScreen ? (
                 <ArrowsInSimple size={24} weight="fill" />

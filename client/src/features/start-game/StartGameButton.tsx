@@ -17,7 +17,7 @@ function StartGameButton() {
     },
     enabled: false,
     onSuccess: () => {
-      socket.emit("startGame", gameActivity.roomId)
+      socket.emit("startGame", gameActivity.roomId, gameActivity.time)
     },
     onError: () => {
       toast.error(

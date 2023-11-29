@@ -23,3 +23,21 @@
   display: flex;
   justify-content: flex-end;
 }
+
+@media (max-width: 600px) {
+  .header {
+    grid-template-columns: 1fr;
+    text-align: left;
+    height: auto;
+  }
+
+  .left,
+  .right {
+    justify-content: center;
+  }
+
+  .mid {
+    order: -1;
+    text-align: center;
+  }
+}

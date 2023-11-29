@@ -1,16 +1,34 @@
-
+import { useNavigate } from "react-router-dom"
 import { QuestionBuilder } from "../features/create-game"
-
+import styles from "./CreateQuestions.module.css"
+import { Button, Header } from "../components"
 
 function QuizCreation() {
+  const navigate = useNavigate()
+
   return (
-    <div className="QuizCreation">
-      <QuestionBuilder />
-    </div>
+    <>
+      <Header
+        leftElement={
+          <Button size="lg" onClick={() => navigate("/host/questions/create")}>
+            Back
+          </Button>
+        }
+      />
+      <div
+        style={{
+          width: "1000px",
+          marginLeft: "auto",
+          marginRight: "auto",
+          marginTop: "50px",
+        }}
+      >
+        <div className={styles.questionContainer}>
+          <QuestionBuilder />
+        </div>
+      </div>
+    </>
   )
 }
 
-export default QuizCreation;
-
-
-
+export default QuizCreation

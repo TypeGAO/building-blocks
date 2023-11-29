@@ -53,8 +53,32 @@ export async function getExpectedOutput(questionId: number) {
     return expected_output;
 }
 
+export async function getInput(questionId: number) {
+    const strSQL = `
+            SELECT test_cases
+            FROM questions WHERE id = $1
+        `;
+    const { rows } = await query(strSQL, [questionId]);
+    const input = rows[0].test_cases.input;
+    return '\n'+input;
+}
+
+export async function getPublicInput(questionId: number) {
+    const strSQL = `
+            SELECT public_tests
+            FROM questions WHERE id = $1
+        `;
+    const { rows } = await query(strSQL, [questionId]);
+    let input = rows[0].public_tests.input;
+    input = input.map((i: string) => {
+        return `print(${i})`
+    }).join('\n');
+    return '\n'+input;
+}
+
 export async function runCode(code: string) {
     // Timeout for 5 seconds, python -I is for isolated environment
+    // Note: this doesn't fully check syntax?
     const command = `python3 -I -c "${code}"`;
     try {
         const { stdout, stderr } = await exec(command, { timeout: 5000 });

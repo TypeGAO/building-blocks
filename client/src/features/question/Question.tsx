@@ -1,7 +1,7 @@
 import { useQuery } from "react-query"
 import toast from "react-hot-toast"
 import { fetchQuestion } from "../../api"
-import { Question as QuestionComponent } from "../../components"
+import QuestionItem from "./QuestionItem"
 import useGameActivity from "../../hooks/useGameActivity"
 
 interface QuestionProps {
@@ -25,11 +25,12 @@ function Question({ questionId }: QuestionProps) {
   })
 
   return (
-    <QuestionComponent
+    <QuestionItem
       currentQuestion={currentPlayer.currentQuestion + 1}
       title={question?.data.title}
       description={question?.data.question}
       isLoading={questionIsLoading || questionIsFetching}
+      publicTests={question?.data.public_tests}
     />
   )
 }
