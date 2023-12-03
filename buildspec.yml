@@ -3,8 +3,14 @@ env:
   secrets-manager:
     DOCKERHUB_PASS: "DockerLogin:DOCKER_P"
     DOCKERHUB_USERNAME: "DockerLogin:DOCKER_U"
+    db_host: "DBSInfo:host"
+    db_user: "DBSInfo:username"
+    db_password: "DBSInfo:password"
+    db_port: "DBSInfo:port"
+    db_database: "DBSInfo:dbname"
 phases:
   pre_build:
+    on-failure: CONTINUE
     commands:
       - yarn install
       - cd server
