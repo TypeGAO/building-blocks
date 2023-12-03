@@ -4,6 +4,11 @@ env:
     DOCKERHUB_PASS: "DockerLogin:DOCKER_P"
     DOCKERHUB_USERNAME: "DockerLogin:DOCKER_U"
 phases:
+  pre_build:
+    commands:
+      - yarn install
+      - cd server
+      - yarn test
   build:
     commands:
       - echo Building nginx, client, and backend images
