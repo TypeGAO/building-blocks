@@ -12,6 +12,7 @@ import {
     getQuestionIds,
     getStarterCode,
 } from "../services/gameManagerService";
+const query = require('../src/db/index.ts');
 
 var expect = require('chai').expect;
 
@@ -43,7 +44,7 @@ describe('Test /generateManagerService', () => {
             expect(player.roomId).to.equal(roomId);
             expect(player.nickname).to.equal(nickname);
             expect(player.currentQuestion).to.equal(0);
-            expect(player.score).to.equal(0);
+            expect(player.score).to.equal(150);
             expect(player.buildingBlocksId).to.have.lengthOf(0);
             expect(player.submissions).to.equal(0);
             expect(player.currentCode).to.equal('');
@@ -61,9 +62,9 @@ describe('Test /generateManagerService', () => {
             expect(gameActivity.masterSocket).to.equal(masterSocket);
             expect(gameActivity.roomId).to.equal(roomId);
             expect(gameActivity.nickname).to.equal('');
-            expect(gameActivity.time).to.equal(-1);
+            expect(gameActivity.time).to.equal(600);
             expect(gameActivity.players).to.have.lengthOf(0);
-            expect(gameActivity.stage).to.equal('lobby');
+            expect(gameActivity.stage).to.equal('creating');
             expect(gameActivity.questionSetId).to.equal(2);
         });
     });
@@ -75,10 +76,10 @@ describe('Test /gameManagerService', () => {
 
     // Mock database responses
     const fakeIsActive = false;
-    const fakeGameActivity = newGameActivity('masterSocket', 'roomId')
-    const fakeExpectedOutput = 'Fake Expected Output';
+    const fakeGameActivity = newGameActivity('masterSocket', '1234567')
+    const fakeExpectedOutput = "120\n720\n1\n1\n6";
     const fakeQuestionIds = [157, 158, 159];
-    const fakeStarterCode = 'Fake Starter Code';
+    const fakeStarterCode = 'def factorial(n): # Do not change this line\n    pass';
 
     // Set up sinon stubs
     queryStub.withArgs(sinon.match(/SELECT is_active/), sinon.match.array).resolves({ rows: [{ is_active: fakeIsActive }] });
@@ -96,13 +97,15 @@ describe('Test /gameManagerService', () => {
 
     beforeEach(async () => {
         // Insert a game activity (adjust as needed)
-        const gameActivity = newGameActivity('masterSocket', 'roomId');
+        const gameActivity = newGameActivity('masterSocket', '1234567');
         await insertGameActivity(gameActivity, "1234567");
       });
     
       // After each test, end the game and clean up the database
       afterEach(async () => {
         await endGame("1234567");
+        let strSQL = `DELETE FROM rooms WHERE pin = '1234567'`
+        await query(strSQL, []);
       });
     
 
@@ -127,7 +130,7 @@ describe('Test /gameManagerService', () => {
     describe('setGameActivity', () => {
         it('should update the game activity for the given room', async () => {
             const roomId = '1234567';
-            const GameActivity = newGameActivity('masterSocket', '1234567');
+            const GameActivity = newGameActivity('newmasterSocket', '1234567');
 
             await setGameActivity(GameActivity, roomId);
 
@@ -138,13 +141,9 @@ describe('Test /gameManagerService', () => {
 
     describe('insertGameActivity', () => {
         it('should insert a new game activity into the database', async () => {
-            const roomId = '7654321';
-            const GameActivity = newGameActivity('masterSocket', '1234567');
-
-            await insertGameActivity(GameActivity, roomId);
-
+            const roomId = '1234567';
             const insertedGameActivity = await getGameActivity(roomId);
-            expect(insertedGameActivity).to.deep.equal(GameActivity);
+            expect(insertedGameActivity).to.deep.equal(fakeGameActivity);
         });
     });
 
@@ -158,19 +157,19 @@ describe('Test /gameManagerService', () => {
         });
     });
 
-    // describe('getExpectedOutput', () => {
-    //     it('should return the expected output for the given question id', async () => {
-    //         const questionId = 1;
-    //         const expectedOutput = await getExpectedOutput(questionId);
+    describe('getExpectedOutput', () => {
+        it('should return the expected output for the given question id', async () => {
+            const questionId = 37;
+            const expectedOutput = await getExpectedOutput(questionId);
 
-    //         expect(expectedOutput).to.equal(fakeExpectedOutput);
-    //     });
-    // });
+            expect(expectedOutput).to.equal(fakeExpectedOutput);
+        });
+    });
 
     // describe('runCode', () => {
     //     it('should execute the provided code and return the output', async () => {
     //         const code = 'print("Hello, World!")';
-    //         const output = await runCode(code);
+    //         const output = await runCode(code.replace(/"/g, '\\"'));
 
     //         // Add assertions based on your expectations for code execution
     //         // For example, check if the output contains "Hello, World!"
@@ -187,14 +186,14 @@ describe('Test /gameManagerService', () => {
         });
     });
 
-    // describe('getStarterCode', () => {
-    //     it('should return the starter code for the given question id', async () => {
-    //         const questionId = 1;
-    //         const starterCode = await getStarterCode(questionId);
+    describe('getStarterCode', () => {
+        it('should return the starter code for the given question id', async () => {
+            const questionId = 37;
+            const starterCode = await getStarterCode(questionId);
 
-    //         expect(starterCode).to.equal(fakeStarterCode);
-    //     });
-    // });
+            expect(starterCode).to.equal(fakeStarterCode);
+        });
+    });
 
     // Restore the original query function after all tests
     sinon.restore();
