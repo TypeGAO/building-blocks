@@ -17,6 +17,7 @@ phases:
       - yarn test
   build:
     commands:
+      - cd ..
       - echo Building nginx, client, and backend images
       - docker build -t ardiank/nginx -f ./nginx/Dockerfile ./nginx
       - cd client && docker build -t ardiank/client .
