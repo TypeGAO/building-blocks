@@ -13,6 +13,13 @@ jobs:
       matrix:
         node-version: [18.x]
 
+    env:
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_DATABASE: ${{ secrets.DB_DATABASE }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_USER: ${{ secrets.DB_USER }}
+
     steps:
     - uses: actions/checkout@v3
     - name: Setup for tests and builds
